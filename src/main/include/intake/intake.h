@@ -6,6 +6,8 @@
 
 class Intake : public frc2::SubsystemBase {
 public:
+    void runRollers (double speed);
+    void stopRollers ();
 
 private:
     TalonSRX mRollerMotor {0}; // the motor that turns the rollers to pull the ball in
