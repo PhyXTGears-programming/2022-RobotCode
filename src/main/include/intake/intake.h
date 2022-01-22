@@ -16,9 +16,14 @@ public:
 
     double getIntakePosition ();
 
-    double getDistanceToPosition (double targetPosition);
+    double getDistanceToPosition ();
+
+    void setStationary (); // sets mCurrentIntakeStatus to stationary
 
 private:
+    enum mIntakeMovementStatus {extending, retracting, stationary};
+    mIntakeMovementStatus mCurrentIntakeStatus = stationary;
+
     TalonSRX mRollerMotor {0}; // the motor that turns the rollers to pull the ball in
     TalonSRX mDeployMotor {0}; // the motor that flips the intake in/out
 

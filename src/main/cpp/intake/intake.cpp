@@ -7,6 +7,8 @@ void Intake::extendIntake () {
         mDeployCurrentSpeed += kDeploySpeedFactor * (mDeployTargetSpeed - mDeployCurrentSpeed);
     }
     mDeployMotor.Set(ControlMode::PercentOutput, mDeployCurrentSpeed);
+
+    mCurrentIntakeStatus = extending;
 }
 
 void Intake::retractIntake () {
@@ -14,6 +16,8 @@ void Intake::retractIntake () {
         mDeployCurrentSpeed += kDeploySpeedFactor * (mDeployTargetSpeed - mDeployCurrentSpeed);
     }
     mDeployMotor.Set(ControlMode::PercentOutput, mDeployCurrentSpeed);
+
+    mCurrentIntakeStatus = retracting;
 }
 
 void Intake::runRollers (double speed) {
@@ -32,6 +36,23 @@ double Intake::getIntakePosition () {
     return mIntakePosition.Get();
 }
 
-double Intake::getDistanceToPosition (double targetPosition) {
-    return targetPosition - getIntakePosition();
+double Intake::getDistanceToPosition () {
+    switch (mCurrentIntakeStatus)
+    {
+    case extending:
+        return mIntakeExtendedPosition - getIntakePosition();
+        break;
+    
+    case retracting:
+        return mIntakeRetractedPosition - getIntakePosition();
+        break;
+    
+    case stationary:
+        return 0.0;
+        break;
+    }
+}
+
+void Intake::setStationary () {
+    mCurrentIntakeStatus = stationary;
 }

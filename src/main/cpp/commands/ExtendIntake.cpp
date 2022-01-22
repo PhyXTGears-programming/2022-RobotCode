@@ -13,9 +13,10 @@ void ExtendIntakeCommand::Initialize () {
 
 void ExtendIntakeCommand::Execute () {}
 
-void ExtendIntakeCommand::End (bool interrupted) {}
+void ExtendIntakeCommand::End (bool interrupted) {
+    mIntake->setStationary();
+}
 
 bool ExtendIntakeCommand::IsFinished () {
-    // if position is within buffer value, execute code
-    return abs(mIntake->getDistanceToPosition("placeholder")) < kAcceptablePositionError;
+    return abs(mIntake->getDistanceToPosition()) < kAcceptablePositionError;
 }
