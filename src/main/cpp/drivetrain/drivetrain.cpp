@@ -8,6 +8,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "rev/CANSparkMax.h"
+
 Tables tables;
 
 //MAKE SURE TO REMOVE THIS AND REPLACE IT WITH HOW IT IS ACTUALY DECLARED FROM THE GYRO
@@ -52,4 +54,8 @@ void Drivetrain::setSpinRadiansPerSecond(double radiansPerSecond){
 
 void Drivetrain::setSpinDegreesPerSecond(double degreesPerSecond){
     Drivetrain::setSpinRadiansPerSecond( ( (degreesPerSecond / 180) * M_PI) ); //converts degrees to radians
+}
+
+void Drivetrain::setWheelMotorSpeeds(double *speeds){
+
 }
