@@ -18,7 +18,7 @@ public:
 
     double getDistanceToPosition ();
 
-    void setStationary (); // sets mCurrentIntakeStatus to stationary
+    void setStationary (bool isExtended); // sets mCurrentIntakeStatus to stationary
 
 private:
     enum mIntakeMovementStatus {extending, retracting, stationary};

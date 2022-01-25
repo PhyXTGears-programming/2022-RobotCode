@@ -47,12 +47,13 @@ double Intake::getDistanceToPosition () {
         return mIntakeRetractedPosition - getIntakePosition();
         break;
     
-    case stationary:
+    default:
         return 0.0;
         break;
     }
 }
 
-void Intake::setStationary () {
+void Intake::setStationary (bool isExtended) {
     mCurrentIntakeStatus = stationary;
+    mIsIntakeExtended = isExtended;
 }

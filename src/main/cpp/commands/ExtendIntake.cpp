@@ -14,7 +14,7 @@ void ExtendIntakeCommand::Initialize () {
 void ExtendIntakeCommand::Execute () {}
 
 void ExtendIntakeCommand::End (bool interrupted) {
-    mIntake->setStationary();
+    mIntake->setStationary(true); // the function is setStationary (isExtended)
 }
 
 bool ExtendIntakeCommand::IsFinished () {
