@@ -9,6 +9,8 @@ public:
     void extendIntake ();
     void retractIntake ();
 
+    void moveIntake ();
+
     void runRollers (double speed);
     void stopRollers ();
 
@@ -21,8 +23,8 @@ public:
     void setStationary (bool isExtended); // sets mCurrentIntakeStatus to stationary
 
 private:
-    enum mIntakeMovementStatus {extending, retracting, stationary};
-    mIntakeMovementStatus mCurrentIntakeStatus = stationary;
+    enum mIntakeMovementStatus {EXTENDING, RETRACTING, STATIONARY};
+    mIntakeMovementStatus mCurrentIntakeStatus = STATIONARY;
 
     TalonSRX mRollerMotor {0}; // the motor that turns the rollers to pull the ball in
     TalonSRX mDeployMotor {0}; // the motor that flips the intake in/out
@@ -33,6 +35,9 @@ private:
 
     double mDeployTargetSpeed = 1.0;
     double mDeployCurrentSpeed = 0.0;
+
+    const double kExtendTargetSpeed = 0.5;
+    const double kRetractTargetSpeed = -0.5;
 
     double mIntakeRetractedPosition = 0.0; // value the potentiometer should read when retracted
     double mIntakeExtendedPosition = 90.0; // value the potentiometer should read when extended

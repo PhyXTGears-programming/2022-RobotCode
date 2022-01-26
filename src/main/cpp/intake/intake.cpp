@@ -3,21 +3,20 @@
 const double kDeploySpeedFactor = 0.1;
 
 void Intake::extendIntake () {
+    mDeployTargetSpeed = kExtendTargetSpeed;
+    mCurrentIntakeStatus = EXTENDING;
+}
+
+void Intake::retractIntake () {
+    mDeployTargetSpeed = kRetractTargetSpeed;
+    mCurrentIntakeStatus = RETRACTING;
+}
+
+void Intake::moveIntake () {
     if (mDeployTargetSpeed != mDeployCurrentSpeed) { // add a tenth of the difference to current_speed
         mDeployCurrentSpeed += kDeploySpeedFactor * (mDeployTargetSpeed - mDeployCurrentSpeed);
     }
     mDeployMotor.Set(ControlMode::PercentOutput, mDeployCurrentSpeed);
-
-    mCurrentIntakeStatus = extending;
-}
-
-void Intake::retractIntake () {
-    if (-mDeployTargetSpeed != mDeployCurrentSpeed) { // add a tenth of the difference to current_speed
-        mDeployCurrentSpeed += kDeploySpeedFactor * (mDeployTargetSpeed - mDeployCurrentSpeed);
-    }
-    mDeployMotor.Set(ControlMode::PercentOutput, mDeployCurrentSpeed);
-
-    mCurrentIntakeStatus = retracting;
 }
 
 void Intake::runRollers (double speed) {
@@ -33,17 +32,17 @@ bool Intake::isIntakeExtended () {
 }
 
 double Intake::getIntakePosition () {
-    return mIntakePosition.Get();
-}
+    return mIntakePosition.Get(); // mIntakePosition is a potentiometer. Get() gets its current position
+} 
 
 double Intake::getDistanceToPosition () {
     switch (mCurrentIntakeStatus)
     {
-    case extending:
+    case EXTENDING:
         return mIntakeExtendedPosition - getIntakePosition();
         break;
     
-    case retracting:
+    case RETRACTING:
         return mIntakeRetractedPosition - getIntakePosition();
         break;
     
@@ -54,6 +53,7 @@ double Intake::getDistanceToPosition () {
 }
 
 void Intake::setStationary (bool isExtended) {
-    mCurrentIntakeStatus = stationary;
+    mCurrentIntakeStatus = STATIONARY;
     mIsIntakeExtended = isExtended;
+    mDeployTargetSpeed = 0.0;
 }

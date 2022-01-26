@@ -11,7 +11,9 @@ void RetractIntakeCommand::Initialize () {
     mIntake->retractIntake();
 }
 
-void RetractIntakeCommand::Execute () {}
+void RetractIntakeCommand::Execute () {
+    mIntake->moveIntake();
+}
 
 void RetractIntakeCommand::End (bool interrupted) {
     mIntake->setStationary(false);
