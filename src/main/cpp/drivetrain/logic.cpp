@@ -4,8 +4,6 @@
 
 #include <math.h>
 
-Constants constants;
-
 double Drivetrain::fieldCentricToRobotAngle(double angle, double speed, double centerOfFieldAngle)
 {
     return (-speed * sin(centerOfFieldAngle)) + (angle * cos(centerOfFieldAngle));
@@ -16,13 +14,13 @@ double Drivetrain::fieldCentricToRobotSpeed(double speed, double angle, double c
     return (speed * cos(centerOfFieldAngle)) + (angle * sin(centerOfFieldAngle));
 }
 
-double *Drivetrain::getWheelSpeeds(double speed, double angle, double clockwiseSpin, double centerFieldAngle)
+std::vector<double> Drivetrain::getWheelSpeeds(double speed, double angle, double clockwiseSpin, double centerFieldAngle)
 {
     //not sure what the next four variables are exactly for, but they should be for calculating speed and angles
-    double A = angle - (clockwiseSpin * (constants.wheelBase / constants.diameter));
-    double B = angle + (clockwiseSpin * (constants.wheelBase / constants.diameter));
-    double C = speed - (clockwiseSpin * (constants.trackWidth / constants.diameter));
-    double D = speed + (clockwiseSpin * (constants.trackWidth / constants.diameter));
+    double A = angle - (clockwiseSpin * (constants::wheelBase / constants::diameter));
+    double B = angle + (clockwiseSpin * (constants::wheelBase / constants::diameter));
+    double C = speed - (clockwiseSpin * (constants::trackWidth / constants::diameter));
+    double D = speed + (clockwiseSpin * (constants::trackWidth / constants::diameter));
 
     double WheelSpeed1 = sqrt(pow(B, 2) + pow(C, 2));
     double WheelSpeed2 = sqrt(pow(B, 2) + pow(D, 2));
@@ -53,26 +51,26 @@ double *Drivetrain::getWheelSpeeds(double speed, double angle, double clockwiseS
         WheelSpeed3 /= max;
         WheelSpeed4 /= max;
     }
-
-    double wheelSpeeds[4] = {WheelSpeed1, WheelSpeed2, WheelSpeed3, WheelSpeed4};
+    
+    std::vector<double> wheelSpeeds {WheelSpeed1, WheelSpeed2, WheelSpeed3, WheelSpeed4};
 
     return wheelSpeeds;
 }
 
-double *Drivetrain::getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle)
+std::vector<double> Drivetrain::getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle)
 {
     //not sure what the next four variables are exactly for, but they should be for calculating speed and angles
-    double A = angle - (clockwiseSpin * (constants.wheelBase / constants.diameter));
-    double B = angle + (clockwiseSpin * (constants.wheelBase / constants.diameter));
-    double C = speed - (clockwiseSpin * (constants.trackWidth / constants.diameter));
-    double D = speed + (clockwiseSpin * (constants.trackWidth / constants.diameter));
+    double A = angle - (clockwiseSpin * (constants::wheelBase / constants::diameter));
+    double B = angle + (clockwiseSpin * (constants::wheelBase / constants::diameter));
+    double C = speed - (clockwiseSpin * (constants::trackWidth / constants::diameter));
+    double D = speed + (clockwiseSpin * (constants::trackWidth / constants::diameter));
 
     double WheelAngle1 = atan2(B, C);
     double WheelAngle2 = atan2(B, D);
     double WheelAngle3 = atan2(A, D);
     double WheelAngle4 = atan2(A, C);
 
-    double wheelSpeeds[4] = {WheelAngle1, WheelAngle2, WheelAngle3, WheelAngle4};
+    std::vector<double> wheelSpeeds {WheelAngle1, WheelAngle2, WheelAngle3, WheelAngle4};
 
     return wheelSpeeds;
 }

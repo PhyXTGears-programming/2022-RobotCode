@@ -2,7 +2,7 @@
 
 #include "frc2/command/SubsystemBase.h"
 
-namespace Constants
+namespace constants
 {
 
     //global constants
@@ -16,4 +16,4 @@ namespace Constants
 
     const double MaxWheelSpeed = 20; //meters per sec
 
-};
+}

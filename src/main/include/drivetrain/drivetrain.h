@@ -112,4 +112,8 @@ private:
     double *getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
     //controll the motor controller speeds
     void setWheelMotorSpeeds(double *speeds);
+     //gets the percent of the speed in which the robot should be going from max (they are normalised so that it will not go above 1)
+     std::vector<double> getWheelSpeeds(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
+     //gets the angle of the drive modules in radians (from -pi to +pi)
+     std::vector<double> getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
 };
