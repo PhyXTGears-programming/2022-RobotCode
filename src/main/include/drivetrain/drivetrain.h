@@ -106,10 +106,6 @@ private:
     double fieldCentricToRobotAngle(double angle, double speed, double centerOfFieldAngle);
     //takes the speed from the controller and makes it local to the robot
     double fieldCentricToRobotSpeed(double speed, double angle, double centerOfFieldAngle);
-    //gets the percent of the speed in which the robot should be going from max (they are normalised so that it will not go above 1)
-    double *getWheelSpeeds(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
-    //gets the angle of the drive modules in radians (from -pi to +pi)
-    double *getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
     //controll the motor controller speeds
     void setWheelMotorSpeeds(double *speeds);
      //gets the percent of the speed in which the robot should be going from max (they are normalised so that it will not go above 1)
