@@ -10,6 +10,10 @@
 
 #include "rev/CANSparkMax.h"
 
+#include "RobotCompileModes.h" //set all robot modes here
+
+#define DEG_TO_RAD(deg) ((deg / 180.0) * M_PI)
+
 Tables tables;
 
 //MAKE SURE TO REMOVE THIS AND REPLACE IT WITH HOW IT IS ACTUALY DECLARED FROM THE GYRO
@@ -31,7 +35,7 @@ void Drivetrain::setHeadingRadians(double radians)
 
 void Drivetrain::setHeadingDegrees(double degrees)
 {
-    Drivetrain::setHeadingRadians(((degrees / 2) * M_PI)); //converts degrees to radians
+    Drivetrain::setHeadingRadians(DEG_TO_RAD(degrees)); //converts degrees to radians
 }
 
 void Drivetrain::setVelocityMeters(double metersPerSecond)
@@ -52,8 +56,9 @@ void Drivetrain::setSpinRadiansPerSecond(double radiansPerSecond){
     Drivetrain::mSpinRobotVelocity = radiansPerSecond;
 }
 
-void Drivetrain::setSpinDegreesPerSecond(double degreesPerSecond){
-    Drivetrain::setSpinRadiansPerSecond( ( (degreesPerSecond / 180) * M_PI) ); //converts degrees to radians
+void Drivetrain::setSpinDegreesPerSecond(double degreesPerSecond)
+{
+    Drivetrain::setSpinRadiansPerSecond(DEG_TO_RAD(degreesPerSecond)); //converts degrees to radians
 }
 
 void Drivetrain::setWheelMotorSpeeds(double *speeds){

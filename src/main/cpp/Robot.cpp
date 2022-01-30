@@ -8,7 +8,14 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include "RobotCompileModes.h"
+
 void Robot::RobotInit() {
+  #ifdef ROBOTCMH_TESTING_MODE
+  #warning (In robot.cpp, testing mode is enabled)
+  frc::SmartDashboard::PutString("Robot mode", "TESTING, RobotCompileModes.h");
+  #endif
+
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
