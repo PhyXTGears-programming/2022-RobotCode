@@ -51,9 +51,9 @@ void Drivetrain::setPidValues(rev::SparkMaxPIDController PIDController, double k
 //set the heading of the robot as a whole, and set the individual wheels to the correct direction.
 void Drivetrain::setHeadingRadians(double radians)
 {
-    Drivetrain::mRotationRadiansCentric = Drivetrain::fieldCentricToRobotAngle(radians, Drivetrain::mVelocityMeters, gyroFieldAngle);
-    Drivetrain::mVelocityMetersCentric = Drivetrain::fieldCentricToRobotSpeed(Drivetrain::mVelocityMeters, radians, gyroFieldAngle);
-    Drivetrain::mRotationRadians = radians;
+    Drivetrain::m_RotationRadiansCentric = Drivetrain::fieldCentricToRobotAngle(radians, Drivetrain::m_VelocityMeters, gyroFieldAngle);
+    Drivetrain::m_VelocityMetersCentric = Drivetrain::fieldCentricToRobotSpeed(Drivetrain::m_VelocityMeters, radians, gyroFieldAngle);
+    Drivetrain::m_RotationRadians = radians;
 }
 
 void Drivetrain::setHeadingDegrees(double degrees)
@@ -63,20 +63,21 @@ void Drivetrain::setHeadingDegrees(double degrees)
 
 void Drivetrain::setVelocityMeters(double metersPerSecond)
 {
-    Drivetrain::mRotationRadiansCentric = Drivetrain::fieldCentricToRobotAngle(Drivetrain::mRotationRadians, metersPerSecond, gyroFieldAngle);
-    Drivetrain::mVelocityMetersCentric = Drivetrain::fieldCentricToRobotSpeed(metersPerSecond, Drivetrain::mRotationRadians, gyroFieldAngle);
-    Drivetrain::mVelocityMeters = metersPerSecond;
+    Drivetrain::m_RotationRadiansCentric = Drivetrain::fieldCentricToRobotAngle(Drivetrain::m_RotationRadians, metersPerSecond, gyroFieldAngle);
+    Drivetrain::m_VelocityMetersCentric = Drivetrain::fieldCentricToRobotSpeed(metersPerSecond, Drivetrain::m_RotationRadians, gyroFieldAngle);
+    Drivetrain::m_VelocityMeters = metersPerSecond;
 }
 
 void Drivetrain::setVelocityFeet(double feetPerSecond)
 {
     //feet to inches (12in in a foot), then to centimeters (2.52cm in an in), then to meters (100cm in one m) = 0.3024 ft in a meter
-    double feetPerSecToMPS = feetPerSecond*0.3024;
+    double feetPerSecToMPS = feetPerSecond * 0.3024;
     Drivetrain::setVelocityMeters(feetPerSecToMPS);
 }
 
-void Drivetrain::setSpinRadiansPerSecond(double radiansPerSecond){
-    Drivetrain::mSpinRobotVelocity = radiansPerSecond;
+void Drivetrain::setSpinRadiansPerSecond(double radiansPerSecond)
+{
+    Drivetrain::m_SpinRobotVelocity = radiansPerSecond;
 }
 
 void Drivetrain::setSpinDegreesPerSecond(double degreesPerSecond)
@@ -84,6 +85,10 @@ void Drivetrain::setSpinDegreesPerSecond(double degreesPerSecond)
     Drivetrain::setSpinRadiansPerSecond(DEG_TO_RAD(degreesPerSecond)); //converts degrees to radians
 }
 
-void Drivetrain::setWheelMotorSpeeds(double *speeds){
+void Drivetrain::setWheelMotorSpeeds(double *speeds)
+{
+    // m_driveMotor1
+}
+
 
 }
