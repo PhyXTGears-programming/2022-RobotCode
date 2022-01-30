@@ -2,6 +2,12 @@
 
 #include "frc2/command/SubsystemBase.h"
 
+#include "rev/CANSparkMax.h"
+#include "constants/constants.h"
+#include "constants/interfaces.h"
+
+#include "RobotCompileModes.h"
+
 class Drivetrain : public frc2::SubsystemBase
 {
 public:
@@ -112,4 +118,14 @@ private:
      std::vector<double> getWheelSpeeds(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
      //gets the angle of the drive modules in radians (from -pi to +pi)
      std::vector<double> getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
+
+     rev::CANSparkMax m_DriveMotor1{interfaces::k_Drive1, rev::CANSparkMax::MotorType::kBrushless};
+     rev::CANSparkMax m_DriveMotor2{interfaces::k_Drive2, rev::CANSparkMax::MotorType::kBrushless};
+     rev::CANSparkMax m_DriveMotor3{interfaces::k_Drive3, rev::CANSparkMax::MotorType::kBrushless};
+     rev::CANSparkMax m_DriveMotor4{interfaces::k_Drive4, rev::CANSparkMax::MotorType::kBrushless};
+     rev::CANSparkMax m_SteerMotor1{interfaces::k_Steer1, rev::CANSparkMax::MotorType::kBrushless};
+     rev::CANSparkMax m_SteerMotor2{interfaces::k_Steer2, rev::CANSparkMax::MotorType::kBrushless};
+     rev::CANSparkMax m_SteerMotor3{interfaces::k_Steer3, rev::CANSparkMax::MotorType::kBrushless};
+     rev::CANSparkMax m_SteerMotor4{interfaces::k_Steer4, rev::CANSparkMax::MotorType::kBrushless};
+
 };
