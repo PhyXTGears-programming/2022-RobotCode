@@ -10,6 +10,11 @@
 
 #include "RobotCompileModes.h"
 
+#ifdef ROBOTCMH_PID_TUNING_MODE
+#include "drivetrain/drivetrain.h"
+Drivetrain drivetrain;
+#endif
+
 void Robot::RobotInit() {
   #ifdef ROBOTCMH_TESTING_MODE
   #warning (In robot.cpp, testing mode is enabled)
@@ -65,7 +70,11 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+  #ifdef ROBOTCMH_PID_TUNING_MODE
+  drivetrain.tunePIDNetworktables();
+  #endif
+}
 
 void Robot::DisabledInit() {}
 

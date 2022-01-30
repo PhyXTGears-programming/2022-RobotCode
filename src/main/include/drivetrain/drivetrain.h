@@ -97,6 +97,11 @@ public:
          */
      double getSpinDegreesPerSecond();
 
+     /**
+         * @brief get current PID values and post relevent data to the network tables
+         * 
+         */
+     void tunePIDNetworktables();
 
 private:
      //generally logic things that are not useful to have visable to the rest of the world
@@ -201,4 +206,8 @@ private:
      const double k_PID_SteerMotor4_D = 0.0;
      const double k_PID_SteerMotor4_F = 0.0;
 
+#ifdef ROBOTCMH_PID_TUNING_MODE
+     rev::CANSparkMax &currentController = Drivetrain::m_DriveMotor1;
+     rev::SparkMaxPIDController CurrentPIDController = Drivetrain::currentController.GetPIDController();
+#endif
 };
