@@ -1,30 +1,28 @@
 #include "intake/intake.h"
 
-const double kDeploySpeedFactor = 0.1;
-
 void Intake::extendIntake () {
-    mDeployTargetSpeed = kExtendTargetSpeed;
+    mDeployTargetSpeed = config.extendTargetSpeed;
     mCurrentIntakeStatus = EXTENDING;
 }
 
 void Intake::retractIntake () {
-    mDeployTargetSpeed = kRetractTargetSpeed;
+    mDeployTargetSpeed = config.retractTargetSpeed;
     mCurrentIntakeStatus = RETRACTING;
 }
 
 void Intake::moveIntake () {
     if (mDeployTargetSpeed != mDeployCurrentSpeed) { // add a tenth of the difference to current_speed
-        mDeployCurrentSpeed += kDeploySpeedFactor * (mDeployTargetSpeed - mDeployCurrentSpeed);
+        mDeployCurrentSpeed += config.deploySpeedFactor * (mDeployTargetSpeed - mDeployCurrentSpeed);
     }
     mDeployMotor.Set(ControlMode::PercentOutput, mDeployCurrentSpeed);
 }
 
-void Intake::runRollers (double speed) {
-    mRollerMotor.Set(ControlMode::PercentOutput, speed);
+void Intake::runRollers () {
+    mRollerMotor.Set(ControlMode::PercentOutput, config.rollerSpeed);
 }
 
 void Intake::stopRollers () {
-    runRollers(0.0);
+    mRollerMotor.Set(ControlMode::PercentOutput, 0.0);
 }
 
 bool Intake::isIntakeExtended () {
@@ -36,14 +34,13 @@ double Intake::getIntakePosition () {
 } 
 
 double Intake::getDistanceToPosition () {
-    switch (mCurrentIntakeStatus)
-    {
+    switch (mCurrentIntakeStatus) {
     case EXTENDING:
-        return mIntakeExtendedPosition - getIntakePosition();
+        return config.intakeExtendedPosition - getIntakePosition();
         break;
     
     case RETRACTING:
-        return mIntakeRetractedPosition - getIntakePosition();
+        return config.intakeRetractedPosition - getIntakePosition();
         break;
     
     default:

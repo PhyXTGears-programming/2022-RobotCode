@@ -6,7 +6,7 @@ RunIntakeCommand::RunIntakeCommand (Intake* intake) {
 }
 
 void RunIntakeCommand::Initialize () {
-    mIntake->runRollers(1.0);
+    mIntake->runRollers();
 }
 
 void RunIntakeCommand::Execute () {}

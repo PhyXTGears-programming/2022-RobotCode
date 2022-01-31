@@ -11,7 +11,7 @@ public:
 
     void moveIntake ();
 
-    void runRollers (double speed);
+    void runRollers ();
     void stopRollers ();
 
     bool isIntakeExtended ();
@@ -36,9 +36,10 @@ private:
     double mDeployTargetSpeed = 1.0;
     double mDeployCurrentSpeed = 0.0;
 
-    const double kExtendTargetSpeed = 0.5;
-    const double kRetractTargetSpeed = -0.5;
-
-    double mIntakeRetractedPosition = 0.0; // value the potentiometer should read when retracted
-    double mIntakeExtendedPosition = 90.0; // value the potentiometer should read when extended
+    struct {
+        double rollerSpeed, extendTargetSpeed, retractTargetSpeed;
+        double deploySpeedFactor; // the larger this value is, the faster the deploy motor will try to accelerate
+        double intakeRetractedPosition, intakeExtendedPosition; // the potentiometer readings when intake is fully extended/retracted
+    } config;
+    
 };
