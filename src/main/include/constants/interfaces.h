@@ -13,28 +13,28 @@ namespace interfaces
     namespace
     {
         //block 0
-        const int k_CAN00 = 0;
-        const int k_CAN01 = 1;
-        const int k_CAN02 = 2;
-        const int k_CAN03 = 3;
-        const int k_CAN04 = 4;
-        const int k_CAN05 = 5;
-        const int k_CAN06 = 6;
-        const int k_CAN07 = 7;
-        const int k_CAN08 = 8;
-        const int k_CAN09 = 9;
+        const int kCAN00 = 0;
+        const int kCAN01 = 1;
+        const int kCAN02 = 2;
+        const int kCAN03 = 3;
+        const int kCAN04 = 4;
+        const int kCAN05 = 5;
+        const int kCAN06 = 6;
+        const int kCAN07 = 7;
+        const int kCAN08 = 8;
+        const int kCAN09 = 9;
 
         //block 1
-        const int k_CAN10 = 10;
-        const int k_CAN11 = 11;
-        const int k_CAN12 = 12;
-        const int k_CAN13 = 13;
-        const int k_CAN14 = 14;
-        const int k_CAN15 = 15;
-        const int k_CAN16 = 16;
-        const int k_CAN17 = 17;
-        const int k_CAN18 = 18;
-        const int k_CAN19 = 19;
+        const int kCAN10 = 10;
+        const int kCAN11 = 11;
+        const int kCAN12 = 12;
+        const int kCAN13 = 13;
+        const int kCAN14 = 14;
+        const int kCAN15 = 15;
+        const int kCAN16 = 16;
+        const int kCAN17 = 17;
+        const int kCAN18 = 18;
+        const int kCAN19 = 19;
     }
 
     /*
@@ -45,12 +45,12 @@ namespace interfaces
     */
     //drivetrain CAN assignments (block 0)
     
-    const int k_Drive1 = k_CAN00;
-    const int k_Drive2 = k_CAN01;
-    const int k_Drive3 = k_CAN02;
-    const int k_Drive4 = k_CAN03;
-    const int k_Steer1 = k_CAN04;
-    const int k_Steer2 = k_CAN05;
-    const int k_Steer3 = k_CAN06;
-    const int k_Steer4 = k_CAN07;
+    const int kDrive1 = kCAN00;
+    const int kDrive2 = kCAN01;
+    const int kDrive3 = kCAN02;
+    const int kDrive4 = kCAN03;
+    const int kSteer1 = kCAN04;
+    const int kSteer2 = kCAN05;
+    const int kSteer3 = kCAN06;
+    const int kSteer4 = kCAN07;
 }
