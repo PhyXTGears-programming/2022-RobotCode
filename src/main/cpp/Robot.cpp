@@ -8,7 +8,19 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include "RobotCompileModes.h"
+
+#ifdef ROBOTCMH_PID_TUNING_MODE
+#include "drivetrain/drivetrain.h"
+Drivetrain drivetrain;
+#endif
+
 void Robot::RobotInit() {
+  #ifdef ROBOTCMH_TESTING_MODE
+  #warning (In robot.cpp, testing mode is enabled)
+  frc::SmartDashboard::PutString("Robot mode", "TESTING, RobotCompileModes.h");
+  #endif
+
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
@@ -58,7 +70,11 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+  #ifdef ROBOTCMH_PID_TUNING_MODE
+  drivetrain.tunePIDNetworktables();
+  #endif
+}
 
 void Robot::DisabledInit() {}
 
