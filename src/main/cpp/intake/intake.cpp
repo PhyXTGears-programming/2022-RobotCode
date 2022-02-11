@@ -1,5 +1,14 @@
 #include "intake/intake.h"
 
+Intake::Intake (std::shared_ptr<cpptoml::table> toml) {
+    config.rollerSpeed = toml->get_qualified_as<double>("rollerSpeed").value_or(0.5);
+    config.extendTargetSpeed = toml->get_qualified_as<double>("extendTargetSpeed").value_or(0.5);
+    config.retractTargetSpeed = toml->get_qualified_as<double>("retractTargetSpeed").value_or(0.5);
+    config.deploySpeedFactor = toml->get_qualified_as<double>("deploySpeedFactor").value_or(0.01);
+    config.intakeExtendedPosition = toml->get_qualified_as<double>("intakeExtendedPosition").value_or(0.0);
+    config.intakeRetractedPosition = toml->get_qualified_as<double>("intakeRetractedPosition").value_or(0.0);
+}
+
 void Intake::extendIntake () {
     mDeployTargetSpeed = config.extendTargetSpeed;
     mCurrentIntakeStatus = EXTENDING;

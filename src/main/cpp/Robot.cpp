@@ -21,6 +21,9 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutString("Robot mode", "TESTING, RobotCompileModes.h");
   #endif
 
+  std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
+  mIntake = new Intake(toml->get_table("intake"));
+
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
@@ -83,6 +86,16 @@ void Robot::DisabledPeriodic() {}
 void Robot::TestInit() {}
 
 void Robot::TestPeriodic() {}
+
+std::shared_ptr<cpptoml::table> Robot::LoadConfig(std::string path) {
+  try {
+    return cpptoml::parse_file(path);
+  } catch (cpptoml::parse_exception & ex) {
+    std::cerr << "Error loading config file: " << path << std::endl
+      << ex.what() << std::endl;
+    exit(1);
+  }
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {

@@ -4,8 +4,12 @@
 #include <ctre/Phoenix.h>
 #include <frc/AnalogPotentiometer.h>
 
+#include "cpptoml.h"
+
 class Intake : public frc2::SubsystemBase {
 public:
+    Intake (std::shared_ptr<cpptoml::table> toml);
+
     void extendIntake ();
     void retractIntake ();
 
