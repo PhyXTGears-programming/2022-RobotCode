@@ -1,11 +1,16 @@
 #pragma once
 
-#include "frc2/command/SubsystemBase.h"
+#include <frc2/command/SubsystemBase.h>
+#include <rev/CANSparkMax.h>
 
-class Shooter : public frc2::SubsystemBase{
-    public:
-        Shooter(); // constructor
+#include "constants/interfaces.h"
 
-    private:
-        //generally logic things that are not useful to have visable to the rest of the world
+class Shooter : public frc2::SubsystemBase {
+public:
+    void runShooter (double speed);
+    void stopShooter ();
+
+private:
+    rev::CANSparkMax mShooterMotor {interfaces::kShooterMotor, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+            
 };

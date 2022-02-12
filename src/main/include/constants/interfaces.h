@@ -4,7 +4,7 @@ namespace interfaces
 {
     //for future note, each subsystem has their own block of 10 CAN IDs (presuming it needs them)
     //block 0 (00-09) is reserved for the drivetrain
-    //block 1 (10-19) is not reserved
+    //block 1 (10-19) is reserved for the shooter
     //block 2 (20-29) is not reserved
     //block 3 (30-39) is not reserved
     //block 4 (40-49) is not reserved
@@ -53,4 +53,6 @@ namespace interfaces
     const int kSteer2 = kCAN05;
     const int kSteer3 = kCAN06;
     const int kSteer4 = kCAN07;
+
+    const int kShooterMotor = kCAN10;
 }

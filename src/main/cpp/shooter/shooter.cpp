@@ -1,3 +1,9 @@
 #include "shooter/shooter.h"
 
-#include <frc2/command/SubsystemBase.h>
+void Shooter::runShooter (double speed) {
+    mShooterMotor.Set(speed);
+}
+
+void Shooter::stopShooter () {
+    runShooter(0.0);
+}
