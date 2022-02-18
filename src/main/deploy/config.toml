@@ -5,3 +5,12 @@ retractTargetSpeed = 0.7
 deploySpeedFactor = 0.01
 intakeRetractedPosition = 0.0
 intakeExtendedPosition = 90.0
+
+[climber]
+lockServoPosition
+extendSpeed
+retractSpeed
+innerStaticFriction
+outerStaticFriction
+innerStaticFrictionWithLoad
+outerStaticFrictionWithLoad
