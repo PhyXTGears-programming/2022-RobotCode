@@ -4,7 +4,6 @@
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxRelativeEncoder.h>
 #include <frc/Servo.h>
-#include <frc/Relay.h>
 
 #include "cpptoml.h"
 #include "constants/interfaces.h"
@@ -22,7 +21,6 @@ class Climber : public frc2::SubsystemBase{
         void stopInner();
 
         void lockArms();
-        void updateRelay(bool isOn);
 
         void rotateInner(double targetPosition);
         void rotateOuter(double targetPosition);
@@ -51,8 +49,6 @@ class Climber : public frc2::SubsystemBase{
         frc::Servo mInnerServo2 {interfaces::kInnerServo2};
         frc::Servo mOuterServo1 {interfaces::kOuterServo1};
         frc::Servo mOuterServo2 {interfaces::kOuterServo2};
-
-        frc::Relay mBackDriveRelay {interfaces::kBackDriveRelay};
 
         struct {
             double extendSpeed, retractSpeed;

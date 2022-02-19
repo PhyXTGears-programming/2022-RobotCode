@@ -117,5 +117,7 @@ namespace interfaces
     const int kOuterServo1 = kPWM4;
     const int kOuterServo2 = kPWM5;
 
-    const int kBackDriveRelay = kDIO0;
+    // servo power control
+
+    const int kServoPowerRelay = kDIO0;
 }

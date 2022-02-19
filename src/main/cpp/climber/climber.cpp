@@ -46,14 +46,6 @@ void Climber::lockArms() {
     mStopServo2.Set(config.lockServoPosition);
 }
 
-void Climber::updateRelay(bool isOn) {
-    if (isOn) {
-        mBackDriveRelay.Set(frc::Relay::Value::kOn);
-    } else {
-        mBackDriveRelay.Set(frc::Relay::Value::kOff);
-    }
-}
-
 void Climber::rotateInner(double targetPosition) {
     mInnerServo1.Set(targetPosition);
     mInnerServo2.Set(targetPosition);
