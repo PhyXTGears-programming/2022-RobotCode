@@ -3,8 +3,11 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxRelativeEncoder.h>
+#include <frc/Servo.h>
+#include <frc/Relay.h>
+
+#include "cpptoml.h"
 #include "constants/interfaces.h"
-#include <cpptoml.h>
 
 class Climber : public frc2::SubsystemBase{
     public:
@@ -15,7 +18,7 @@ class Climber : public frc2::SubsystemBase{
         void extendInner();
         void retractInner();
         void lockArms();
-        void updateRelay();
+        void updateRelay(bool isOn);
 
         double getInnerArmRotations();
         double getOuterArmRotations();
@@ -28,10 +31,10 @@ class Climber : public frc2::SubsystemBase{
         rev::CANSparkMax mOuterHookMotor1 {interfaces::kOuterArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
         rev::CANSparkMax mOuterHookMotor2 {interfaces::kOuterArm2, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
 
-        rev::SparkMaxRelativeEncoder mInnerHook1Encoder = mInnerHookMotor1.getEncoder();
-        rev::SparkMaxRelativeEncoder mInnerHook2Encoder = mInnerHookMotor2.getEncoder();
-        rev::SparkMaxRelativeEncoder mOuterHook1Encoder = mOuterHookMotor1.getEncoder();
-        rev::SparkMaxRelativeEncoder mOuterHook2Encoder = mOuterHookMotor2.getEncoder();
+        rev::SparkMaxRelativeEncoder mInnerHook1Encoder {mInnerHookMotor1.GetEncoder()};
+        rev::SparkMaxRelativeEncoder mInnerHook2Encoder {mInnerHookMotor2.GetEncoder()};
+        rev::SparkMaxRelativeEncoder mOuterHook1Encoder {mOuterHookMotor1.GetEncoder()};
+        rev::SparkMaxRelativeEncoder mOuterHook2Encoder {mOuterHookMotor2.GetEncoder()};
 
         frc::Servo mStopServo1 {interfaces::kStopServo1};
         frc::Servo mStopServo2 {interfaces::kStopServo2};

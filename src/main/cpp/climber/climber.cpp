@@ -7,6 +7,7 @@ Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     config.friction.innerStaticFriction = toml->get_qualified_as<double>("innerStaticFriction").value_or(0.0);
     config.friction.outerStaticFriction = toml->get_qualified_as<double>("outerStaticFriction").value_or(0.0);
     config.friction.innerStaticFrictionWithLoad = toml->get_qualified_as<double>("innerStaticFrictionWithLoad").value_or(0.0);
+    config.friction.outerStaticFrictionWithLoad = toml->get_qualified_as<double>("outerStaticFrictionWithLoad").value_or(0.0);
 }
 
 void Climber::extendOuter() {
@@ -30,15 +31,15 @@ void Climber::retractInner() {
 }
 
 void Climber::lockArms() {
-    mStopServo1.set(config.lockServoPosition);
-    mStopServo2.set(config.lockServoPosition);
+    mStopServo1.Set(config.lockServoPosition);
+    mStopServo2.Set(config.lockServoPosition);
 }
 
-void Climber::updateRelay(bool on) {
-    if (on) {
-        mBackDriveRelay.set(frc::Relay.Value.kOn);
+void Climber::updateRelay(bool isOn) {
+    if (isOn) {
+        mBackDriveRelay.Set(frc::Relay::Value::kOn);
     } else {
-        mBackDriveRelay.set(frc::Relay.Value.kOff);
+        mBackDriveRelay.Set(frc::Relay::Value::kOff);
     }
 }
 
