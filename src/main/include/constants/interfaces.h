@@ -104,6 +104,4 @@ namespace interfaces
     const int kOuterServo2 = kPWM5;
 
     const int kBackDriveRelay = kDIO0;
-
-
 }
