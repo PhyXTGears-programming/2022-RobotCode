@@ -5,9 +5,9 @@ namespace interfaces
     //for future note, each subsystem has their own block of 10 CAN IDs (presuming it needs them)
     //block 0 (00-09) is reserved for the drivetrain
     //block 1 (10-19) is not reserved
-    //block 2 (20-29) is reserved for the climber
+    //block 2 (20-29) is not reserved
     //block 3 (30-39) is not reserved
-    //block 4 (40-49) is not reserved
+    //block 4 (40-49) is reserved for the climber
 
     //done to prevent direct access to CAN pins and instead you have to use the pretty print name
     namespace
@@ -47,6 +47,18 @@ namespace interfaces
         const int kCAN27 = 27;
         const int kCAN28 = 28;
         const int kCAN29 = 29;
+
+        //block 4
+        const int kCAN40 = 40;
+        const int kCAN41 = 41;
+        const int kCAN42 = 42;
+        const int kCAN43 = 43;
+        const int kCAN44 = 44;
+        const int kCAN45 = 45;
+        const int kCAN46 = 46;
+        const int kCAN47 = 47;
+        const int kCAN48 = 48;
+        const int kCAN49 = 49;
 
         //PWM Servos
         const int kPWM0 = 0;
@@ -91,10 +103,12 @@ namespace interfaces
     const int kSteer3 = kCAN06;
     const int kSteer4 = kCAN07;
 
-    const int kInnerArm1 = kCAN20;
-    const int kInnerArm2 = kCAN21;
-    const int kOuterArm1 = kCAN22;
-    const int kOuterArm2 = kCAN23;
+    // climber CAN (block 4), PWM, and DIO assignments
+
+    const int kInnerArm1 = kCAN40;
+    const int kInnerArm2 = kCAN41;
+    const int kOuterArm1 = kCAN42;
+    const int kOuterArm2 = kCAN43;
     
     const int kStopServo1 = kPWM0;
     const int kStopServo2 = kPWM1;
