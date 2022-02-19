@@ -1,4 +1,4 @@
-#include "commands/RetractIntake.h"
+#include "commands/intake/RetractIntake.h"
 
 const double kAcceptablePositionError = 0.01; // buffer value for potentiometer position
 

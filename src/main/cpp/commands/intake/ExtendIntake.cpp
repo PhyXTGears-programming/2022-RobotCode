@@ -1,4 +1,4 @@
-#include "commands/ExtendIntake.h"
+#include "commands/intake/ExtendIntake.h"
 
 const double kAcceptablePositionError = 0.01; // buffer value for potentiometer position
 

@@ -1,4 +1,4 @@
-#include "commands/RunIntake.h"
+#include "commands/intake/RunIntake.h"
 
 RunIntakeCommand::RunIntakeCommand (Intake* intake) {
     AddRequirements(intake);
