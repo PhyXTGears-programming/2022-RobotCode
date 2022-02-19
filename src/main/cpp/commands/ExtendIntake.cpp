@@ -11,14 +11,12 @@ void ExtendIntakeCommand::Initialize () {
     mIntake->extendIntake();
 }
 
-void ExtendIntakeCommand::Execute () {
-    mIntake->moveIntake();
-}
+void ExtendIntakeCommand::Execute () {}
 
 void ExtendIntakeCommand::End (bool interrupted) {
     mIntake->setStationary(true); // the function is setStationary (isExtended)
 }
 
 bool ExtendIntakeCommand::IsFinished () {
-    return abs(mIntake->getDistanceToPosition()) < kAcceptablePositionError;
+    return true;
 }

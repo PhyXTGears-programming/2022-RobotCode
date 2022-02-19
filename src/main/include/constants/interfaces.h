@@ -90,4 +90,10 @@ namespace interfaces
     const int kSteer2 = kCAN05;
     const int kSteer3 = kCAN06;
     const int kSteer4 = kCAN07;
+
+    // intake CAN and PWM assignments (block 2)
+
+    const int kRollerMotor = kCAN20;
+    const int kDeployServo1 = kPWM6;
+    const int kDeployServo2 = kPWM7;
 }

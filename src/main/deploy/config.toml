@@ -1,7 +1,5 @@
 [intake]
 rollerSpeed = 1.0
 extendTargetSpeed = 0.7
-retractTargetSpeed = 0.7
-deploySpeedFactor = 0.01
 intakeRetractedPosition = 0.0
-intakeExtendedPosition = 90.0
+intakeExtendedPosition = 1.0

@@ -11,14 +11,12 @@ void RetractIntakeCommand::Initialize () {
     mIntake->retractIntake();
 }
 
-void RetractIntakeCommand::Execute () {
-    mIntake->moveIntake();
-}
+void RetractIntakeCommand::Execute () {}
 
 void RetractIntakeCommand::End (bool interrupted) {
     mIntake->setStationary(false);
 }
 
 bool RetractIntakeCommand::IsFinished () {
-    return abs(mIntake->getDistanceToPosition()) < kAcceptablePositionError;
+    return true;
 }
