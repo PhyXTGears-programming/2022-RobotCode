@@ -2,8 +2,9 @@
 
 Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     config.lockServoPosition = toml->get_qualified_as<double>("lockServoPosition").value_or(0.0);
-    config.extendSpeed = toml->get_qualified_as<double>("extendSpeed").value_or(0.0);
-    config.retractSpeed = toml->get_qualified_as<double>("retractSpeed").value_or(0.0);
+    config.extendSpeed = toml->get_qualified_as<double>("extendSpeed").value_or(0.5);
+    config.retractSpeed = toml->get_qualified_as<double>("retractSpeed").value_or(0.5);
+    config.inchesPerRevolution = toml->get_qualified_as<double>("inchesPerRevolution").value_or(0.128325);
     config.friction.innerStaticFriction = toml->get_qualified_as<double>("innerStaticFriction").value_or(0.0);
     config.friction.outerStaticFriction = toml->get_qualified_as<double>("outerStaticFriction").value_or(0.0);
     config.friction.innerStaticFrictionWithLoad = toml->get_qualified_as<double>("innerStaticFrictionWithLoad").value_or(0.0);
@@ -67,10 +68,12 @@ void Climber::setUnderLoad(bool isUnderLoad) {
     mIsUnderLoad = isUnderLoad;
 }
 
-double Climber::getInnerArmRotationsFromTarget(double targetRotations) {
-    return targetRotations - (mInnerHook1Encoder.GetPosition() + mInnerHook2Encoder.GetPosition()) / 2;
+double Climber::getInnerArmExtension() {
+    double averageRevolutions = (mInnerHook1Encoder.GetPosition() + mInnerHook2Encoder.GetPosition()) / 2;
+    return averageRevolutions * config.inchesPerRevolution;
 }
 
-double Climber::getOuterArmRotationsFromTarget(double targetRotations) {
-    return targetRotations - (mOuterHook1Encoder.GetPosition() + mOuterHook2Encoder.GetPosition()) / 2;
+double Climber::getOuterArmExtension() {
+    double averageRevolutions = (mOuterHook1Encoder.GetPosition() + mOuterHook2Encoder.GetPosition()) / 2;
+    return averageRevolutions * config.inchesPerRevolution;
 }

@@ -29,11 +29,10 @@ class Climber : public frc2::SubsystemBase{
 
         void setUnderLoad(bool isUnderLoad);
 
-        double getInnerArmRotationsFromTarget(double targetRotations);
-        double getOuterArmRotationsFromTarget(double targetRotations);
+        double getInnerArmExtension();
+        double getOuterArmExtension();
 
     private:
-        //const int kCountsPerRevolution = 42;
         bool mIsUnderLoad = false;
 
         rev::CANSparkMax mInnerHookMotor1 {interfaces::kInnerArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
@@ -58,6 +57,7 @@ class Climber : public frc2::SubsystemBase{
         struct {
             double extendSpeed, retractSpeed;
             double lockServoPosition;
+            double inchesPerRevolution;
             struct {
                 double innerStaticFriction, outerStaticFriction;
                 double innerStaticFrictionWithLoad, outerStaticFrictionWithLoad;
