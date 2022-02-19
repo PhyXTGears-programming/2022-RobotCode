@@ -15,3 +15,16 @@ innerStaticFriction = 0.0 # actual value unknown
 outerStaticFriction = 0.0 # actual value unknown
 innerStaticFrictionWithLoad = 0.0 # actual value unknown
 outerStaticFrictionWithLoad = 0.0 # actual value unknown
+
+[cycleCommand]
+initalExtension = 0.0
+liftExtension = 0.0
+armRotationForNextBar = 0.0
+extendToNextBarExtension = 0.0
+dropToNextBar = 0.0
+grabNextBarExtension = 0.0
+releaseRearBar = 0.0
+liftOffRearBar = 0.0
+extendToRearBar = 0.0
+armRotationVertical = 0.5
+restingExtension = 0.0

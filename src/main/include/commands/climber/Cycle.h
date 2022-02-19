@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cpptoml.h"
+
 #include "climber/climber.h"
 #include "servoPower/servoPower.h"
 
@@ -20,7 +22,7 @@
 
 class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
     public:
-        Cycle(Climber * climber, ServoPower * servoPower);
+        Cycle(Climber * climber, ServoPower * servoPower, std::shared_ptr<cpptoml::table> toml);
 
         void Initialize() override;
         void Execute() override;
@@ -48,41 +50,10 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
             double restingExtension; // extension while driving/not reaching
         } config;
 
-        frc2::SequentialCommandGroup * highCycle = new frc2::SequentialCommandGroup(
-            RotateOuterArmsCommand {mClimber, config.armRotationForNextBar},
-            RetractInnerArmsCommand {mClimber, config.liftExtension},
-            ExtendOuterArmsCommand {mClimber, config.extendToNextBarExtension},
-            RotateOuterArmsCommand {mClimber, config.dropToNextBar},
-            RetractOuterArmsCommand {mClimber, config.grabNextBarExtension},
-            PowerServosOffCommand {mServoPower},
-            frc2::ParallelCommandGroup (
-                ExtendInnerArmsCommand {mClimber, config.extendToRearBar}, // the inner arms extend
-                RetractOuterArmsCommand {mClimber, config.liftExtension} // and the outer arms retract to bring it into position
-            ),
-            PowerServosOnCommand {mServoPower},
-            ExtendInnerArmsCommand {mClimber, config.releaseRearBar},
-            RotateInnerArmsCommand {mClimber, config.liftOffRearBar},
-            RetractInnerArmsCommand {mClimber, config.restingExtension}
-        );
+        frc2::SequentialCommandGroup * mHighCycle = nullptr;
 
         // at this point the outer hooks should be on the second bar and the inner hooks should be pointing towards the traversal rung.
 
-        frc2::SequentialCommandGroup * traversalCycle = new frc2::SequentialCommandGroup (
-            RotateInnerArmsCommand {mClimber, config.armRotationForNextBar},
-            ExtendInnerArmsCommand {mClimber, config.extendToNextBarExtension},
-            RotateInnerArmsCommand {mClimber, config.dropToNextBar},
-            RetractInnerArmsCommand {mClimber, config.grabNextBarExtension},
-            PowerServosOffCommand {mServoPower},
-            frc2::ParallelCommandGroup (
-                ExtendOuterArmsCommand {mClimber, config.extendToRearBar}, // the outer arms extend
-                RetractInnerArmsCommand {mClimber, config.liftExtension} // and the outer arms retract to bring it into position
-            ),
-            PowerServosOnCommand {mServoPower},
-            ExtendOuterArmsCommand {mClimber, config.releaseRearBar},
-            RotateOuterArmsCommand {mClimber, config.liftOffRearBar},
-            RetractOuterArmsCommand {mClimber, config.restingExtension},
-            RotateOuterArmsCommand {mClimber, config.armRotationVertical},
-            LockArmsCommand {mClimber}
-        );
+        frc2::SequentialCommandGroup * mTraversalCycle = nullptr;
         // and now the inner hooks should be on the traversal rung.
 };
