@@ -53,6 +53,20 @@ void Climber::updateRelay(bool isOn) {
     }
 }
 
+void Climber::rotateInner(double targetPosition) {
+    mInnerServo1.Set(targetPosition);
+    mInnerServo2.Set(targetPosition);
+}
+
+void Climber::rotateOuter(double targetPosition) {
+    mOuterServo1.Set(targetPosition);
+    mOuterServo2.Set(targetPosition);
+}
+
+void Climber::setUnderLoad(bool isUnderLoad) {
+    mIsUnderLoad = isUnderLoad;
+}
+
 double Climber::getInnerArmRotationsFromTarget(double targetRotations) {
     return targetRotations - (mInnerHook1Encoder.GetPosition() + mInnerHook2Encoder.GetPosition()) / 2;
 }
