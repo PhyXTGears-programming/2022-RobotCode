@@ -24,11 +24,11 @@ class Climber : public frc2::SubsystemBase{
         void lockArms();
         void updateRelay(bool isOn);
 
-        double getInnerArmRotations();
-        double getOuterArmRotations();
+        double getInnerArmRotationsFromTarget(double targetRotations);
+        double getOuterArmRotationsFromTarget(double targetRotations);
 
     private:
-        const int kCountsPerRevolution = 42;
+        //const int kCountsPerRevolution = 42;
 
         rev::CANSparkMax mInnerHookMotor1 {interfaces::kInnerArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
         rev::CANSparkMax mInnerHookMotor2 {interfaces::kInnerArm2, rev::CANSparkMaxLowLevel::MotorType::kBrushless};

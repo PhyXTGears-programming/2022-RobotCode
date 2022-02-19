@@ -53,10 +53,10 @@ void Climber::updateRelay(bool isOn) {
     }
 }
 
-double Climber::getInnerArmRotations() { // returns average of the hook positions
-    return (mInnerHook1Encoder.GetPosition() + mInnerHook2Encoder.GetPosition())/2;
+double Climber::getInnerArmRotationsFromTarget(double targetRotations) {
+    return targetRotations - (mInnerHook1Encoder.GetPosition() + mInnerHook2Encoder.GetPosition()) / 2;
 }
 
-double Climber::getOuterArmRotations() { // returns average of the hook positions
-    return (mOuterHook1Encoder.GetPosition() + mOuterHook2Encoder.GetPosition())/2;
+double Climber::getOuterArmRotationsFromTarget(double targetRotations) {
+    return targetRotations - (mOuterHook1Encoder.GetPosition() + mOuterHook2Encoder.GetPosition()) / 2;
 }
