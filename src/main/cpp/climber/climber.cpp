@@ -20,6 +20,11 @@ void Climber::retractOuter() {
     mOuterHookMotor2.Set(config.retractSpeed);
 }
 
+void Climber::stopOuter() {
+    mOuterHookMotor1.Set(0.0);
+    mOuterHookMotor2.Set(0.0);
+}
+
 void Climber::extendInner() {
     mInnerHookMotor1.Set(config.extendSpeed);
     mInnerHookMotor2.Set(config.extendSpeed);
@@ -28,6 +33,11 @@ void Climber::extendInner() {
 void Climber::retractInner() {
     mOuterHookMotor1.Set(config.retractSpeed);
     mOuterHookMotor2.Set(config.retractSpeed);
+}
+
+void Climber::stopInner() {
+    mInnerHookMotor1.Set(0.0);
+    mInnerHookMotor2.Set(0.0);
 }
 
 void Climber::lockArms() {

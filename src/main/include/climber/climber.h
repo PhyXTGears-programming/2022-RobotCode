@@ -15,8 +15,12 @@ class Climber : public frc2::SubsystemBase{
 
         void extendOuter();
         void retractOuter();
+        void stopOuter();
+
         void extendInner();
         void retractInner();
+        void stopInner();
+
         void lockArms();
         void updateRelay(bool isOn);
 
