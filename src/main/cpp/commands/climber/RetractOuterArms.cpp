@@ -8,16 +8,26 @@ RetractOuterArmsCommand::RetractOuterArmsCommand(Climber * climber, double targe
     mTargetExtension = targetExtension;
 }
 
-void RetractOuterArmsCommand::Initialize() {
-    mClimber->retractOuter();
+void RetractOuterArmsCommand::Initialize() {}
+
+void RetractOuterArmsCommand::Execute() {
+    if (mClimber->isOuter1NearTarget(mTargetExtension)) {
+        mClimber->stopOuter1();
+    } else {
+        mClimber->retractOuter1();
+    }
+    if (mClimber->isOuter2NearTarget(mTargetExtension)) {
+        mClimber->stopOuter2();
+    } else {
+        mClimber->retractOuter2();
+    }
 }
 
-void RetractOuterArmsCommand::Execute() {}
-
 void RetractOuterArmsCommand::End(bool isInterrupted) {
-    mClimber->stopOuter();
+    mClimber->stopOuter1();
+    mClimber->stopOuter2();
 }
 
 bool RetractOuterArmsCommand::IsFinished() {
-    return abs(mTargetExtension - mClimber->getOuterArmExtension()) < kAcceptableExtensionError;
+    return mClimber->isOuter1NearTarget(mTargetExtension) && mClimber->isOuter2NearTarget(mTargetExtension);
 }

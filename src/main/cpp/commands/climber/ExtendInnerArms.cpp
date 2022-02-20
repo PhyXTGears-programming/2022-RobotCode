@@ -8,16 +8,26 @@ ExtendInnerArmsCommand::ExtendInnerArmsCommand(Climber * climber, double targetE
     mTargetExtension = targetExtension;
 }
 
-void ExtendInnerArmsCommand::Initialize() {
-    mClimber->extendInner();
+void ExtendInnerArmsCommand::Initialize() {}
+
+void ExtendInnerArmsCommand::Execute() {
+    if (mClimber->isInner1NearTarget(mTargetExtension)) {
+        mClimber->stopInner1();
+    } else {
+        mClimber->extendInner1();
+    }
+    if (mClimber->isInner2NearTarget(mTargetExtension)) {
+        mClimber->stopInner2();
+    } else {
+        mClimber->extendInner2();
+    }
 }
 
-void ExtendInnerArmsCommand::Execute() {}
-
 void ExtendInnerArmsCommand::End(bool isInterrupted) {
-    mClimber->stopInner();
+    mClimber->stopInner1();
+    mClimber->stopInner2();
 }
 
 bool ExtendInnerArmsCommand::IsFinished() {
-    return abs(mTargetExtension - mClimber->getInnerArmExtension()) < kAcceptableExtensionError;
+    return mClimber->isInner1NearTarget(mTargetExtension) && mClimber->isInner2NearTarget(mTargetExtension);
 }

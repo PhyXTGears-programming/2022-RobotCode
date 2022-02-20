@@ -12,13 +12,19 @@ class Climber : public frc2::SubsystemBase{
     public:
         Climber(std::shared_ptr<cpptoml::table> toml); // constructor
 
-        void extendOuter();
-        void retractOuter();
-        void stopOuter();
+        void extendOuter1();
+        void extendOuter2();
+        void retractOuter1();
+        void retractOuter2();
+        void stopOuter1();
+        void stopOuter2();
 
-        void extendInner();
-        void retractInner();
-        void stopInner();
+        void extendInner1();
+        void extendInner2();
+        void retractInner1();
+        void retractInner2();
+        void stopInner1();
+        void stopInner2();
 
         void lockArms();
 
@@ -27,10 +33,12 @@ class Climber : public frc2::SubsystemBase{
 
         void setUnderLoad(bool isUnderLoad);
 
-        double getInnerArmExtension();
-        double getOuterArmExtension();
-
         void disableServos();
+
+        bool isOuter1NearTarget(double target);
+        bool isOuter2NearTarget(double target);
+        bool isInner1NearTarget(double target);
+        bool isInner2NearTarget(double target);
 
     private:
         bool mIsUnderLoad = false;

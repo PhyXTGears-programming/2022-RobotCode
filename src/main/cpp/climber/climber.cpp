@@ -1,5 +1,7 @@
 #include "climber/climber.h"
 
+const double kAcceptablePositionError = 0.05;
+
 Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     config.lockServoPosition = toml->get_qualified_as<double>("lockServoPosition").value_or(0.0);
     config.extendSpeed = toml->get_qualified_as<double>("extendSpeed").value_or(0.5);
@@ -11,33 +13,51 @@ Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     config.friction.outerStaticFrictionWithLoad = toml->get_qualified_as<double>("outerStaticFrictionWithLoad").value_or(0.0);
 }
 
-void Climber::extendOuter() {
+void Climber::extendOuter1() {
     mOuterHookMotor1.Set(config.extendSpeed);
+}
+
+void Climber::extendOuter2() {
     mOuterHookMotor2.Set(config.extendSpeed);
 }
 
-void Climber::retractOuter() {
+void Climber::retractOuter1() {
     mOuterHookMotor1.Set(config.retractSpeed);
+}
+
+void Climber::retractOuter2() {
     mOuterHookMotor2.Set(config.retractSpeed);
 }
 
-void Climber::stopOuter() {
+void Climber::stopOuter1() {
     mOuterHookMotor1.Set(0.0);
+}
+
+void Climber::stopOuter2() {
     mOuterHookMotor2.Set(0.0);
 }
 
-void Climber::extendInner() {
+void Climber::extendInner1() {
     mInnerHookMotor1.Set(config.extendSpeed);
+}
+
+void Climber::extendInner2() {
     mInnerHookMotor2.Set(config.extendSpeed);
 }
 
-void Climber::retractInner() {
+void Climber::retractInner1() {
     mOuterHookMotor1.Set(config.retractSpeed);
+}
+    
+void Climber::retractInner2() {
     mOuterHookMotor2.Set(config.retractSpeed);
 }
 
-void Climber::stopInner() {
+void Climber::stopInner1() {
     mInnerHookMotor1.Set(0.0);
+}
+
+void Climber::stopInner2() {
     mInnerHookMotor2.Set(0.0);
 }
 
@@ -60,19 +80,25 @@ void Climber::setUnderLoad(bool isUnderLoad) {
     mIsUnderLoad = isUnderLoad;
 }
 
-double Climber::getInnerArmExtension() {
-    double averageRevolutions = (mInnerHook1Encoder.GetPosition() + mInnerHook2Encoder.GetPosition()) / 2;
-    return averageRevolutions * config.inchesPerRevolution;
-}
-
-double Climber::getOuterArmExtension() {
-    double averageRevolutions = (mOuterHook1Encoder.GetPosition() + mOuterHook2Encoder.GetPosition()) / 2;
-    return averageRevolutions * config.inchesPerRevolution;
-}
-
 void Climber::disableServos() {
     mInnerServo1.SetOffline();
     mInnerServo2.SetOffline();
     mOuterServo1.SetOffline();
     mOuterServo2.SetOffline();
+}
+
+bool Climber::isOuter1NearTarget(double target) {
+    return abs(target - (mOuterHook1Encoder.GetPosition() * config.inchesPerRevolution)) < kAcceptablePositionError;
+}
+
+bool Climber::isOuter2NearTarget(double target) {
+    return abs(target - (mOuterHook2Encoder.GetPosition() * config.inchesPerRevolution)) < kAcceptablePositionError;
+}
+
+bool Climber::isInner1NearTarget(double target) {
+    return abs(target - (mInnerHook1Encoder.GetPosition() * config.inchesPerRevolution)) < kAcceptablePositionError;
+}
+
+bool Climber::isInner2NearTarget(double target) {
+    return abs(target - (mInnerHook2Encoder.GetPosition() * config.inchesPerRevolution)) < kAcceptablePositionError;
 }
