@@ -41,7 +41,7 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
             double dropToNextBar; // drops arm onto next rung
             double grabNextBarExtension; // retracts arm so hook is grabbing next rung
             double releaseRearBar; // extends arm beyond rear bar
-            double liftOffRearBar;
+            double dropOffRearBar;
             double extendToRearBar; // extends the arms on the rear bar as the robot swings
             double armRotationVertical; // brings the arms vertical
             double restingExtension; // extension while driving/not reaching
