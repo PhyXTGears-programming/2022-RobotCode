@@ -3,11 +3,11 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "servoPower/servoPower.h"
+#include "climber/climber.h"
 
 class PowerServosOffCommand : public frc2::CommandHelper<frc2::CommandBase, PowerServosOffCommand> {
     public:
-        PowerServosOffCommand(ServoPower * servoPower);
+        PowerServosOffCommand(Climber * climber);
 
         void Initialize() override;
         void Execute() override;
@@ -15,5 +15,5 @@ class PowerServosOffCommand : public frc2::CommandHelper<frc2::CommandBase, Powe
         bool IsFinished() override;
 
     private:
-        ServoPower * mServoPower;
+        Climber * mClimber;
 };

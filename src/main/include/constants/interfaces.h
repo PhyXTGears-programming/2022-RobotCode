@@ -103,7 +103,7 @@ namespace interfaces
     const int kSteer3 = kCAN06;
     const int kSteer4 = kCAN07;
 
-    // climber CAN (block 4), PWM, and DIO assignments
+    // climber CAN (block 4) and PWM assignments
 
     const int kInnerArm1 = kCAN40;
     const int kInnerArm2 = kCAN41;
@@ -116,8 +116,4 @@ namespace interfaces
     const int kInnerServo2 = kPWM3;
     const int kOuterServo1 = kPWM4;
     const int kOuterServo2 = kPWM5;
-
-    // servo power control
-
-    const int kServoPowerRelay = kDIO0;
 }

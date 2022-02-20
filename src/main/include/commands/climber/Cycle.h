@@ -3,7 +3,6 @@
 #include "cpptoml.h"
 
 #include "climber/climber.h"
-#include "servoPower/servoPower.h"
 
 #include "commands/climber/ExtendInnerArms.h"
 #include "commands/climber/ExtendOuterArms.h"
@@ -12,8 +11,7 @@
 #include "commands/climber/RotateOuterArms.h"
 #include "commands/climber/RotateInnerArms.h"
 #include "commands/climber/LockArms.h"
-#include "commands/servoPower/PowerServosOff.h"
-#include "commands/servoPower/PowerServosOn.h"
+#include "commands/climber/PowerServosOff.h"
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
@@ -22,7 +20,7 @@
 
 class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
     public:
-        Cycle(Climber * climber, ServoPower * servoPower, std::shared_ptr<cpptoml::table> toml);
+        Cycle(Climber * climber, std::shared_ptr<cpptoml::table> toml);
 
         void Initialize() override;
         void Execute() override;
@@ -31,7 +29,6 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
 
     private:
         Climber * mClimber;
-        ServoPower * mServoPower;
 
         enum CycleState {HIGH, TRAVERSE, INOPERATIVE = -1};
         CycleState mGoal = HIGH;

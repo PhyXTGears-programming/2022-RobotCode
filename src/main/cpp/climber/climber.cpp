@@ -69,3 +69,10 @@ double Climber::getOuterArmExtension() {
     double averageRevolutions = (mOuterHook1Encoder.GetPosition() + mOuterHook2Encoder.GetPosition()) / 2;
     return averageRevolutions * config.inchesPerRevolution;
 }
+
+void Climber::disableServos() {
+    mInnerServo1.SetOffline();
+    mInnerServo2.SetOffline();
+    mOuterServo1.SetOffline();
+    mOuterServo2.SetOffline();
+}

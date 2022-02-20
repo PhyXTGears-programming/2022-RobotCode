@@ -1,10 +1,8 @@
 #include "commands/climber/Cycle.h"
 
-Cycle::Cycle(Climber * climber, ServoPower * servoPower, std::shared_ptr<cpptoml::table> toml) {
+Cycle::Cycle(Climber * climber, std::shared_ptr<cpptoml::table> toml) {
     AddRequirements(climber);
-    AddRequirements(servoPower);
     mClimber = climber;
-    mServoPower = servoPower;
 
     config.armRotationForNextBar = toml->get_qualified_as<double>("armRotationForNextBar").value_or(0.0);
     config.armRotationVertical = toml->get_qualified_as<double>("armRotationVertical").value_or(0.5);
@@ -24,12 +22,11 @@ Cycle::Cycle(Climber * climber, ServoPower * servoPower, std::shared_ptr<cpptoml
         ExtendOuterArmsCommand {mClimber, config.extendToNextBarExtension},
         RotateOuterArmsCommand {mClimber, config.dropToNextBar},
         RetractOuterArmsCommand {mClimber, config.grabNextBarExtension},
-        PowerServosOffCommand {mServoPower},
+        PowerServosOffCommand {mClimber},
         frc2::ParallelCommandGroup (
             ExtendInnerArmsCommand {mClimber, config.extendToRearBar}, // the inner arms extend
             RetractOuterArmsCommand {mClimber, config.liftExtension} // and the outer arms retract to bring it into position
         ),
-        PowerServosOnCommand {mServoPower},
         ExtendInnerArmsCommand {mClimber, config.releaseRearBar},
         RotateInnerArmsCommand {mClimber, config.liftOffRearBar},
         RetractInnerArmsCommand {mClimber, config.restingExtension}
@@ -40,12 +37,11 @@ Cycle::Cycle(Climber * climber, ServoPower * servoPower, std::shared_ptr<cpptoml
         ExtendInnerArmsCommand {mClimber, config.extendToNextBarExtension},
         RotateInnerArmsCommand {mClimber, config.dropToNextBar},
         RetractInnerArmsCommand {mClimber, config.grabNextBarExtension},
-        PowerServosOffCommand {mServoPower},
+        PowerServosOffCommand {mClimber},
         frc2::ParallelCommandGroup (
             ExtendOuterArmsCommand {mClimber, config.extendToRearBar}, // the outer arms extend
             RetractInnerArmsCommand {mClimber, config.liftExtension} // and the outer arms retract to bring it into position
         ),
-        PowerServosOnCommand {mServoPower},
         ExtendOuterArmsCommand {mClimber, config.releaseRearBar},
         RotateOuterArmsCommand {mClimber, config.liftOffRearBar},
         RetractOuterArmsCommand {mClimber, config.restingExtension},

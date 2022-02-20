@@ -30,6 +30,8 @@ class Climber : public frc2::SubsystemBase{
         double getInnerArmExtension();
         double getOuterArmExtension();
 
+        void disableServos();
+
     private:
         bool mIsUnderLoad = false;
 
