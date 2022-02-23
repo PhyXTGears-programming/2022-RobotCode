@@ -71,25 +71,25 @@ void Climber::lockArms() {
     mStopServo2.Set(config.lockServoPosition);
 }
 
-void Climber::rotateInner(double targetPosition) {
-    mInnerServo1.Set(targetPosition);
-    mInnerServo2.Set(targetPosition);
+void Climber::rotateInner(double speed) {
+    mInnerArmRotationMotor.Set(speed);
 }
 
-void Climber::rotateOuter(double targetPosition) {
-    mOuterServo1.Set(targetPosition);
-    mOuterServo2.Set(targetPosition);
+void Climber::rotateOuter(double speed) {
+    mOuterArmRotationMotor.Set(speed);
 }
+
+double Climber::getInnerAngle() {
+    return mInnerRotationEncoder.GetAbsolutePosition();
+}
+
+double Climber::getOuterAngle() {
+    return mOuterRotationEncoder.GetAbsolutePosition();
+}
+
 
 void Climber::setUnderLoad(bool isUnderLoad) {
     mIsUnderLoad = isUnderLoad;
-}
-
-void Climber::disableServos() {
-    mInnerServo1.SetOffline();
-    mInnerServo2.SetOffline();
-    mOuterServo1.SetOffline();
-    mOuterServo2.SetOffline();
 }
 
 bool Climber::isOuter1NearTarget(double target) {

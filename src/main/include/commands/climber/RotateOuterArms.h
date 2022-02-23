@@ -7,7 +7,7 @@
 
 class RotateOuterArmsCommand : public frc2::CommandHelper<frc2::CommandBase, RotateOuterArmsCommand> {
     public:
-        RotateOuterArmsCommand(Climber * climber, double targetRotation);
+        RotateOuterArmsCommand(Climber * climber, double targetAngle);
 
         void Initialize() override;
         void Execute() override;
@@ -16,5 +16,5 @@ class RotateOuterArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Rot
 
     private:
         Climber * mClimber;
-        double mTargetRotation;
+        double mTargetAngle;
 };

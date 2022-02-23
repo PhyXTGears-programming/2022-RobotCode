@@ -2,6 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
+#include <ctre/phoenix/sensors/CANCoder.h>
 #include <rev/SparkMaxRelativeEncoder.h>
 #include <frc/Servo.h>
 
@@ -28,12 +29,13 @@ class Climber : public frc2::SubsystemBase{
 
         void lockArms();
 
-        void rotateInner(double targetPosition);
-        void rotateOuter(double targetPosition);
+        void rotateInner(double speed);
+        void rotateOuter(double speed);
+
+        double getInnerAngle();
+        double getOuterAngle();
 
         void setUnderLoad(bool isUnderLoad);
-
-        void disableServos();
 
         bool isOuter1NearTarget(double target);
         bool isOuter2NearTarget(double target);
@@ -48,6 +50,12 @@ class Climber : public frc2::SubsystemBase{
         rev::CANSparkMax mOuterHookMotor1 {interfaces::kOuterArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
         rev::CANSparkMax mOuterHookMotor2 {interfaces::kOuterArm2, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
 
+        rev::CANSparkMax mOuterArmRotationMotor {interfaces::kOuterArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+        rev::CANSparkMax mInnerArmRotationMotor {interfaces::kInnerArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+
+        ctre::phoenix::sensors::CANCoder mInnerRotationEncoder {interfaces::kInnerRotationEncoder};
+        ctre::phoenix::sensors::CANCoder mOuterRotationEncoder {interfaces::kOuterRotationEncoder};
+
         rev::SparkMaxRelativeEncoder mInnerHook1Encoder {mInnerHookMotor1.GetEncoder()};
         rev::SparkMaxRelativeEncoder mInnerHook2Encoder {mInnerHookMotor2.GetEncoder()};
         rev::SparkMaxRelativeEncoder mOuterHook1Encoder {mOuterHookMotor1.GetEncoder()};
@@ -55,10 +63,6 @@ class Climber : public frc2::SubsystemBase{
 
         frc::Servo mStopServo1 {interfaces::kStopServo1};
         frc::Servo mStopServo2 {interfaces::kStopServo2};
-        frc::Servo mInnerServo1 {interfaces::kInnerServo1};
-        frc::Servo mInnerServo2 {interfaces::kInnerServo2};
-        frc::Servo mOuterServo1 {interfaces::kOuterServo1};
-        frc::Servo mOuterServo2 {interfaces::kOuterServo2};
 
         struct {
             double extendSpeed, retractSpeed;

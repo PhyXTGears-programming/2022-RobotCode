@@ -109,11 +109,12 @@ namespace interfaces
     const int kInnerArm2 = kCAN41;
     const int kOuterArm1 = kCAN42;
     const int kOuterArm2 = kCAN43;
+
+    const int kOuterArmRotation = kCAN44;
+    const int kInnerArmRotation = kCAN45;
+    const int kInnerRotationEncoder = kCAN46;
+    const int kOuterRotationEncoder = kCAN47;
     
     const int kStopServo1 = kPWM0;
     const int kStopServo2 = kPWM1;
-    const int kInnerServo1 = kPWM2;
-    const int kInnerServo2 = kPWM3;
-    const int kOuterServo1 = kPWM4;
-    const int kOuterServo2 = kPWM5;
 }

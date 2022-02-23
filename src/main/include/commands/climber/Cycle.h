@@ -11,7 +11,6 @@
 #include "commands/climber/RotateOuterArms.h"
 #include "commands/climber/RotateInnerArms.h"
 #include "commands/climber/LockArms.h"
-#include "commands/climber/PowerServosOff.h"
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
@@ -36,14 +35,14 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
         struct {
             double initalExtension; // amount to raise arms to get on bar
             double liftExtension; // the amount to retract arms to lift robot up
-            double armRotationForNextBar; // lifts arm above next rung
+            double armAngleForNextBar; // lifts arm above next rung
             double extendToNextBarExtension; // Reaches beyond the next rung
             double dropToNextBar; // drops arm onto next rung
             double grabNextBarExtension; // retracts arm so hook is grabbing next rung
             double releaseRearBar; // extends arm beyond rear bar
             double dropOffRearBar;
             double extendToRearBar; // extends the arms on the rear bar as the robot swings
-            double armRotationVertical; // brings the arms vertical
+            double armAngleVertical; // brings the arms vertical
             double restingExtension; // extension while driving/not reaching
         } config;
 
