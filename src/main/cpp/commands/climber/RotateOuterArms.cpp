@@ -17,7 +17,7 @@ void RotateOuterArmsCommand::Initialize() {}
 void RotateOuterArmsCommand::Execute() {
     double armAngle = mClimber->getOuterAngle();
     double err = mTargetAngle - armAngle;
-    double speed = lerp(kMinSpeed, kMaxSpeed, abs(err/180)) * ((err > 0) ? -1.0 : 1.0); // abs(err/180) should be a value between 0 and 1
+    double speed = lerp(kMinSpeed, kMaxSpeed, abs((err + 180) / 360)) * std::copysign(1.0, -err);
     mClimber->rotateOuter(speed);
 }
 
