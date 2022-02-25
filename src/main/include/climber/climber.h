@@ -35,7 +35,8 @@ class Climber : public frc2::SubsystemBase{
         double getInnerAngle();
         double getOuterAngle();
 
-        void setUnderLoad(bool isUnderLoad);
+        void setInnerUnderLoad(bool isUnderLoad);
+        void setOuterUnderLoad(bool isUnderLoad);
 
         bool isOuter1NearTarget(double target);
         bool isOuter2NearTarget(double target);
@@ -43,7 +44,8 @@ class Climber : public frc2::SubsystemBase{
         bool isInner2NearTarget(double target);
 
     private:
-        bool mIsUnderLoad = false;
+        bool mIsInnerUnderLoad = false;
+        bool mIsOuterUnderLoad = false;
 
         rev::CANSparkMax mInnerHookMotor1 {interfaces::kInnerArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
         rev::CANSparkMax mInnerHookMotor2 {interfaces::kInnerArm2, rev::CANSparkMaxLowLevel::MotorType::kBrushless};

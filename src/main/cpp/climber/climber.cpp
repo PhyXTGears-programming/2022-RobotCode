@@ -24,19 +24,19 @@ Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
 }
 
 void Climber::extendOuter1() {
-    mOuterHookMotor1.Set(config.extendSpeed + ((mIsUnderLoad) ? config.friction.outerStaticFrictionWithLoad : config.friction.outerStaticFriction));
+    mOuterHookMotor1.Set(config.extendSpeed + config.friction.outerStaticFriction));
 }
 
 void Climber::extendOuter2() {
-    mOuterHookMotor2.Set(config.extendSpeed + ((mIsUnderLoad) ? config.friction.outerStaticFrictionWithLoad : config.friction.outerStaticFriction));
+    mOuterHookMotor2.Set(config.extendSpeed + config.friction.outerStaticFriction);
 }
 
 void Climber::retractOuter1() {
-    mOuterHookMotor1.Set(config.retractSpeed + config.friction.outerStaticFriction);
+    mOuterHookMotor1.Set(config.retractSpeed + ((mIsOuterUnderLoad) ? config.friction.outerStaticFrictionWithLoad : config.friction.outerStaticFriction));
 }
 
 void Climber::retractOuter2() {
-    mOuterHookMotor2.Set(config.retractSpeed + config.friction.outerStaticFriction);
+    mOuterHookMotor2.Set(config.retractSpeed + ((mIsOuterUnderLoad) ? config.friction.outerStaticFrictionWithLoad : config.friction.outerStaticFriction));
 }
 
 void Climber::stopOuter1() {
@@ -48,19 +48,19 @@ void Climber::stopOuter2() {
 }
 
 void Climber::extendInner1() {
-    mInnerHookMotor1.Set(config.extendSpeed + ((mIsUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
+    mInnerHookMotor1.Set(config.extendSpeed + config.friction.innerStaticFriction));
 }
 
 void Climber::extendInner2() {
-    mInnerHookMotor2.Set(config.extendSpeed + ((mIsUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
+    mInnerHookMotor2.Set(config.extendSpeed + config.friction.innerStaticFriction));
 }
 
 void Climber::retractInner1() {
-    mOuterHookMotor1.Set(config.retractSpeed + config.friction.innerStaticFriction);
+    mOuterHookMotor1.Set(config.retractSpeed + ((mIsInnerUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
 }
     
 void Climber::retractInner2() {
-    mOuterHookMotor2.Set(config.retractSpeed + config.friction.innerStaticFriction);
+    mOuterHookMotor2.Set(config.retractSpeed + ((mIsInnerUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
 }
 
 void Climber::stopInner1() {
@@ -92,9 +92,12 @@ double Climber::getOuterAngle() {
     return mOuterRotationEncoder.GetAbsolutePosition();
 }
 
+void Climber::setInnerUnderLoad(bool isUnderLoad) {
+    mIsInnerUnderLoad = isUnderLoad;
+}
 
-void Climber::setUnderLoad(bool isUnderLoad) {
-    mIsUnderLoad = isUnderLoad;
+void Climber::setOuterUnderLoad(bool isUnderLoad) {
+    mIsOuterUnderLoad = isUnderLoad;
 }
 
 bool Climber::isOuter1NearTarget(double target) {
