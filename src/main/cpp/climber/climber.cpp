@@ -92,6 +92,17 @@ double Climber::getOuterAngle() {
     return mOuterRotationEncoder.GetAbsolutePosition();
 }
 
+void Climber::setRotateMotorsCoast() {
+    mOuterArmRotationMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    mInnerArmRotationMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+}
+
+void Climber::setRotateMotorsBrake() {
+    mOuterArmRotationMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    mInnerArmRotationMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+}
+
+
 void Climber::setInnerUnderLoad(bool isUnderLoad) {
     mIsInnerUnderLoad = isUnderLoad;
 }

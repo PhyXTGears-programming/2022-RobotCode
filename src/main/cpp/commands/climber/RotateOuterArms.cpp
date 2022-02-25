@@ -12,7 +12,9 @@ RotateOuterArmsCommand::RotateOuterArmsCommand(Climber * climber, double targetA
     mTargetAngle = targetAngle;
 }
 
-void RotateOuterArmsCommand::Initialize() {}
+void RotateOuterArmsCommand::Initialize() {
+    mClimber->setRotateMotorsBrake();
+}
 
 void RotateOuterArmsCommand::Execute() {
     double armAngle = mClimber->getOuterAngle();
@@ -21,7 +23,9 @@ void RotateOuterArmsCommand::Execute() {
     mClimber->rotateOuter(speed);
 }
 
-void RotateOuterArmsCommand::End(bool isInterrupted) {}
+void RotateOuterArmsCommand::End(bool isInterrupted) {
+    mClimber->setRotateMotorsCoast();
+}
 
 bool RotateOuterArmsCommand::IsFinished() {
     double armAngle = mClimber->getOuterAngle();

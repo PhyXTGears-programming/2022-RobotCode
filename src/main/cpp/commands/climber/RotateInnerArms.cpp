@@ -12,7 +12,9 @@ RotateInnerArmsCommand::RotateInnerArmsCommand(Climber * climber, double targetA
     mTargetAngle = targetAngle;
 }
 
-void RotateInnerArmsCommand::Initialize() {}
+void RotateInnerArmsCommand::Initialize() {
+    mClimber->setRotateMotorsBrake();
+}
 
 void RotateInnerArmsCommand::Execute() {
     double armAngle = mClimber->getInnerAngle();
@@ -21,7 +23,9 @@ void RotateInnerArmsCommand::Execute() {
     mClimber->rotateInner(speed);
 }
 
-void RotateInnerArmsCommand::End(bool isInterrupted) {}
+void RotateInnerArmsCommand::End(bool isInterrupted) {
+    mClimber->setRotateMotorsCoast();
+}
 
 bool RotateInnerArmsCommand::IsFinished() {
     double armAngle = mClimber->getInnerAngle();
