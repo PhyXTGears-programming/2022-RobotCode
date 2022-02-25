@@ -12,6 +12,11 @@ Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     config.friction.innerStaticFrictionWithLoad = toml->get_qualified_as<double>("innerStaticFrictionWithLoad").value_or(0.0);
     config.friction.outerStaticFrictionWithLoad = toml->get_qualified_as<double>("outerStaticFrictionWithLoad").value_or(0.0);
 
+    mInnerHookMotor1.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    mInnerHookMotor2.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    mOuterHookMotor1.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    mOuterHookMotor2.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+
     mOuterHook1Encoder.SetPosition(0.0);
     mOuterHook2Encoder.SetPosition(0.0);
     mInnerHook1Encoder.SetPosition(0.0);
