@@ -1,11 +1,6 @@
 #include "commands/climber/Cycle.h"
-#include <chrono>
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/InstantCommand.h>
-
-using namespace std::literals::chrono_literals;
-
-const std::chrono::seconds kServoWaitTime = 1s;
 
 Cycle::Cycle(Climber * climber, std::shared_ptr<cpptoml::table> toml) {
     AddRequirements(climber);
