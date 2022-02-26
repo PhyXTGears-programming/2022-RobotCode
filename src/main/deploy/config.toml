@@ -5,3 +5,26 @@ retractTargetSpeed = 0.7
 deploySpeedFactor = 0.01
 intakeRetractedPosition = 0.0
 intakeExtendedPosition = 90.0
+
+[climber]
+lockServoPosition = 0.0 # actual value unknown
+extendSpeed = 1.0
+retractSpeed = 1.0
+inchesPerRevolution = 0.128325 # equal to 2.5665 / 20, meaning 2.5665 inches per 20 revolutions
+innerStaticFriction = 0.0 # actual value unknown
+outerStaticFriction = 0.0 # actual value unknown
+innerStaticFrictionWithLoad = 0.0 # actual value unknown
+outerStaticFrictionWithLoad = 0.0 # actual value unknown
+
+[cycleCommand]
+initalExtension = 0.0
+liftExtension = 2.42
+armAngleForNextBar = 0.0
+extendToNextBarExtension = 0.0
+dropToNextBar = 0.0
+grabNextBarExtension = 0.0
+releaseRearBar = 0.0
+dropOffRearBar = 0.0
+extendToRearBar = 0.0
+armAngleVertical = 0.5
+restingExtension = 0.0
