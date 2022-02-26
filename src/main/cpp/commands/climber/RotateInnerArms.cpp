@@ -19,13 +19,11 @@ void RotateInnerArmsCommand::Initialize() {
 void RotateInnerArmsCommand::Execute() {
     double armAngle = mClimber->getInnerAngle();
     double err = mTargetAngle - armAngle;
-    double speed = lerp(kMinSpeed, kMaxSpeed, abs((err + 180) / 360)) * std::copysign(1.0, -err);
+    double speed = lerp(kMinSpeed, kMaxSpeed, std::copysign(abs((err + 180.0) / 360.0), err));
     mClimber->rotateInner(speed);
 }
 
-void RotateInnerArmsCommand::End(bool isInterrupted) {
-    mClimber->setRotateMotorsCoast();
-}
+void RotateInnerArmsCommand::End(bool isInterrupted) {}
 
 bool RotateInnerArmsCommand::IsFinished() {
     double armAngle = mClimber->getInnerAngle();

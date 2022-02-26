@@ -1,6 +1,7 @@
 #include "commands/climber/Cycle.h"
 #include <chrono>
 #include <frc2/command/WaitCommand.h>
+#include <frc2/command/InstantCommand.h>
 
 using namespace std::literals::chrono_literals;
 
@@ -24,14 +25,18 @@ Cycle::Cycle(Climber * climber, std::shared_ptr<cpptoml::table> toml) {
 
     mHighCycle = new frc2::SequentialCommandGroup(
         RotateOuterArmsCommand {mClimber, config.armAngleForNextBar},
+        frc2::InstantCommand {[&]() { mClimber->setInnerUnderLoad(true); }},
         RetractInnerArmsCommand {mClimber, config.liftExtension},
         ExtendOuterArmsCommand {mClimber, config.extendToNextBarExtension},
         RotateOuterArmsCommand {mClimber, config.dropToNextBar},
         RetractOuterArmsCommand {mClimber, config.grabNextBarExtension},
+        frc2::InstantCommand {[&]() { mClimber->setRotateMotorsCoast(); }},
+        frc2::InstantCommand {[&]() { mClimber->setOuterUnderLoad(true); }},
         frc2::ParallelCommandGroup (
             ExtendInnerArmsCommand {mClimber, config.extendToRearBar}, // the inner arms extend
             RetractOuterArmsCommand {mClimber, config.liftExtension} // and the outer arms retract to bring it into position
         ),
+        frc2::InstantCommand {[&]() { mClimber->setInnerUnderLoad(false); }},
         ExtendInnerArmsCommand {mClimber, config.releaseRearBar},
         RotateInnerArmsCommand {mClimber, config.dropOffRearBar},
         RetractInnerArmsCommand {mClimber, config.restingExtension}
@@ -42,10 +47,13 @@ Cycle::Cycle(Climber * climber, std::shared_ptr<cpptoml::table> toml) {
         ExtendInnerArmsCommand {mClimber, config.extendToNextBarExtension},
         RotateInnerArmsCommand {mClimber, config.dropToNextBar},
         RetractInnerArmsCommand {mClimber, config.grabNextBarExtension},
+        frc2::InstantCommand {[&]() { mClimber->setRotateMotorsCoast(); }},
+        frc2::InstantCommand {[&]() { mClimber->setInnerUnderLoad(true); }},
         frc2::ParallelCommandGroup (
             ExtendOuterArmsCommand {mClimber, config.extendToRearBar}, // the outer arms extend
-            RetractInnerArmsCommand {mClimber, config.liftExtension} // and the outer arms retract to bring it into position
+            RetractInnerArmsCommand {mClimber, config.liftExtension} // and the inner arms retract to bring it into position
         ),
+        frc2::InstantCommand {[&]() { mClimber->setOuterUnderLoad(false); }},
         ExtendOuterArmsCommand {mClimber, config.releaseRearBar},
         RotateOuterArmsCommand {mClimber, config.dropOffRearBar},
         RetractOuterArmsCommand {mClimber, config.restingExtension},
