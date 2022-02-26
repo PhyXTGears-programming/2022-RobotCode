@@ -17,7 +17,7 @@ Cycle::Cycle(Climber * climber, std::shared_ptr<cpptoml::table> toml) {
     config.extendToRearBar = toml->get_qualified_as<double>("extendToRearBar").value_or(0.0);
     config.grabNextBarExtension = toml->get_qualified_as<double>("grabNextBarExtension").value_or(0.0);
     config.initalExtension = toml->get_qualified_as<double>("initalExtension").value_or(0.0);
-    config.liftExtension = toml->get_qualified_as<double>("liftExtension").value_or(0.0);
+    config.liftExtension = toml->get_qualified_as<double>("liftExtension").value_or(2.42);
     config.dropOffRearBar = toml->get_qualified_as<double>("dropOffRearBar").value_or(0.0);
     config.releaseRearBar = toml->get_qualified_as<double>("releaseRearBar").value_or(0.0);
     config.restingExtension = toml->get_qualified_as<double>("restingExtension").value_or(0.0);

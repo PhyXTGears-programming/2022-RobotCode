@@ -18,7 +18,7 @@ outerStaticFrictionWithLoad = 0.0 # actual value unknown
 
 [cycleCommand]
 initalExtension = 0.0
-liftExtension = 0.0
+liftExtension = 2.42
 armAngleForNextBar = 0.0
 extendToNextBarExtension = 0.0
 dropToNextBar = 0.0
