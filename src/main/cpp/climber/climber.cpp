@@ -24,7 +24,7 @@ Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
 }
 
 void Climber::extendOuter1() {
-    mOuterHookMotor1.Set(config.extendSpeed + config.friction.outerStaticFriction));
+    mOuterHookMotor1.Set(config.extendSpeed + config.friction.outerStaticFriction);
 }
 
 void Climber::extendOuter2() {
@@ -48,11 +48,11 @@ void Climber::stopOuter2() {
 }
 
 void Climber::extendInner1() {
-    mInnerHookMotor1.Set(config.extendSpeed + config.friction.innerStaticFriction));
+    mInnerHookMotor1.Set(config.extendSpeed + config.friction.innerStaticFriction);
 }
 
 void Climber::extendInner2() {
-    mInnerHookMotor2.Set(config.extendSpeed + config.friction.innerStaticFriction));
+    mInnerHookMotor2.Set(config.extendSpeed + config.friction.innerStaticFriction);
 }
 
 void Climber::retractInner1() {
