@@ -19,7 +19,6 @@ motor.maxValue = 1.0
 motor.izone = 1.0
 
 [climber]
-
 servo1.unlockPosition = 0.0
 servo1.lockPosition = 0.2
 

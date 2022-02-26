@@ -8,6 +8,16 @@
 
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc2/command/InstantCommand.h>
+
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include <frc/XboxController.h>
+
+#include "commands/climber/ExtendInnerArms.h"
+#include "commands/climber/RetractInnerArms.h"
+#include "commands/climber/ExtendOuterArms.h"
+#include "commands/climber/RetractOuterArms.h"
 
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
@@ -31,14 +41,8 @@
 #include "commands/climber/ClimbMidBarOnly.h"
 #include "commands/climber/HighBarClimb.h"
 #include "commands/climber/TraversalClimb.h"
-#include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
-#include "commands/shooter/ShootCommand.h"
-#include "commands/intake/RunIntake.h"
-#include "commands/intake/ExtendIntake.h"
-#include "commands/intake/RetractIntake.h"
 
-class Robot : public frc::TimedRobot
-{
+class Robot : public frc::TimedRobot {
 public:
     void RobotInit() override;
     void RobotPeriodic() override;
@@ -54,14 +58,7 @@ public:
     std::shared_ptr<cpptoml::table> LoadConfig(std::string path);
 
 private:
-    frc::SendableChooser<std::string> m_chooser;
-    const std::string kAutoNameDefault = "Default";
-    const std::string kAutoNameCustom = "My Auto";
-    const std::string kAutoDriveAndShoot = "Drive and Shoot";
-    const std::string kAutoDriveOnly = "Drive backwards";
-    std::string m_autoSelected;
 
-    frc::XboxController * driverController = nullptr;
     frc::XboxController * operatorController = nullptr;
 
     ClimberInnerReach * mInnerReach = nullptr;
@@ -72,30 +69,17 @@ private:
     Shooter *mShooter = nullptr;
     SwerveDrive * mSwerveDrive = nullptr;
     
-    AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
     HighBarClimb * mHighClimb = nullptr;
     TraversalClimb * mTraversalClimb = nullptr;
-    ShootCommand *mShootCommand = nullptr;
-    
-    RunIntakeCommand *mRunIntakeCommand = nullptr;
-    RetractIntakeCommand *mRetractIntakeCommand = nullptr;
-    ExtendIntakeCommand *mExtendIntakeCommand = nullptr;
-
 
     frc2::FunctionalCommand *mManualRetractOuterArms = nullptr;
     frc2::FunctionalCommand *mManualExtendOuterArms = nullptr;
 
-    frc2::StartEndCommand *mShootNear = nullptr;
-    frc2::StartEndCommand *mShootFar = nullptr;
-    frc2::StartEndCommand *mShootLowHub = nullptr;
-    frc2::StartEndCommand *mShootReverse = nullptr;
-    frc2::StartEndCommand *mIntakeReverse = nullptr;
-    frc2::StartEndCommand *mShootAuto = nullptr;
-
-    frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
-    frc2::SequentialCommandGroup * mDriveOnly = nullptr;
-    
+    RetractInnerArmsCommand mRetractInnerArms {mInnerReach, 1.0};
+    ExtendInnerArmsCommand mExtendInnerArms {mInnerReach, 10.0};
+    RetractOuterArmsCommand mRetractOuterArms {mOuterReach, 1.0};
+    ExtendOuterArmsCommand mExtendOuterArms {mOuterReach, 10.0};
 };
 
 // there is a hidden forg somewhere in the robot's code.
