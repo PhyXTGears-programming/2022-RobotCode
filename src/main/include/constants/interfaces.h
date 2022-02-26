@@ -103,6 +103,12 @@ namespace interfaces
     const int kSteer3 = kCAN06;
     const int kSteer4 = kCAN07;
 
+    // intake CAN and PWM assignments (block 2)
+
+    const int kRollerMotor = kCAN20;
+    const int kDeployServo1 = kPWM6;
+    const int kDeployServo2 = kPWM7;
+
     // climber CAN (block 4) and PWM assignments
 
     const int kInnerArm1 = kCAN40;
@@ -117,4 +123,5 @@ namespace interfaces
     
     const int kStopServo1 = kPWM0;
     const int kStopServo2 = kPWM1;
+
 }

@@ -1,10 +1,12 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <ctre/Phoenix.h>
+#include <frc/Servo.h>
+#include <rev/CANSparkMax.h>
 #include <frc/AnalogPotentiometer.h>
 
 #include "cpptoml.h"
+#include "constants/interfaces.h"
 
 class Intake : public frc2::SubsystemBase {
 public:
@@ -13,16 +15,10 @@ public:
     void extendIntake ();
     void retractIntake ();
 
-    void moveIntake ();
-
     void runRollers ();
     void stopRollers ();
 
     bool isIntakeExtended ();
-
-    double getIntakePosition ();
-
-    double getDistanceToPosition ();
 
     void setStationary (bool isExtended); // sets mCurrentIntakeStatus to stationary
 
@@ -30,20 +26,16 @@ private:
     enum mIntakeMovementStatus {EXTENDING, RETRACTING, STATIONARY};
     mIntakeMovementStatus mCurrentIntakeStatus = STATIONARY;
 
-    TalonSRX mRollerMotor {0}; // the motor that turns the rollers to pull the ball in
-    TalonSRX mDeployMotor {0}; // the motor that flips the intake in/out
+    rev::CANSparkMax mRollerMotor {interfaces::kRollerMotor, rev::CANSparkMaxLowLevel::MotorType::kBrushless}; // the motor that turns the rollers to pull the ball in
 
-    frc::AnalogPotentiometer mIntakePosition {0, 360.0, 0.0}; // {channel, full range, offset}
+    frc::Servo mDeployServo1 {interfaces::kDeployServo1};
+    frc::Servo mDeployServo2 {interfaces::kDeployServo2};
 
     bool mIsIntakeExtended = false;
 
-    double mDeployTargetSpeed = 1.0;
-    double mDeployCurrentSpeed = 0.0;
-
     struct {
         double rollerSpeed, extendTargetSpeed, retractTargetSpeed;
-        double deploySpeedFactor; // the larger this value is, the faster the deploy motor will try to accelerate
-        double intakeRetractedPosition, intakeExtendedPosition; // the potentiometer readings when intake is fully extended/retracted
+        double intakeRetractedPosition, intakeExtendedPosition;
     } config;
     
 };
