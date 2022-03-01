@@ -1,4 +1,4 @@
-#include "commands/shooter/ShootCommand.h";
+#include "commands/shooter/ShootCommand.h"
 
 ShootCommand::ShootCommand (Shooter* shooter) {
     AddRequirements(shooter);
