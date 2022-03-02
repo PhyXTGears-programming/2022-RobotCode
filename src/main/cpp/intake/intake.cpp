@@ -2,6 +2,8 @@
 
 Intake::Intake (std::shared_ptr<cpptoml::table> toml) {
     config.rollerSpeed = toml->get_qualified_as<double>("rollerSpeed").value_or(0.5);
+    
+    mRollerMotor.SetInverted(true);
 }
 
 void Intake::runRollers () {
