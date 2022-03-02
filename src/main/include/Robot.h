@@ -9,28 +9,39 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
+#include "constants/interfaces.h"
+
 #include "cpptoml.h"
 #include "intake/intake.h"
+#include "drivetrain/drivetrain.h"
+#include "commands/drivetrain/DriveTeleopCommand.h"
 
-class Robot : public frc::TimedRobot {
- public:
-  void RobotInit() override;
-  void RobotPeriodic() override;
-  void AutonomousInit() override;
-  void AutonomousPeriodic() override;
-  void TeleopInit() override;
-  void TeleopPeriodic() override;
-  void DisabledInit() override;
-  void DisabledPeriodic() override;
-  void TestInit() override;
-  void TestPeriodic() override;
+class Robot : public frc::TimedRobot
+{
+public:
+    void RobotInit() override;
+    void RobotPeriodic() override;
+    void AutonomousInit() override;
+    void AutonomousPeriodic() override;
+    void TeleopInit() override;
+    void TeleopPeriodic() override;
+    void DisabledInit() override;
+    void DisabledPeriodic() override;
+    void TestInit() override;
+    void TestPeriodic() override;
 
-  std::shared_ptr<cpptoml::table> LoadConfig(std::string path);
- private:
-  frc::SendableChooser<std::string> m_chooser;
-  const std::string kAutoNameDefault = "Default";
-  const std::string kAutoNameCustom = "My Auto";
-  std::string m_autoSelected;
+    std::shared_ptr<cpptoml::table> LoadConfig(std::string path);
 
-  Intake * mIntake = nullptr;
+private:
+    frc::SendableChooser<std::string> m_chooser;
+    const std::string kAutoNameDefault = "Default";
+    const std::string kAutoNameCustom = "My Auto";
+    std::string m_autoSelected;
+
+    frc::XboxController driverController{interfaces::kXBoxDriver};
+
+    Intake *mIntake = nullptr;
+    Drivetrain *mDrivetrain = nullptr;
+
+    DriveTeleopCommand *mDriveTeleopCommand = nullptr;
 };

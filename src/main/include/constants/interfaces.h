@@ -2,10 +2,22 @@
 
 namespace interfaces
 {
+    //USB constants
+    namespace{
+        const int kUSB00 = 0;
+        const int kUSB01 = 1;
+        const int kUSB02 = 2;
+        const int kUSB03 = 3;
+        const int kUSB04 = 4;
+    }
+    const int kXBoxDriver = kUSB00;
+    const int kXBoxOperator = kUSB01;
+
+    //CAN Constants
     //for future note, each subsystem has their own block of 10 CAN IDs (presuming it needs them)
     //block 0 (00-09) is reserved for the drivetrain
-    //block 1 (10-19) is not reserved
-    //block 2 (20-29) is not reserved
+    //block 1 (10-19) is reserved for the drivetrain encoders
+    //block 2 (20-29) is reserved for the intake
     //block 3 (30-39) is reserved for the shooter
     //block 4 (40-49) is reserved for the climber
 
@@ -13,7 +25,7 @@ namespace interfaces
     namespace
     {
         //block 0
-        const int kCAN00 = 0;
+        const int kCAN00 = 0; //reserved for PDP
         const int kCAN01 = 1;
         const int kCAN02 = 2;
         const int kCAN03 = 3;
@@ -47,7 +59,7 @@ namespace interfaces
         const int kCAN27 = 27;
         const int kCAN28 = 28;
         const int kCAN29 = 29;
-      
+
         //block 3
         const int kCAN30 = 30;
         const int kCAN31 = 31;
@@ -105,15 +117,19 @@ namespace interfaces
     |4       3|
     */
     //drivetrain CAN assignments (block 0)
-    
-    const int kDrive1 = kCAN00;
-    const int kDrive2 = kCAN01;
-    const int kDrive3 = kCAN02;
-    const int kDrive4 = kCAN03;
-    const int kSteer1 = kCAN04;
-    const int kSteer2 = kCAN05;
-    const int kSteer3 = kCAN06;
-    const int kSteer4 = kCAN07;
+    const int kDrive1 = kCAN01;
+    const int kDrive2 = kCAN02;
+    const int kDrive3 = kCAN03;
+    const int kDrive4 = kCAN04;
+    const int kSteer1 = kCAN05;
+    const int kSteer2 = kCAN06;
+    const int kSteer3 = kCAN07;
+    const int kSteer4 = kCAN08;
+
+    const int kSteerEncoder1 = kCAN10;
+    const int kSteerEncoder2 = kCAN11;
+    const int kSteerEncoder3 = kCAN12;
+    const int kSteerEncoder4 = kCAN13;
 
     // intake CAN and PWM assignments (block 2)
 
