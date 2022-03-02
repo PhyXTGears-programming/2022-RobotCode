@@ -162,6 +162,40 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     Drivetrain::setPidValues(mPID_SteerMotor2, config.PID.Steer.motor2.k_P, config.PID.Steer.motor2.k_I, config.PID.Steer.motor2.k_D, config.PID.Steer.motor2.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor2", config.PID.Steer.motor2.k_IZone);
     Drivetrain::setPidValues(mPID_SteerMotor3, config.PID.Steer.motor3.k_P, config.PID.Steer.motor3.k_I, config.PID.Steer.motor3.k_D, config.PID.Steer.motor3.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor3", config.PID.Steer.motor3.k_IZone);
     Drivetrain::setPidValues(mPID_SteerMotor4, config.PID.Steer.motor4.k_P, config.PID.Steer.motor4.k_I, config.PID.Steer.motor4.k_D, config.PID.Steer.motor4.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor4", config.PID.Steer.motor4.k_IZone);
+
+    //makes all encoders absolutely positioned
+    mSteerEncoder1.SetPositionToAbsolute();
+    mSteerEncoder2.SetPositionToAbsolute();
+    mSteerEncoder3.SetPositionToAbsolute();
+    mSteerEncoder4.SetPositionToAbsolute();
+
+    //makes the range from 0 to 360
+    Drivetrain::mSteerEncoder1.ConfigAbsoluteSensorRange(ctre::phoenix::sensors::AbsoluteSensorRange::Signed_PlusMinus180);
+    Drivetrain::mSteerEncoder2.ConfigAbsoluteSensorRange(ctre::phoenix::sensors::AbsoluteSensorRange::Signed_PlusMinus180);
+    Drivetrain::mSteerEncoder3.ConfigAbsoluteSensorRange(ctre::phoenix::sensors::AbsoluteSensorRange::Signed_PlusMinus180);
+    Drivetrain::mSteerEncoder4.ConfigAbsoluteSensorRange(ctre::phoenix::sensors::AbsoluteSensorRange::Signed_PlusMinus180);
+
+    //makes sure it does not lose 0 point on reboot
+    Drivetrain::mSteerEncoder1.ConfigSensorInitializationStrategy(ctre::phoenix::sensors::SensorInitializationStrategy::BootToAbsolutePosition);
+    Drivetrain::mSteerEncoder2.ConfigSensorInitializationStrategy(ctre::phoenix::sensors::SensorInitializationStrategy::BootToAbsolutePosition);
+    Drivetrain::mSteerEncoder3.ConfigSensorInitializationStrategy(ctre::phoenix::sensors::SensorInitializationStrategy::BootToAbsolutePosition);
+    Drivetrain::mSteerEncoder4.ConfigSensorInitializationStrategy(ctre::phoenix::sensors::SensorInitializationStrategy::BootToAbsolutePosition);
+
+    //sets the global offsets tuned from the toml file from pheonix tuner
+    Drivetrain::mSteerEncoder1.ConfigMagnetOffset((config.Encoders.Encoder1GlobalOffset-180));
+    Drivetrain::mSteerEncoder2.ConfigMagnetOffset((config.Encoders.Encoder2GlobalOffset-180));
+    Drivetrain::mSteerEncoder3.ConfigMagnetOffset((config.Encoders.Encoder3GlobalOffset-180));
+    Drivetrain::mSteerEncoder4.ConfigMagnetOffset((config.Encoders.Encoder4GlobalOffset-180));
+
+    Drivetrain::InitialOffsetAngle1 = DEG_TO_RAD(Drivetrain::mSteerEncoder1.GetPosition());
+    Drivetrain::InitialOffsetAngle2 = DEG_TO_RAD(Drivetrain::mSteerEncoder2.GetPosition());
+    Drivetrain::InitialOffsetAngle3 = DEG_TO_RAD(Drivetrain::mSteerEncoder3.GetPosition());
+    Drivetrain::InitialOffsetAngle4 = DEG_TO_RAD(Drivetrain::mSteerEncoder4.GetPosition());
+
+    std::cout << DEG_TO_RAD(Drivetrain::mSteerEncoder1.GetPosition()) << std::endl;
+    std::cout << DEG_TO_RAD(Drivetrain::mSteerEncoder2.GetPosition()) << std::endl;
+    std::cout << DEG_TO_RAD(Drivetrain::mSteerEncoder3.GetPosition()) << std::endl;
+    std::cout << DEG_TO_RAD(Drivetrain::mSteerEncoder4.GetPosition()) << std::endl;
 }
 
 void Drivetrain::setPidValues(rev::SparkMaxPIDController PIDController, double k_P,
@@ -222,8 +256,7 @@ void Drivetrain::setVelocityMeters(double metersPerSecond)
 
 void Drivetrain::setVelocityFeet(double feetPerSecond)
 {
-    //feet to inches (12in in a foot), then to centimeters (2.52cm in an in), then to meters (100cm in one m) = 0.3024 ft in a meter
-    double feetPerSecToMPS = feetPerSecond * 0.3024;
+    double feetPerSecToMPS = FEET_TO_METERS(feetPerSecond);
     Drivetrain::setVelocityMeters(feetPerSecToMPS);
 }
 

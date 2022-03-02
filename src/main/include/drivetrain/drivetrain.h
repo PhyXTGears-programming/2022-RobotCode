@@ -3,6 +3,7 @@
 #include <frc2/command/SubsystemBase.h>
 
 #include <rev/CANSparkMax.h>
+#include <ctre/phoenix/sensors/CANCoder.h>
 
 #include "constants/constants.h"
 #include "constants/interfaces.h"
@@ -188,6 +189,15 @@ private:
     rev::SparkMaxPIDController mPID_SteerMotor3 = Drivetrain::mSteerMotor3.GetPIDController();
     rev::SparkMaxPIDController mPID_SteerMotor4 = Drivetrain::mSteerMotor4.GetPIDController();
 
+    ctre::phoenix::sensors::CANCoder mSteerEncoder1{interfaces::kSteerEncoder1};
+    ctre::phoenix::sensors::CANCoder mSteerEncoder2{interfaces::kSteerEncoder2};
+    ctre::phoenix::sensors::CANCoder mSteerEncoder3{interfaces::kSteerEncoder3};
+    ctre::phoenix::sensors::CANCoder mSteerEncoder4{interfaces::kSteerEncoder4};
+
+    double InitialOffsetAngle1 = 0.0;
+    double InitialOffsetAngle2 = 0.0;
+    double InitialOffsetAngle3 = 0.0;
+    double InitialOffsetAngle4 = 0.0;
 
     //global constants for the motors
 
