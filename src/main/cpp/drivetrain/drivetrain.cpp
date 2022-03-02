@@ -11,6 +11,8 @@
 #include "rev/CANSparkMax.h"
 #include "rev/REVLibError.h"
 
+#include "cpptoml.h"
+
 #include "RobotCompileModes.h" //set all robot modes here
 
 #include <iostream>
@@ -30,7 +32,28 @@ nt::NetworkTableEntry PIDspeed;
 nt::NetworkTableEntry PIDposition;
 #endif
 
+#define ROBOT_ONLY
+
 #define DEG_TO_RAD(deg) ((deg / 180.0) * M_PI)
+
+#define RAD_TO_DEG(deg) ((deg / M_PI) / 180)
+
+#define DEG_TO_ROT(deg) (deg/360)
+
+//feet to inches (1ft = 12in), then to centimeters (1in = 2.54cm), then to meters (1cm = 0.01m) = 0.3048ft = 1meter
+#define FEET_TO_METERS(feet) (feet * 0.3048)
+
+//the motor revolutions and the wheel revolutions for steering are not the same, so we have to divide it by this number to get a single rotation
+#define MOTOR_TURN_CONVERSION_FACTOR(angle) ((angle) * 55.75) //was in radians, now in rotations (-pi to pi)
+
+//radius of the swerve modeule drive wheel
+#define DRIVE_WHEEL_RADIUS 0.0381 //done in meters
+#define GEARING_RATIO 5.25
+//the conversion from the floor speed to the motor's speed (outputted in meters per second, goes to morot RPMs)
+//meters per second to rotations per second (of the wheel, omega) is MPS/radius (speed/radius)
+//wheel-rps to motor-rps is Wheel-RPS/gear-ratio (omega-wheel*gear-ratio)
+//motor-rps to motor-rpm is Motor-rps/60 (omega-motor*seconds-per-minute)
+#define ROBOT_SPEED_TO_MOTOR_SPEED(speed) (((speed/DRIVE_WHEEL_RADIUS)*5.25)*60)
 
 Tables tables;
 
@@ -38,9 +61,78 @@ Tables tables;
 double gyroFieldAngle = 0;
 
 //constructor
-Drivetrain::Drivetrain()
+Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
 {
+    
+    // Drivetrain::mDriveMotor1.RestoreFactoryDefaults();
+    // Drivetrain::mDriveMotor2.RestoreFactoryDefaults();
+    // Drivetrain::mDriveMotor3.RestoreFactoryDefaults();
+    // Drivetrain::mDriveMotor4.RestoreFactoryDefaults();
+    // Drivetrain::mSteerMotor1.RestoreFactoryDefaults();
+    // Drivetrain::mSteerMotor2.RestoreFactoryDefaults();
+    // Drivetrain::mSteerMotor3.RestoreFactoryDefaults();
+    // Drivetrain::mSteerMotor4.RestoreFactoryDefaults();
+
+    //grabbing values from config.toml start
     tables.LogToNetworktable("Drivetrain initialised");
+
+    Drivetrain::config.PID.Drive.motor1.k_P = toml->get_qualified_as<double>("PID.Drive.Motor1.k_P").value_or(config.PID.Drive.motor1.k_P);
+    Drivetrain::config.PID.Drive.motor1.k_I = toml->get_qualified_as<double>("PID.Drive.Motor1.k_I").value_or(config.PID.Drive.motor1.k_I);
+    Drivetrain::config.PID.Drive.motor1.k_D = toml->get_qualified_as<double>("PID.Drive.Motor1.k_D").value_or(config.PID.Drive.motor1.k_D);
+    Drivetrain::config.PID.Drive.motor1.k_FF = toml->get_qualified_as<double>("PID.Drive.Motor1.k_FF").value_or(config.PID.Drive.motor1.k_FF);
+    Drivetrain::config.PID.Drive.motor1.k_IZone = toml->get_qualified_as<double>("PID.Drive.Motor1.k_IZone").value_or(config.PID.Drive.motor1.k_IZone);
+
+    Drivetrain::config.PID.Drive.motor2.k_P = toml->get_qualified_as<double>("PID.Drive.Motor2.k_P").value_or(config.PID.Drive.motor2.k_P);
+    Drivetrain::config.PID.Drive.motor2.k_I = toml->get_qualified_as<double>("PID.Drive.Motor2.k_I").value_or(config.PID.Drive.motor2.k_I);
+    Drivetrain::config.PID.Drive.motor2.k_D = toml->get_qualified_as<double>("PID.Drive.Motor2.k_D").value_or(config.PID.Drive.motor2.k_D);
+    Drivetrain::config.PID.Drive.motor2.k_FF = toml->get_qualified_as<double>("PID.Drive.Motor2.k_FF").value_or(config.PID.Drive.motor2.k_FF);
+    Drivetrain::config.PID.Drive.motor2.k_IZone = toml->get_qualified_as<double>("PID.Drive.Motor2.k_IZone").value_or(config.PID.Drive.motor2.k_IZone);
+
+    Drivetrain::config.PID.Drive.motor3.k_P = toml->get_qualified_as<double>("PID.Drive.Motor3.k_P").value_or(config.PID.Drive.motor3.k_P);
+    Drivetrain::config.PID.Drive.motor3.k_I = toml->get_qualified_as<double>("PID.Drive.Motor3.k_I").value_or(config.PID.Drive.motor3.k_I);
+    Drivetrain::config.PID.Drive.motor3.k_D = toml->get_qualified_as<double>("PID.Drive.Motor3.k_D").value_or(config.PID.Drive.motor3.k_D);
+    Drivetrain::config.PID.Drive.motor3.k_FF = toml->get_qualified_as<double>("PID.Drive.Motor3.k_FF").value_or(config.PID.Drive.motor3.k_FF);
+    Drivetrain::config.PID.Drive.motor3.k_IZone = toml->get_qualified_as<double>("PID.Drive.Motor3.k_IZone").value_or(config.PID.Drive.motor3.k_IZone);
+
+    Drivetrain::config.PID.Drive.motor4.k_P = toml->get_qualified_as<double>("PID.Drive.Motor4.k_P").value_or(config.PID.Drive.motor4.k_P);
+    Drivetrain::config.PID.Drive.motor4.k_I = toml->get_qualified_as<double>("PID.Drive.Motor4.k_I").value_or(config.PID.Drive.motor4.k_I);
+    Drivetrain::config.PID.Drive.motor4.k_D = toml->get_qualified_as<double>("PID.Drive.Motor4.k_D").value_or(config.PID.Drive.motor4.k_D);
+    Drivetrain::config.PID.Drive.motor4.k_FF = toml->get_qualified_as<double>("PID.Drive.Motor4.k_FF").value_or(config.PID.Drive.motor4.k_FF);
+    Drivetrain::config.PID.Drive.motor4.k_IZone = toml->get_qualified_as<double>("PID.Drive.Motor4.k_IZone").value_or(config.PID.Drive.motor4.k_IZone);
+
+    Drivetrain::config.PID.Steer.motor1.k_P = toml->get_qualified_as<double>("PID.Steer.Motor1.k_P").value_or(config.PID.Steer.motor1.k_P);
+    Drivetrain::config.PID.Steer.motor1.k_I = toml->get_qualified_as<double>("PID.Steer.Motor1.k_I").value_or(config.PID.Steer.motor1.k_I);
+    Drivetrain::config.PID.Steer.motor1.k_D = toml->get_qualified_as<double>("PID.Steer.Motor1.k_D").value_or(config.PID.Steer.motor1.k_D);
+    Drivetrain::config.PID.Steer.motor1.k_FF = toml->get_qualified_as<double>("PID.Steer.Motor1.k_FF").value_or(config.PID.Steer.motor1.k_FF);
+    Drivetrain::config.PID.Steer.motor1.k_IZone = toml->get_qualified_as<double>("PID.Steer.Motor1.k_IZone").value_or(config.PID.Steer.motor1.k_IZone);
+
+    Drivetrain::config.PID.Steer.motor2.k_P = toml->get_qualified_as<double>("PID.Steer.Motor2.k_P").value_or(config.PID.Steer.motor2.k_P);
+    Drivetrain::config.PID.Steer.motor2.k_I = toml->get_qualified_as<double>("PID.Steer.Motor2.k_I").value_or(config.PID.Steer.motor2.k_I);
+    Drivetrain::config.PID.Steer.motor2.k_D = toml->get_qualified_as<double>("PID.Steer.Motor2.k_D").value_or(config.PID.Steer.motor2.k_D);
+    Drivetrain::config.PID.Steer.motor2.k_FF = toml->get_qualified_as<double>("PID.Steer.Motor2.k_FF").value_or(config.PID.Steer.motor2.k_FF);
+    Drivetrain::config.PID.Steer.motor2.k_IZone = toml->get_qualified_as<double>("PID.Steer.Motor2.k_IZone").value_or(config.PID.Steer.motor2.k_IZone);
+
+    Drivetrain::config.PID.Steer.motor3.k_P = toml->get_qualified_as<double>("PID.Steer.Motor3.k_P").value_or(config.PID.Steer.motor3.k_P);
+    Drivetrain::config.PID.Steer.motor3.k_I = toml->get_qualified_as<double>("PID.Steer.Motor3.k_I").value_or(config.PID.Steer.motor3.k_I);
+    Drivetrain::config.PID.Steer.motor3.k_D = toml->get_qualified_as<double>("PID.Steer.Motor3.k_D").value_or(config.PID.Steer.motor3.k_D);
+    Drivetrain::config.PID.Steer.motor3.k_FF = toml->get_qualified_as<double>("PID.Steer.Motor3.k_FF").value_or(config.PID.Steer.motor3.k_FF);
+    Drivetrain::config.PID.Steer.motor3.k_IZone = toml->get_qualified_as<double>("PID.Steer.Motor3.k_IZone").value_or(config.PID.Steer.motor3.k_IZone);
+
+    Drivetrain::config.PID.Steer.motor4.k_P = toml->get_qualified_as<double>("PID.Steer.Motor4.k_P").value_or(config.PID.Steer.motor4.k_P);
+    Drivetrain::config.PID.Steer.motor4.k_I = toml->get_qualified_as<double>("PID.Steer.Motor4.k_I").value_or(config.PID.Steer.motor4.k_I);
+    Drivetrain::config.PID.Steer.motor4.k_D = toml->get_qualified_as<double>("PID.Steer.Motor4.k_D").value_or(config.PID.Steer.motor4.k_D);
+    Drivetrain::config.PID.Steer.motor4.k_FF = toml->get_qualified_as<double>("PID.Steer.Motor4.k_FF").value_or(config.PID.Steer.motor4.k_FF);
+    Drivetrain::config.PID.Steer.motor4.k_IZone = toml->get_qualified_as<double>("PID.Steer.Motor4.k_IZone").value_or(config.PID.Steer.motor4.k_IZone);
+
+    
+    Drivetrain::config.PID.k_maxOutput = toml->get_qualified_as<double>("PID.k_maxOutput").value_or(config.PID.k_maxOutput);
+    Drivetrain::config.PID.k_minOutput = toml->get_qualified_as<double>("PID.k_minOutput").value_or(config.PID.k_minOutput);
+
+    Drivetrain::config.Encoders.Encoder1GlobalOffset = toml->get_qualified_as<double>("EncoderSetpoint.Steer1GlobalOffset").value_or(config.Encoders.Encoder1GlobalOffset);
+    Drivetrain::config.Encoders.Encoder2GlobalOffset = toml->get_qualified_as<double>("EncoderSetpoint.Steer2GlobalOffset").value_or(config.Encoders.Encoder2GlobalOffset);
+    Drivetrain::config.Encoders.Encoder3GlobalOffset = toml->get_qualified_as<double>("EncoderSetpoint.Steer3GlobalOffset").value_or(config.Encoders.Encoder3GlobalOffset);
+    Drivetrain::config.Encoders.Encoder4GlobalOffset = toml->get_qualified_as<double>("EncoderSetpoint.Steer4GlobalOffset").value_or(config.Encoders.Encoder4GlobalOffset);
+    //grabbing values from config.toml end
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
     auto inst = nt::NetworkTableInstance::GetDefault();
