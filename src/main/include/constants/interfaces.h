@@ -4,9 +4,9 @@ namespace interfaces
 {
     //for future note, each subsystem has their own block of 10 CAN IDs (presuming it needs them)
     //block 0 (00-09) is reserved for the drivetrain
-    //block 1 (10-19) is reserved for the shooter
+    //block 1 (10-19) is not reserved
     //block 2 (20-29) is not reserved
-    //block 3 (30-39) is not reserved
+    //block 3 (30-39) is reserved for the shooter
     //block 4 (40-49) is not reserved
 
     //done to prevent direct access to CAN pins and instead you have to use the pretty print name
@@ -35,6 +35,18 @@ namespace interfaces
         const int kCAN17 = 17;
         const int kCAN18 = 18;
         const int kCAN19 = 19;
+
+        //block 3
+        const int kCAN30 = 30;
+        const int kCAN31 = 31;
+        const int kCAN32 = 32;
+        const int kCAN33 = 33;
+        const int kCAN34 = 34;
+        const int kCAN35 = 35;
+        const int kCAN36 = 36;
+        const int kCAN37 = 37;
+        const int kCAN38 = 38;
+        const int kCAN39 = 39;
     }
 
     /*
@@ -54,5 +66,6 @@ namespace interfaces
     const int kSteer3 = kCAN06;
     const int kSteer4 = kCAN07;
 
-    const int kShooterMotor = kCAN10;
+    //shooter CAN assignment (block 3)
+    const int kShooterMotor = kCAN30;
 }
