@@ -13,8 +13,6 @@
 
 #include "cpptoml.h"
 #include "intake/intake.h"
-#include "drivetrain/drivetrain.h"
-#include "commands/drivetrain/DriveTeleopCommand.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -41,7 +39,4 @@ private:
     frc::XboxController driverController{interfaces::kXBoxDriver};
 
     Intake *mIntake = nullptr;
-    Drivetrain *mDrivetrain = nullptr;
-
-    DriveTeleopCommand *mDriveTeleopCommand = nullptr;
 };

@@ -24,11 +24,6 @@ void Robot::RobotInit()
 
     std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
     mIntake = new Intake(toml->get_table("intake"));
-    mDrivetrain = new Drivetrain(toml->get_table("drivetrain"));
-
-    mDriveTeleopCommand = new DriveTeleopCommand(mDrivetrain, &driverController);
-
-    mDrivetrain->turnOffMotors();
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
@@ -88,7 +83,7 @@ void Robot::AutonomousPeriodic()
 }
 
 void Robot::TeleopInit() {
-    mDriveTeleopCommand->Schedule();
+
 }
 
 void Robot::TeleopPeriodic()
