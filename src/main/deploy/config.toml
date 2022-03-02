@@ -2,7 +2,7 @@
 rollerSpeed = 1.0
 extendTargetSpeed = 0.7
 intakeRetractedPosition = 0.0
-intakeExtendedPosition = 1.0
+intakeExtendedPosition = 90.0
 
 [shooter]
 speed.near = 0.1
