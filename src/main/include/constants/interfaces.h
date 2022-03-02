@@ -59,7 +59,6 @@ namespace interfaces
         const int kCAN27 = 27;
         const int kCAN28 = 28;
         const int kCAN29 = 29;
-      
 
         //block 3
         const int kCAN30 = 30;
@@ -155,4 +154,18 @@ namespace interfaces
     
     const int kStopServo1 = kPWM0;
     const int kStopServo2 = kPWM1;
+    
+    const int kDrive1 = kCAN01;
+    const int kDrive2 = kCAN02;
+    const int kDrive3 = kCAN03;
+    const int kDrive4 = kCAN04;
+    const int kSteer1 = kCAN05;
+    const int kSteer2 = kCAN06;
+    const int kSteer3 = kCAN07;
+    const int kSteer4 = kCAN08;
+
+    const int kSteerEncoder1 = kCAN10;
+    const int kSteerEncoder2 = kCAN11;
+    const int kSteerEncoder3 = kCAN12;
+    const int kSteerEncoder4 = kCAN13;
 }
