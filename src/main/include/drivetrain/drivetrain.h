@@ -1,8 +1,9 @@
 #pragma once
 
-#include "frc2/command/SubsystemBase.h"
+#include <frc2/command/SubsystemBase.h>
 
-#include "rev/CANSparkMax.h"
+#include <rev/CANSparkMax.h>
+
 #include "constants/constants.h"
 #include "constants/interfaces.h"
 
@@ -103,6 +104,18 @@ public:
          */
     void tunePIDNetworktables();
 
+     /**
+      * @brief turns off all motors
+      * 
+      */
+    void turnOffMotors();
+
+     /**
+      * @brief Set the speeds and directions of the wheels.
+      * 
+      */
+    void setWheels();
+
 private:
     //generally logic things that are not useful to have visable to the rest of the world
 
@@ -123,7 +136,11 @@ private:
     //gets the angle of the drive modules in radians (from -pi to +pi)
     std::vector<double> getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
     //control the motor controller speeds
-    void setWheelMotorSpeeds(double *speeds);
+    void setWheelMotorSpeeds(std::vector<double> speeds);
+    //control the motor controller angles
+    void setWheelMotorAngles(std::vector<double> angles);
+
+    double findMod(double a, double b);
 
     /**
      * @brief Set the PID Values of the motor
@@ -137,8 +154,16 @@ private:
      * @param k_maxValue the miximum output value of the PID loop
      * @param k_IZone the I zone value to set it to (defaults to 0)
      */
-    void setPidValues(rev::SparkMaxPIDController PIDController, double k_P, double k_I, double k_D, double k_FF, double k_minValue, double k_maxValue, double k_IZone = 0.0);
+    void setPidValues(rev::SparkMaxPIDController PIDController, double k_P, double k_I, double k_D, double k_FF, double k_minValue, double k_maxValue, std::string motorReference, double k_IZone = 0.0);
 
+
+
+    /*
+    |1       2|
+    |         |
+    |         |
+    |4       3|
+    */
     //initialised the motors
 
     rev::CANSparkMax mDriveMotor1{interfaces::kDrive1, rev::CANSparkMax::MotorType::kBrushless};
