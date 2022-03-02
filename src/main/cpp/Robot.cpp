@@ -26,6 +26,7 @@ void Robot::RobotInit()
     mIntake = new Intake(toml->get_table("intake"));
     mDrivetrain = new Drivetrain(toml->get_table("drivetrain"));
 
+    mDriveTeleopCommand = new DriveTeleopCommand(mDrivetrain, &driverController);
 
     mDrivetrain->turnOffMotors();
 
@@ -42,7 +43,9 @@ void Robot::RobotInit()
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {}
+void Robot::RobotPeriodic() {
+    frc2::CommandScheduler::GetInstance().Run();
+}
 
 /**
  * This autonomous (along with the chooser code above) shows how to select
@@ -55,33 +58,44 @@ void Robot::RobotPeriodic() {}
  * if-else structure below with additional strings. If using the SendableChooser
  * make sure to add them to the chooser code above as well.
  */
-void Robot::AutonomousInit() {
-  m_autoSelected = m_chooser.GetSelected();
-  // m_autoSelected = SmartDashboard::GetString("Auto Selector",
-  //     kAutoNameDefault);
-  std::cout << "Auto selected: " << m_autoSelected << std::endl;
+void Robot::AutonomousInit()
+{
+    m_autoSelected = m_chooser.GetSelected();
+    // m_autoSelected = SmartDashboard::GetString("Auto Selector",
+    //     kAutoNameDefault);
+    std::cout << "Auto selected: " << m_autoSelected << std::endl;
 
-  if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    // Default Auto goes here
-  }
+    if (m_autoSelected == kAutoNameCustom)
+    {
+        // Custom Auto goes here
+    }
+    else
+    {
+        // Default Auto goes here
+    }
 }
 
-void Robot::AutonomousPeriodic() {
-  if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    // Default Auto goes here
-  }
+void Robot::AutonomousPeriodic()
+{
+    if (m_autoSelected == kAutoNameCustom)
+    {
+        // Custom Auto goes here
+    }
+    else
+    {
+        // Default Auto goes here
+    }
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+    mDriveTeleopCommand->Schedule();
+}
 
-void Robot::TeleopPeriodic() {
-  #ifdef ROBOTCMH_PID_TUNING_MODE
-  drivetrain.tunePIDNetworktables();
-  #endif
+void Robot::TeleopPeriodic()
+{
+#ifdef ROBOTCMH_PID_TUNING_MODE
+    drivetrain.tunePIDNetworktables();
+#endif
 }
 
 void Robot::DisabledInit() {}
@@ -92,18 +106,23 @@ void Robot::TestInit() {}
 
 void Robot::TestPeriodic() {}
 
-std::shared_ptr<cpptoml::table> Robot::LoadConfig(std::string path) {
-  try {
-    return cpptoml::parse_file(path);
-  } catch (cpptoml::parse_exception & ex) {
-    std::cerr << "Error loading config file: " << path << std::endl
-      << ex.what() << std::endl;
-    exit(1);
-  }
+std::shared_ptr<cpptoml::table> Robot::LoadConfig(std::string path)
+{
+    try
+    {
+        return cpptoml::parse_file(path);
+    }
+    catch (cpptoml::parse_exception &ex)
+    {
+        std::cerr << "Error loading config file: " << path << std::endl
+                  << ex.what() << std::endl;
+        exit(1);
+    }
 }
 
 #ifndef RUNNING_FRC_TESTS
-int main() {
-  return frc::StartRobot<Robot>();
+int main()
+{
+    return frc::StartRobot<Robot>();
 }
 #endif
