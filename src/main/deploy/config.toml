@@ -5,3 +5,63 @@ retractTargetSpeed = 0.7
 deploySpeedFactor = 0.01
 intakeRetractedPosition = 0.0
 intakeExtendedPosition = 90.0
+
+[drivetrain]
+    [drivetrain.PID]
+    k_maxOutput = 1.0
+    k_minOutput = -1.0
+        [drivetrain.PID.Drive]
+            [drivetrain.PID.Drive.Motor1]
+                k_P = 0.0
+                k_I = 0.0
+                k_D = 0.0
+                k_FF = 0.0
+                k_IZone = 0.0
+            [drivetrain.PID.Drive.Motor2]
+                k_P = 0.0
+                k_I = 0.0
+                k_D = 0.0
+                k_FF = 0.0
+                k_IZone = 0.0
+            [drivetrain.PID.Drive.Motor3]
+                k_P = 6e-5
+                k_I = 1e-6
+                k_D = 0.0
+                k_FF = 0.000015
+                k_IZone = 0.0
+            [drivetrain.PID.Drive.Motor4]
+                k_P = 6e-5
+                k_I = 1e-6
+                k_D = 0.0
+                k_FF = 0.000015
+                k_IZone = 0.0
+        [drivetrain.PID.Steer]
+            [drivetrain.PID.Steer.Motor1]
+                k_P = 0.0575
+                k_I = 0.0125
+                k_D = 0.005
+                k_FF = 0.001
+                k_IZone = 0.05
+            [drivetrain.PID.Steer.Motor2]
+                k_P = 0.0575
+                k_I = 0.0125
+                k_D = 0.005
+                k_FF = 0.001
+                k_IZone = 0.05
+            [drivetrain.PID.Steer.Motor3]
+                k_P = 0.0575
+                k_I = 0.0125
+                k_D = 0.005
+                k_FF = 0.001
+                k_IZone = 0.05
+            [drivetrain.PID.Steer.Motor4]
+                k_P = 0.0575
+                k_I = 0.0125
+                k_D = 0.005
+                k_FF = 0.001
+                k_IZone = 0.05
+    [drivetrain.EncoderSetpoint]
+        Steer1GlobalOffset = 342.773
+        Steer2GlobalOffset = 276.064
+        Steer3GlobalOffset = 297.422
+        Steer4GlobalOffset = 95.537

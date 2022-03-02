@@ -7,12 +7,14 @@
 #include "constants/constants.h"
 #include "constants/interfaces.h"
 
+#include "cpptoml.h"
+
 #include "RobotCompileModes.h"
 
 class Drivetrain : public frc2::SubsystemBase
 {
 public:
-    Drivetrain(); // constructor
+    Drivetrain (std::shared_ptr<cpptoml::table> toml); // constructor
 
     /**
          * @brief used to turn the swerve modules to have a heading centric to the field in radians (put in terms of pi)
@@ -186,51 +188,93 @@ private:
     rev::SparkMaxPIDController mPID_SteerMotor3 = Drivetrain::mSteerMotor3.GetPIDController();
     rev::SparkMaxPIDController mPID_SteerMotor4 = Drivetrain::mSteerMotor4.GetPIDController();
 
+
     //global constants for the motors
-    const double k_MaxOutput = 1.0;
-    const double k_minOutput = -1.0;
 
-    //hardcoded PID values (temporary)
-    //k_ for the member constants to differentiate betweek global constants of k
-    const double k_PID_DriveMotor1_P = 0.0;
-    const double k_PID_DriveMotor1_I = 0.0;
-    const double k_PID_DriveMotor1_D = 0.0;
-    const double k_PID_DriveMotor1_F = 0.0;
-
-    const double k_PID_DriveMotor2_P = 0.0;
-    const double k_PID_DriveMotor2_I = 0.0;
-    const double k_PID_DriveMotor2_D = 0.0;
-    const double k_PID_DriveMotor2_F = 0.0;
-
-    const double k_PID_DriveMotor3_P = 0.0;
-    const double k_PID_DriveMotor3_I = 0.0;
-    const double k_PID_DriveMotor3_D = 0.0;
-    const double k_PID_DriveMotor3_F = 0.0;
-
-    const double k_PID_DriveMotor4_P = 0.0;
-    const double k_PID_DriveMotor4_I = 0.0;
-    const double k_PID_DriveMotor4_D = 0.0;
-    const double k_PID_DriveMotor4_F = 0.0;
-
-    const double k_PID_SteerMotor1_P = 0.0;
-    const double k_PID_SteerMotor1_I = 0.0;
-    const double k_PID_SteerMotor1_D = 0.0;
-    const double k_PID_SteerMotor1_F = 0.0;
-
-    const double k_PID_SteerMotor2_P = 0.0;
-    const double k_PID_SteerMotor2_I = 0.0;
-    const double k_PID_SteerMotor2_D = 0.0;
-    const double k_PID_SteerMotor2_F = 0.0;
-
-    const double k_PID_SteerMotor3_P = 0.0;
-    const double k_PID_SteerMotor3_I = 0.0;
-    const double k_PID_SteerMotor3_D = 0.0;
-    const double k_PID_SteerMotor3_F = 0.0;
-
-    const double k_PID_SteerMotor4_P = 0.0;
-    const double k_PID_SteerMotor4_I = 0.0;
-    const double k_PID_SteerMotor4_D = 0.0;
-    const double k_PID_SteerMotor4_F = 0.0;
+    struct
+    {
+    	struct
+		{
+			struct
+			{
+				struct
+				{
+					double k_P = 0.0;
+					double k_I = 0.0;
+					double k_D = 0.0;
+					double k_FF = 0.0;
+					double k_IZone = 0.0;
+				} motor1;
+				struct
+				{
+					double k_P = 0.0;
+					double k_I = 0.0;
+					double k_D = 0.0;
+					double k_FF = 0.0;
+					double k_IZone = 0.0;
+				} motor2;
+				struct
+				{
+					double k_P = 0.0;
+					double k_I = 0.0;
+					double k_D = 0.0;
+					double k_FF = 0.0;
+					double k_IZone = 0.0;
+				} motor3;
+				struct
+				{
+					double k_P = 0.0;
+					double k_I = 0.0;
+					double k_D = 0.0;
+					double k_FF = 0.0;
+					double k_IZone = 0.0;
+				} motor4;
+			} Drive;
+			struct
+			{
+				struct
+				{
+					double k_P = 0.0;
+					double k_I = 0.0;
+					double k_D = 0.0;
+					double k_FF = 0.0;
+					double k_IZone = 0.0;
+				} motor1;
+				struct
+				{
+					double k_P = 0.0;
+					double k_I = 0.0;
+					double k_D = 0.0;
+					double k_FF = 0.0;
+					double k_IZone = 0.0;
+				} motor2;
+				struct
+				{
+					double k_P = 0.0;
+					double k_I = 0.0;
+					double k_D = 0.0;
+					double k_FF = 0.0;
+					double k_IZone = 0.0;
+				} motor3;
+				struct
+				{
+					double k_P = 0.0;
+					double k_I = 0.0;
+					double k_D = 0.0;
+					double k_FF = 0.0;
+					double k_IZone = 0.0;
+				} motor4;
+			} Steer;
+		double k_maxOutput = 1.0;
+		double k_minOutput = -1.0;
+		} PID;
+          struct{
+               double Encoder1GlobalOffset = 0.0;
+               double Encoder2GlobalOffset = 0.0;
+               double Encoder3GlobalOffset = 0.0;
+               double Encoder4GlobalOffset = 0.0;
+          } Encoders;
+    } config;
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
     rev::CANSparkMax &currentController = Drivetrain::mDriveMotor1;

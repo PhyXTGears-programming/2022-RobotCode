@@ -12,21 +12,26 @@
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
-Drivetrain drivetrain;
+static Drivetrain drivetrain;
 #endif
 
-void Robot::RobotInit() {
-  #ifdef ROBOTCMH_TESTING_MODE
-  #warning (In robot.cpp, testing mode is enabled)
-  frc::SmartDashboard::PutString("Robot mode", "TESTING, RobotCompileModes.h");
-  #endif
+void Robot::RobotInit()
+{
+#ifdef ROBOTCMH_TESTING_MODE
+#warning(In robot.cpp, testing mode is enabled)
+    frc::SmartDashboard::PutString("Robot mode", "TESTING, RobotCompileModes.h");
+#endif
 
-  std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
-  mIntake = new Intake(toml->get_table("intake"));
+    std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
+    mIntake = new Intake(toml->get_table("intake"));
+    mDrivetrain = new Drivetrain(toml->get_table("drivetrain"));
 
-  m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
-  m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+    mDrivetrain->turnOffMotors();
+
+    m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
+    m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
+    frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 }
 
 /**
