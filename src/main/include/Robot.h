@@ -76,10 +76,10 @@ private:
     frc2::FunctionalCommand *mManualRetractOuterArms = nullptr;
     frc2::FunctionalCommand *mManualExtendOuterArms = nullptr;
 
-    RetractInnerArmsCommand mRetractInnerArms {mInnerReach, 1.0};
-    ExtendInnerArmsCommand mExtendInnerArms {mInnerReach, 10.0};
-    RetractOuterArmsCommand mRetractOuterArms {mOuterReach, 1.0};
-    ExtendOuterArmsCommand mExtendOuterArms {mOuterReach, 10.0};
+    RetractInnerArmsCommand * mRetractInnerArms = nullptr;
+    ExtendInnerArmsCommand * mExtendInnerArms = nullptr;
+    RetractOuterArmsCommand * mRetractOuterArms = nullptr;
+    ExtendOuterArmsCommand * mExtendOuterArms = nullptr;
 };
 
 // there is a hidden forg somewhere in the robot's code.

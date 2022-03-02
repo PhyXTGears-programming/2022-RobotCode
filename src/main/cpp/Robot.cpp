@@ -5,6 +5,7 @@
 #include "Robot.h"
 
 #include <iostream>
+#include <frc2/command/CommandScheduler.h>
 
 #include "RobotCompileModes.h"
 
@@ -124,6 +125,11 @@ void Robot::RobotInit() {
             && mInnerReach->getMotor2Position() > 20.0; },
         { mOuterReach, mInnerReach }
     );
+
+    mRetractInnerArms = new RetractInnerArmsCommand {mInnerReach, 1.0};
+    mExtendInnerArms = new ExtendInnerArmsCommand {mInnerReach, 10.0};
+    mRetractOuterArms = new RetractOuterArmsCommand {mOuterReach, 1.0};
+    mExtendOuterArms = new ExtendOuterArmsCommand {mOuterReach, 10.0};
 }
 
 /**
@@ -164,9 +170,6 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic()
 {
-#ifdef ROBOTCMH_PID_TUNING_MODE
-    drivetrain.tunePIDNetworktables();
-#endif
     //Climber
     if (0 == operatorController->GetPOV()) { // Check up button
         mClimbMidbarOnly->mReachMidBar->Schedule();
@@ -208,15 +211,15 @@ void Robot::TeleopPeriodic()
 
     // Climber test
     if (operatorController->GetXButtonPressed()) {
-        mRetractInnerArms.Schedule();
+        mRetractInnerArms->Schedule();
     } else if (operatorController->GetYButtonPressed()) {
-        mExtendInnerArms.Schedule();
+        mExtendInnerArms->Schedule();
     }
 
     if (operatorController->GetAButtonPressed()) {
-        mRetractOuterArms.Schedule();
+        mRetractOuterArms->Schedule();
     } else if (operatorController->GetBButtonPressed()) {
-        mExtendOuterArms.Schedule();
+        mExtendOuterArms->Schedule();
     }
 }
 
