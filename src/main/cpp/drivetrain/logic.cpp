@@ -16,11 +16,13 @@ double Drivetrain::fieldCentricToRobotSpeed(double speed, double angle, double c
 
 std::vector<double> Drivetrain::getWheelSpeeds(double speed, double angle, double clockwiseSpin, double centerFieldAngle)
 {
+    double Y_Vector = (sin(angle)*speed);
+    double X_Vector = (cos(angle)*speed);
     //not sure what the next four variables are exactly for, but they should be for calculating speed and angles
-    double A = angle - (clockwiseSpin * (constants::wheelBase / constants::diameter));
-    double B = angle + (clockwiseSpin * (constants::wheelBase / constants::diameter));
-    double C = speed - (clockwiseSpin * (constants::trackWidth / constants::diameter));
-    double D = speed + (clockwiseSpin * (constants::trackWidth / constants::diameter));
+    double A = X_Vector - (clockwiseSpin * (constants::kWheelBase / constants::kDiameter));
+    double B = X_Vector + (clockwiseSpin * (constants::kWheelBase / constants::kDiameter));
+    double C = Y_Vector - (clockwiseSpin * (constants::kTrackWidth / constants::kDiameter));
+    double D = Y_Vector + (clockwiseSpin * (constants::kTrackWidth / constants::kDiameter));
 
     double WheelSpeed1 = sqrt(pow(B, 2) + pow(C, 2));
     double WheelSpeed2 = sqrt(pow(B, 2) + pow(D, 2));
@@ -59,11 +61,14 @@ std::vector<double> Drivetrain::getWheelSpeeds(double speed, double angle, doubl
 
 std::vector<double> Drivetrain::getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle)
 {
+    double Y_Vector = (sin(angle) * speed);
+    double X_Vector = (cos(angle) * speed);
     //not sure what the next four variables are exactly for, but they should be for calculating speed and angles
-    double A = angle - (clockwiseSpin * (constants::wheelBase / constants::diameter));
-    double B = angle + (clockwiseSpin * (constants::wheelBase / constants::diameter));
-    double C = speed - (clockwiseSpin * (constants::trackWidth / constants::diameter));
-    double D = speed + (clockwiseSpin * (constants::trackWidth / constants::diameter));
+    double A = X_Vector - (clockwiseSpin * (constants::kWheelBase / constants::kDiameter));
+    double B = X_Vector + (clockwiseSpin * (constants::kWheelBase / constants::kDiameter));
+    double C = Y_Vector - (clockwiseSpin * (constants::kTrackWidth / constants::kDiameter));
+    double D = Y_Vector + (clockwiseSpin * (constants::kTrackWidth / constants::kDiameter));
+
 
     double WheelAngle1 = atan2(B, C);
     double WheelAngle2 = atan2(B, D);
