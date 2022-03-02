@@ -4,6 +4,13 @@
 
 #include <math.h>
 
+
+//grabs the offset from the encoders and applies it to the angle
+#define INCLUDE_ABSOLUTE_OFFSET
+//makes sure the rotations stay within pi to -pi
+//#define INCLUDE_ROTATION_NORMALIZE
+
+
 double Drivetrain::fieldCentricToRobotAngle(double angle, double speed, double centerOfFieldAngle)
 {
     return (-speed * sin(centerOfFieldAngle)) + (angle * cos(centerOfFieldAngle));
@@ -53,8 +60,8 @@ std::vector<double> Drivetrain::getWheelSpeeds(double speed, double angle, doubl
         WheelSpeed3 /= max;
         WheelSpeed4 /= max;
     }
-    
-    std::vector<double> wheelSpeeds {WheelSpeed1, WheelSpeed2, WheelSpeed3, WheelSpeed4};
+
+    std::vector<double> wheelSpeeds{ WheelSpeed1, WheelSpeed2, WheelSpeed3, WheelSpeed4 };
 
     return wheelSpeeds;
 }
@@ -69,13 +76,61 @@ std::vector<double> Drivetrain::getWheelDirection(double speed, double angle, do
     double C = Y_Vector - (clockwiseSpin * (constants::kTrackWidth / constants::kDiameter));
     double D = Y_Vector + (clockwiseSpin * (constants::kTrackWidth / constants::kDiameter));
 
+#ifdef INCLUDE_ABSOLUTE_OFFSET
+    double WheelAngle1 = (atan2(B, C) - Drivetrain::InitialOffsetAngle1);
+    double WheelAngle2 = (atan2(B, D) - Drivetrain::InitialOffsetAngle2);
+    double WheelAngle3 = (atan2(A, D) - Drivetrain::InitialOffsetAngle3);
+    double WheelAngle4 = (atan2(A, C) - Drivetrain::InitialOffsetAngle4);
+#endif // INCLUDE_ABSOLUTE_OFFSET
 
-    double WheelAngle1 = atan2(B, C);
-    double WheelAngle2 = atan2(B, D);
-    double WheelAngle3 = atan2(A, D);
-    double WheelAngle4 = atan2(A, C);
 
-    std::vector<double> wheelSpeeds {WheelAngle1, WheelAngle2, WheelAngle3, WheelAngle4};
+#ifndef INCLUDE_ABSOLUTE_OFFSET
+    double WheelAngle1 = (atan2(B, C));
+    double WheelAngle2 = (atan2(B, D));
+    double WheelAngle3 = (atan2(A, D));
+    double WheelAngle4 = (atan2(A, C));
+#endif // !INCLUDE_ABSOLUTE_OFFSET
+
+    std::vector<double> wheelSpeeds{ WheelAngle1, WheelAngle2, WheelAngle3, WheelAngle4 };
+
+#ifdef INCLUDE_ROTATION_NORMALIZE
+    //normalize to be within -pi and pi
+    for (int i = 0; i < wheelSpeeds.size(); i++) {
+        if (wheelSpeeds[i] > M_PI) {
+            wheelSpeeds[i] -= (M_PI * 2);
+        }
+        if (wheelSpeeds[i] < M_PI) {
+            wheelSpeeds[i] += (M_PI * 2);
+        }
+    }
+#endif // INCLUDE_ROTATION_NORMALIZE
 
     return wheelSpeeds;
 }
+
+
+#ifdef INCLUDE_ROTATION_NORMALIZE
+double Drivetrain::findMod(double a, double b)
+{
+    double mod;
+    // Handling negative values
+    if (a < 0)
+        mod = -a;
+    else
+        mod = a;
+    if (b < 0)
+        b = -b;
+
+    // Finding mod by repeated subtraction
+
+    while (mod >= b)
+        mod = mod - b;
+
+    // Sign of result typically depends
+    // on sign of a.
+    if (a < 0)
+        return -mod;
+
+    return mod;
+}
+#endif
