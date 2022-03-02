@@ -6,7 +6,7 @@ namespace interfaces
     //block 0 (00-09) is reserved for the drivetrain
     //block 1 (10-19) is not reserved
     //block 2 (20-29) is not reserved
-    //block 3 (30-39) is not reserved
+    //block 3 (30-39) is reserved for the shooter
     //block 4 (40-49) is reserved for the climber
 
     //done to prevent direct access to CAN pins and instead you have to use the pretty print name
@@ -47,6 +47,18 @@ namespace interfaces
         const int kCAN27 = 27;
         const int kCAN28 = 28;
         const int kCAN29 = 29;
+      
+        //block 3
+        const int kCAN30 = 30;
+        const int kCAN31 = 31;
+        const int kCAN32 = 32;
+        const int kCAN33 = 33;
+        const int kCAN34 = 34;
+        const int kCAN35 = 35;
+        const int kCAN36 = 36;
+        const int kCAN37 = 37;
+        const int kCAN38 = 38;
+        const int kCAN39 = 39;
 
         //block 4
         const int kCAN40 = 40;
@@ -109,6 +121,9 @@ namespace interfaces
     const int kDeployServo1 = kPWM6;
     const int kDeployServo2 = kPWM7;
 
+    //shooter CAN assignment (block 3)
+    const int kShooterMotor = kCAN30;
+
     // climber CAN (block 4) and PWM assignments
 
     const int kInnerArm1 = kCAN40;
@@ -123,5 +138,4 @@ namespace interfaces
     
     const int kStopServo1 = kPWM0;
     const int kStopServo2 = kPWM1;
-
 }

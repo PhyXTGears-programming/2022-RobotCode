@@ -4,6 +4,17 @@ extendTargetSpeed = 0.7
 intakeRetractedPosition = 0.0
 intakeExtendedPosition = 1.0
 
+[shooter]
+speed.near = 0.1
+speed.far = 0.5
+motor.p = 0.001
+motor.i = 0.0
+motor.d = 0.0
+motor.ff = 0.0
+motor.minValue = -1.0
+motor.maxValue = 1.0
+motor.izone = 1.0
+
 [climber]
 lockServoPosition = 0.0 # actual value unknown
 extendSpeed = 1.0
