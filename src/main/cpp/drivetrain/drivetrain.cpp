@@ -9,8 +9,11 @@
 #include <math.h>
 
 #include "rev/CANSparkMax.h"
+#include "rev/REVLibError.h"
 
 #include "RobotCompileModes.h" //set all robot modes here
+
+#include <iostream>
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "networktables/NetworkTable.h"
@@ -52,33 +55,57 @@ Drivetrain::Drivetrain()
     //
     currentController.GetEncoder().SetVelocityConversionFactor(42);
     //we start with a 5.33:1 gear ratio from the swerve module, and
-    //we hhave a 12:1 gear ratio for the output shaft on the motor
+    //we have a 12:1 gear ratio for the output shaft on the motor
     // = 2688 encoder tick per revolution
     // currentController.GetEncoder().SetPositionConversionFactor(2688);
 #endif
 
     //initial drive motor PID values
-    Drivetrain::setPidValues(mPID_DriveMotor1, k_PID_DriveMotor1_P, k_PID_DriveMotor1_I, k_PID_DriveMotor1_D, k_PID_DriveMotor1_F, k_minOutput, k_MaxOutput);
-    Drivetrain::setPidValues(mPID_DriveMotor2, k_PID_DriveMotor2_P, k_PID_DriveMotor2_I, k_PID_DriveMotor2_D, k_PID_DriveMotor2_F, k_minOutput, k_MaxOutput);
-    Drivetrain::setPidValues(mPID_DriveMotor3, k_PID_DriveMotor3_P, k_PID_DriveMotor3_I, k_PID_DriveMotor3_D, k_PID_DriveMotor3_F, k_minOutput, k_MaxOutput);
-    Drivetrain::setPidValues(mPID_DriveMotor4, k_PID_DriveMotor4_P, k_PID_DriveMotor4_I, k_PID_DriveMotor4_D, k_PID_DriveMotor4_F, k_minOutput, k_MaxOutput);
+    Drivetrain::setPidValues(mPID_DriveMotor1, config.PID.Drive.motor1.k_P, config.PID.Drive.motor1.k_I, config.PID.Drive.motor1.k_D, config.PID.Drive.motor1.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "DriveMotor1", config.PID.Drive.motor1.k_IZone);
+    Drivetrain::setPidValues(mPID_DriveMotor2, config.PID.Drive.motor2.k_P, config.PID.Drive.motor2.k_I, config.PID.Drive.motor2.k_D, config.PID.Drive.motor2.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "DriveMotor2", config.PID.Drive.motor2.k_IZone);
+    Drivetrain::setPidValues(mPID_DriveMotor3, config.PID.Drive.motor3.k_P, config.PID.Drive.motor3.k_I, config.PID.Drive.motor3.k_D, config.PID.Drive.motor3.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "DriveMotor3", config.PID.Drive.motor3.k_IZone);
+    Drivetrain::setPidValues(mPID_DriveMotor4, config.PID.Drive.motor4.k_P, config.PID.Drive.motor4.k_I, config.PID.Drive.motor4.k_D, config.PID.Drive.motor4.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "DriveMotor4", config.PID.Drive.motor4.k_IZone);
     //initial steering PID values
-    Drivetrain::setPidValues(mPID_SteerMotor1, k_PID_SteerMotor1_P, k_PID_SteerMotor1_I, k_PID_SteerMotor1_D, k_PID_SteerMotor1_F, k_minOutput, k_MaxOutput);
-    Drivetrain::setPidValues(mPID_SteerMotor2, k_PID_SteerMotor2_P, k_PID_SteerMotor2_I, k_PID_SteerMotor2_D, k_PID_SteerMotor2_F, k_minOutput, k_MaxOutput);
-    Drivetrain::setPidValues(mPID_SteerMotor3, k_PID_SteerMotor3_P, k_PID_SteerMotor3_I, k_PID_SteerMotor3_D, k_PID_SteerMotor3_F, k_minOutput, k_MaxOutput);
-    Drivetrain::setPidValues(mPID_SteerMotor4, k_PID_SteerMotor4_P, k_PID_SteerMotor4_I, k_PID_SteerMotor4_D, k_PID_SteerMotor4_F, k_minOutput, k_MaxOutput);
+    Drivetrain::setPidValues(mPID_SteerMotor1, config.PID.Steer.motor1.k_P, config.PID.Steer.motor1.k_I, config.PID.Steer.motor1.k_D, config.PID.Steer.motor1.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor1", config.PID.Steer.motor1.k_IZone);
+    Drivetrain::setPidValues(mPID_SteerMotor2, config.PID.Steer.motor2.k_P, config.PID.Steer.motor2.k_I, config.PID.Steer.motor2.k_D, config.PID.Steer.motor2.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor2", config.PID.Steer.motor2.k_IZone);
+    Drivetrain::setPidValues(mPID_SteerMotor3, config.PID.Steer.motor3.k_P, config.PID.Steer.motor3.k_I, config.PID.Steer.motor3.k_D, config.PID.Steer.motor3.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor3", config.PID.Steer.motor3.k_IZone);
+    Drivetrain::setPidValues(mPID_SteerMotor4, config.PID.Steer.motor4.k_P, config.PID.Steer.motor4.k_I, config.PID.Steer.motor4.k_D, config.PID.Steer.motor4.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor4", config.PID.Steer.motor4.k_IZone);
 }
 
 void Drivetrain::setPidValues(rev::SparkMaxPIDController PIDController, double k_P,
                               double k_I, double k_D, double k_FF,
-                              double k_minValue, double k_maxValue, double k_IZone /*= 0.0*/)
+                              double k_minValue, double k_maxValue, std::string motorReference, double k_IZone /*= 0*/)
 {
-    PIDController.SetP(k_P);
-    PIDController.SetI(k_I);
-    PIDController.SetD(k_D);
-    PIDController.SetFF(k_FF);
-    PIDController.SetOutputRange(k_minValue, k_maxValue);
-    PIDController.SetIZone(k_IZone);
+    if (PIDController.SetP(k_P) != rev::REVLibError::kOk)
+    {
+        std::cout << "ERROR, P NOT SET SUCCESSFULLY ON MOTOR: " << motorReference << std::endl;
+        PIDController.SetP(k_P);
+    }
+    if (PIDController.SetI(k_I) != rev::REVLibError::kOk)
+    {
+        std::cout << "ERROR, I NOT SET SUCCESSFULLY ON MOTOR: " << motorReference << std::endl;
+        PIDController.SetI(k_I);
+    }
+    if (PIDController.SetD(k_D) != rev::REVLibError::kOk)
+    {
+        std::cout << "ERROR, D NOT SET SUCCESSFULLY ON MOTOR: " << motorReference << std::endl;
+        PIDController.SetD(k_D);
+    }
+    if (PIDController.SetFF(k_FF) != rev::REVLibError::kOk)
+    {
+        std::cout << "ERROR, Feed Foreward NOT SET SUCCESSFULLY ON MOTOR: " << motorReference << std::endl;
+        PIDController.SetFF(k_FF);
+    }
+    if (PIDController.SetOutputRange(k_minValue, k_maxValue) != rev::REVLibError::kOk)
+    {
+        std::cout << "ERROR, Output Range NOT SET SUCCESSFULLY ON MOTOR: " << motorReference << std::endl;
+        PIDController.SetOutputRange(k_minValue, k_maxValue);
+    }
+    if (PIDController.SetIZone(k_IZone) != rev::REVLibError::kOk)
+    {
+        std::cout << "ERROR, I Zone NOT SET SUCCESSFULLY ON MOTOR: " << motorReference << std::endl;
+        PIDController.SetIZone(k_IZone);
+    }
 }
 
 //set the heading of the robot as a whole, and set the individual wheels to the correct direction.
