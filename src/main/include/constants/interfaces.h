@@ -59,7 +59,6 @@ namespace interfaces
         const int kCAN27 = 27;
         const int kCAN28 = 28;
         const int kCAN29 = 29;
-      
 
         //block 3
         const int kCAN30 = 30;
