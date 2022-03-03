@@ -14,10 +14,14 @@
 #include "constants/interfaces.h"
 
 #include "cpptoml.h"
-#include "intake/intake.h"
 
 #include "drivetrain-swerve/SwerveDrive.h"
+#include "intake/intake.h"
+#include "shooter/shooter.h"
+
 #include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
+#include "commands/shooter/ShootCommand.h"
+#include "commands/intake/RunIntake.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -41,11 +45,14 @@ private:
     const std::string kAutoNameCustom = "My Auto";
     std::string m_autoSelected;
 
-    SwerveDrive * mSwerveDrive = nullptr;
-
     frc::XboxController * driverController = nullptr;
-
-    AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
+    frc::XboxController * operatorController = nullptr;
 
     Intake *mIntake = nullptr;
+    Shooter *mShooter = nullptr;
+    SwerveDrive * mSwerveDrive = nullptr;
+    
+    AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
+    ShootCommand *mShootCommand = nullptr;
+    RunIntakeCommand *mRunIntakeCommand = nullptr;
 };
