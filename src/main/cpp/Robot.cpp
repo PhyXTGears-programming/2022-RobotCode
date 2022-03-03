@@ -28,7 +28,7 @@ void Robot::RobotInit()
 
     driverController = new frc::XboxController(interfaces::kXBoxDriver);
     
-    mDrivetrainTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
+    mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
@@ -88,7 +88,7 @@ void Robot::AutonomousPeriodic()
 }
 
 void Robot::TeleopInit() {
-    mDrivetrainTeleopCommand->Schedule();
+    mDriveTeleopCommand->Schedule();
 }
 
 void Robot::TeleopPeriodic()

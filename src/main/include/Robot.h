@@ -45,7 +45,7 @@ private:
 
     frc::XboxController * driverController = nullptr;
 
-    AltDriveTeleopCommand * mDrivetrainTeleopCommand = nullptr;
+    AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
 
     Intake *mIntake = nullptr;
 };
