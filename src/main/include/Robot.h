@@ -42,7 +42,7 @@ private:
     std::string m_autoSelected;
 
     frc::XboxController operatorController{interfaces::kXBoxDriver};
-    frc::XboxController driverController{interfaces::kXBoxDriver};    
+    frc::XboxController driverController{interfaces::kXBoxOperator};
 
     Intake *mIntake = nullptr;
     Drivetrain *mDrivetrain = nullptr;
