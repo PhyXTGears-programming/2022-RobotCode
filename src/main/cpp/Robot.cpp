@@ -10,6 +10,7 @@
 
 #include "RobotCompileModes.h"
 
+
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
 static Drivetrain drivetrain;
@@ -24,6 +25,7 @@ void Robot::RobotInit()
 
     std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
     mIntake = new Intake(toml->get_table("intake"));
+    mShooter = new Shooter(toml->get_table("shooter"));
     mDrivetrain = new Drivetrain(toml->get_table("drivetrain"));
 
     mDriveTeleopCommand = new DriveTeleopCommand(mDrivetrain, &driverController);
@@ -96,6 +98,62 @@ void Robot::TeleopPeriodic()
 #ifdef ROBOTCMH_PID_TUNING_MODE
     drivetrain.tunePIDNetworktables();
 #endif
+    //Shooter
+    if (operatorController.GetXButtonPressed()) 
+    {
+        mShootCommand->Schedule();
+    }
+    else if(operatorController.GetXButtonReleased())
+    {
+        mShootCommand->Cancel();
+    }
+
+    //Intake
+    if (operatorController.GetAButtonPressed())
+    {
+        mRunIntakeCommand->Schedule();
+    }
+    else if(operatorController.GetAButtonReleased())
+    {
+        mRunIntakeCommand->Cancel();
+    }
+
+    //Climber
+    if (operatorController.GetPOV(0)) // Check up button
+    {
+
+    }
+    else
+    {
+
+    }
+    
+    if (operatorController.GetPOV(90)) // Check right button
+    {
+
+    }
+    else
+    {
+
+    }
+
+    if (operatorController.GetPOV(180)) // Check down button
+    {
+
+    }
+    else
+    {
+
+    }
+
+    if (operatorController.GetPOV(270)) // Check left button
+    {
+
+    }
+    else
+    {
+        
+    }
 }
 
 void Robot::DisabledInit() {}

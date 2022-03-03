@@ -13,9 +13,12 @@
 
 #include "cpptoml.h"
 #include "intake/intake.h"
+#include "shooter/shooter.h"
 #include "drivetrain/drivetrain.h"
-#include "commands/drivetrain/DriveTeleopCommand.h"
 
+#include "commands/drivetrain/DriveTeleopCommand.h"
+#include "commands/shooter/ShootCommand.h"
+#include "commands/intake/RunIntake.h"
 class Robot : public frc::TimedRobot
 {
 public:
@@ -38,10 +41,14 @@ private:
     const std::string kAutoNameCustom = "My Auto";
     std::string m_autoSelected;
 
-    frc::XboxController driverController{interfaces::kXBoxDriver};
+    frc::XboxController operatorController{interfaces::kXBoxDriver};
+    frc::XboxController driverController{interfaces::kXBoxDriver};    
 
     Intake *mIntake = nullptr;
     Drivetrain *mDrivetrain = nullptr;
+    Shooter *mShooter = nullptr;
 
     DriveTeleopCommand *mDriveTeleopCommand = nullptr;
+    ShootCommand *mShootCommand = nullptr;
+    RunIntakeCommand *mRunIntakeCommand = nullptr;
 };
