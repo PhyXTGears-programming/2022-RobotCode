@@ -27,7 +27,7 @@ void Robot::RobotInit()
     mIntake = new Intake(toml->get_table("intake"));
 
     driverController = new frc::XboxController(interfaces::kXBoxDriver);
-    operatorController = new frc::XboxController(interfaces::kXBoxOperator};
+    operatorController = new frc::XboxController(interfaces::kXBoxOperator);
   
     mShooter = new Shooter(toml->get_table("shooter"));
     mSwerveDrive = new SwerveDrive(false);
@@ -103,27 +103,27 @@ void Robot::TeleopPeriodic()
     drivetrain.tunePIDNetworktables();
 #endif
     //Shooter
-    if (operatorController.GetXButtonPressed()) 
+    if (operatorController->GetXButtonPressed()) 
     {
         mShootCommand->Schedule();
     }
-    else if(operatorController.GetXButtonReleased())
+    else if(operatorController->GetXButtonReleased())
     {
         mShootCommand->Cancel();
     }
 
     //Intake
-    if (operatorController.GetAButtonPressed())
+    if (operatorController->GetAButtonPressed())
     {
         mRunIntakeCommand->Schedule();
     }
-    else if(operatorController.GetAButtonReleased())
+    else if(operatorController->GetAButtonReleased())
     {
         mRunIntakeCommand->Cancel();
     }
 
     //Climber
-    if (operatorController.GetPOV(0)) // Check up button
+    if (operatorController->GetPOV(0)) // Check up button
     {
 
     }
@@ -132,7 +132,7 @@ void Robot::TeleopPeriodic()
 
     }
     
-    if (operatorController.GetPOV(90)) // Check right button
+    if (operatorController->GetPOV(90)) // Check right button
     {
 
     }
@@ -141,7 +141,7 @@ void Robot::TeleopPeriodic()
 
     }
 
-    if (operatorController.GetPOV(180)) // Check down button
+    if (operatorController->GetPOV(180)) // Check down button
     {
 
     }
@@ -150,7 +150,7 @@ void Robot::TeleopPeriodic()
 
     }
 
-    if (operatorController.GetPOV(270)) // Check left button
+    if (operatorController->GetPOV(270)) // Check left button
     {
 
     }
