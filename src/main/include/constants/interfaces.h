@@ -112,8 +112,9 @@ namespace interfaces
 
     const int kOuterArmRotation = kCAN44;
     const int kInnerArmRotation = kCAN45;
-    const int kInnerRotationEncoder = kCAN46;
-    const int kOuterRotationEncoder = kCAN47;
+
+    const int kInnerRotationEncoder = kDIO3;
+    const int kOuterRotationEncoder = kDIO4;
     
     const int kStopServo1 = kPWM0;
     const int kStopServo2 = kPWM1;

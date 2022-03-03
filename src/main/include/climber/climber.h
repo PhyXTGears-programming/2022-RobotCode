@@ -2,7 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
-#include <ctre/phoenix/sensors/CANCoder.h>
+#include <frc/DutyCycleEncoder.h>
 #include <rev/SparkMaxRelativeEncoder.h>
 #include <frc/Servo.h>
 
@@ -58,8 +58,8 @@ class Climber : public frc2::SubsystemBase{
         rev::CANSparkMax mOuterArmRotationMotor {interfaces::kOuterArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
         rev::CANSparkMax mInnerArmRotationMotor {interfaces::kInnerArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
 
-        ctre::phoenix::sensors::CANCoder mInnerRotationEncoder {interfaces::kInnerRotationEncoder};
-        ctre::phoenix::sensors::CANCoder mOuterRotationEncoder {interfaces::kOuterRotationEncoder};
+        frc::DutyCycleEncoder mInnerRotationEncoder {interfaces::kInnerRotationEncoder};
+        frc::DutyCycleEncoder mOuterRotationEncoder {interfaces::kOuterRotationEncoder};
 
         rev::SparkMaxRelativeEncoder mInnerHook1Encoder {mInnerHookMotor1.GetEncoder()};
         rev::SparkMaxRelativeEncoder mInnerHook2Encoder {mInnerHookMotor2.GetEncoder()};
