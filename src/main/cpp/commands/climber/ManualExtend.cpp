@@ -1,6 +1,7 @@
 #include "commands/climber/ManualExtend.h"
 
 ManualExtendCommand::ManualExtendCommand(Climber * climber) {
+    AddRequirements(climber);
     mClimber = climber;
     
     mRetract = new RetractInnerArmsCommand {mClimber, kRestingExtension};
