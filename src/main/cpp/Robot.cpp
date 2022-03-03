@@ -30,7 +30,7 @@ void Robot::RobotInit()
 
     mDriveTeleopCommand = new DriveTeleopCommand(mDrivetrain, &driverController);
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
-    mShootCommand = new mShootCommand(mShooter);
+    mShootCommand = new ShootCommand(mShooter);
 
     mDrivetrain->turnOffMotors();
 
