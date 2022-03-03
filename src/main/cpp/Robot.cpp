@@ -24,6 +24,11 @@ void Robot::RobotInit()
 
     std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
     mIntake = new Intake(toml->get_table("intake"));
+    mSwerveDrive = new SwerveDrive(false);
+
+    driverController = new frc::XboxController(interfaces::kXBoxDriver);
+    
+    mDrivetrainTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
@@ -83,7 +88,7 @@ void Robot::AutonomousPeriodic()
 }
 
 void Robot::TeleopInit() {
-
+    mDrivetrainTeleopCommand->Schedule();
 }
 
 void Robot::TeleopPeriodic()

@@ -9,10 +9,15 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
+#include <frc/XboxController.h>
+
 #include "constants/interfaces.h"
 
 #include "cpptoml.h"
 #include "intake/intake.h"
+
+#include "drivetrain-swerve/SwerveDrive.h"
+#include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -36,7 +41,11 @@ private:
     const std::string kAutoNameCustom = "My Auto";
     std::string m_autoSelected;
 
-    frc::XboxController driverController{interfaces::kXBoxDriver};
+    SwerveDrive * mSwerveDrive = nullptr;
+
+    frc::XboxController * driverController = nullptr;
+
+    AltDriveTeleopCommand * mDrivetrainTeleopCommand = nullptr;
 
     Intake *mIntake = nullptr;
 };
