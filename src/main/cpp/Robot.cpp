@@ -29,6 +29,8 @@ void Robot::RobotInit()
     mDrivetrain = new Drivetrain(toml->get_table("drivetrain"));
 
     mDriveTeleopCommand = new DriveTeleopCommand(mDrivetrain, &driverController);
+    mRunIntakeCommand = new RunIntakeCommand(mIntake);
+    mShootCommand = new mShootCommand(mShooter);
 
     mDrivetrain->turnOffMotors();
 
