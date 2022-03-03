@@ -9,16 +9,20 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
+#include <frc/XboxController.h>
+
 #include "constants/interfaces.h"
 
 #include "cpptoml.h"
+
+#include "drivetrain-swerve/SwerveDrive.h"
 #include "intake/intake.h"
 #include "shooter/shooter.h"
-#include "drivetrain/drivetrain.h"
 
-#include "commands/drivetrain/DriveTeleopCommand.h"
+#include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 #include "commands/shooter/ShootCommand.h"
 #include "commands/intake/RunIntake.h"
+
 class Robot : public frc::TimedRobot
 {
 public:
@@ -41,14 +45,14 @@ private:
     const std::string kAutoNameCustom = "My Auto";
     std::string m_autoSelected;
 
-    frc::XboxController operatorController{interfaces::kXBoxDriver};
-    frc::XboxController driverController{interfaces::kXBoxOperator};
+    frc::XboxController * driverController = nullptr;
+    frc::XboxController * operatorController = nullptr;
 
     Intake *mIntake = nullptr;
-    Drivetrain *mDrivetrain = nullptr;
     Shooter *mShooter = nullptr;
-
-    DriveTeleopCommand *mDriveTeleopCommand = nullptr;
+    SwerveDrive * mSwerveDrive = nullptr;
+    
+    AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ShootCommand *mShootCommand = nullptr;
     RunIntakeCommand *mRunIntakeCommand = nullptr;
 };
