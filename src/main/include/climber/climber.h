@@ -13,6 +13,8 @@ class Climber : public frc2::SubsystemBase{
     public:
         Climber(std::shared_ptr<cpptoml::table> toml); // constructor
 
+        void Periodic() override;
+
         void extendOuter1();
         void extendOuter2();
         void retractOuter1();
@@ -26,11 +28,17 @@ class Climber : public frc2::SubsystemBase{
         void retractInner2();
         void stopInner1();
         void stopInner2();
+        void runInner1(double speed);
+        void runInner2(double speed);
 
         void lockArms();
+        void unlockArms();
 
         void rotateInner(double speed);
         void rotateOuter(double speed);
+
+        void setInnerMotorsCoast();
+        void setInnerMotorsBrake();
 
         void setRotateMotorsCoast();
         void setRotateMotorsBrake();
@@ -40,6 +48,11 @@ class Climber : public frc2::SubsystemBase{
 
         void setInnerUnderLoad(bool isUnderLoad);
         void setOuterUnderLoad(bool isUnderLoad);
+
+        double getInner1Position();
+        double getInner2Position();
+        double getOuter1Position();
+        double getOuter2Position();
 
         bool isOuter1NearTarget(double target);
         bool isOuter2NearTarget(double target);
@@ -71,7 +84,12 @@ class Climber : public frc2::SubsystemBase{
 
         struct {
             double extendSpeed, retractSpeed;
-            double lockServoPosition;
+
+            struct {
+                double unlockPosition;
+                double lockPosition;
+            } servo1, servo2;
+
             double inchesPerRevolution;
             struct {
                 double innerStaticFriction, outerStaticFriction;

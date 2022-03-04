@@ -34,8 +34,62 @@ void Robot::RobotInit()
     mSwerveDrive = new SwerveDrive(false);
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
+    mClimbMidbarOnly = new ClimbMidBarOnly(mClimber, toml->get_table_qualified("command.climb.midbar"));
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
     mShootCommand = new ShootCommand(mShooter);
+
+    mManualRetractInnerArms = new frc2::FunctionalCommand(
+        [&]() {},
+        [&]() {
+            bool isInner1NearTarget = mClimber->isInner1NearTarget(0.0);
+            bool isInner2NearTarget = mClimber->isInner2NearTarget(0.0);
+
+            if (isInner1NearTarget) {
+                mClimber->stopInner1();
+            } else {
+                mClimber->runInner1(0.2);
+            }
+
+            if (isInner2NearTarget) {
+                mClimber->stopInner2();
+            } else {
+                mClimber->runInner2(0.2);
+            }
+        },
+        [&](bool) {
+            mClimber->stopInner1();
+            mClimber->stopInner2();
+        },
+        [&]() { return mClimber->isInner1NearTarget(0.0) || mClimber->isInner2NearTarget(0.0); },
+        { mClimber }
+    );
+
+    mManualExtendInnerArms = new frc2::FunctionalCommand(
+        [&]() {},
+        [&]() {
+            bool isInner1NearTarget = mClimber->isInner1NearTarget(20.0);
+            bool isInner2NearTarget = mClimber->isInner2NearTarget(20.0);
+
+            if (isInner1NearTarget) {
+                mClimber->stopInner1();
+            } else {
+                mClimber->runInner1(-0.2);
+            }
+
+            if (isInner2NearTarget) {
+                mClimber->stopInner2();
+            } else {
+                mClimber->runInner2(-0.2);
+            }
+        },
+        [&](bool) {
+            mClimber->stopInner1();
+            mClimber->stopInner2();
+        },
+        [&]() { return mClimber->isInner1NearTarget(20.0) || mClimber->isInner2NearTarget(20.0); },
+        { mClimber }
+    );
+
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoShootAndDrive, kAutoShootAndDrive);
@@ -96,12 +150,9 @@ void Robot::AutonomousInit()
 
 void Robot::AutonomousPeriodic()
 {
-    if (m_autoSelected == kAutoNameCustom)
-    {
+    if (m_autoSelected == kAutoNameCustom) {
         // Custom Auto goes here
-    }
-    else
-    {
+    } else {
         // Default Auto goes here
     }
 }
@@ -116,60 +167,54 @@ void Robot::TeleopPeriodic()
     drivetrain.tunePIDNetworktables();
 #endif
     //Shooter
-    if (operatorController->GetXButtonPressed()) 
-    {
+    if (operatorController->GetXButtonPressed()) {
         mShootCommand->Schedule();
-    }
-    else if(operatorController->GetXButtonReleased())
-    {
+    } else if(operatorController->GetXButtonReleased()) {
         mShootCommand->Cancel();
     }
 
     //Intake
-    if (operatorController->GetAButtonPressed())
-    {
+    if (operatorController->GetAButtonPressed()) {
         mRunIntakeCommand->Schedule();
-    }
-    else if(operatorController->GetAButtonReleased())
-    {
+    } else if(operatorController->GetAButtonReleased()) {
         mRunIntakeCommand->Cancel();
     }
 
     //Climber
-    if (operatorController->GetPOV(0)) // Check up button
-    {
-
-    }
-    else
-    {
-
+    if (0 == operatorController->GetPOV()) { // Check up button
+        mClimbMidbarOnly->mReachMidBar->Schedule();
     }
     
-    if (operatorController->GetPOV(90)) // Check right button
-    {
+    if (90 == operatorController->GetPOV()) { // Check right button
 
-    }
-    else
-    {
+    } else {
 
     }
 
-    if (operatorController->GetPOV(180)) // Check down button
-    {
-
-    }
-    else
-    {
-
+    if (180 == operatorController->GetPOV()) { // Check down button
+      mClimbMidbarOnly->mClimbMidBarAndLock->Schedule();
     }
 
-    if (operatorController->GetPOV(270)) // Check left button
-    {
+    if (270 == operatorController->GetPOV()) { // Check left button
 
-    }
-    else
-    {
+    } else {
         
+    }
+
+    // FIXME: Hack to allow operator to manually (and slowly) move inner climb
+    // arms if no other command is running.
+    double opY = operatorController->GetLeftY();
+    opY = fabs(opY) < 0.3 ? 0.0 : opY;
+    if (opY < 0.0) {
+        mManualRetractInnerArms->Schedule();
+    } else if (opY > 0.0) {
+        mManualExtendInnerArms->Schedule();
+    } else {
+        if (mManualRetractInnerArms->IsScheduled()) {
+            mManualRetractInnerArms->Cancel();
+        } else if (mManualExtendInnerArms->IsScheduled()) {
+            mManualExtendInnerArms->Cancel();
+        }
     }
 }
 
