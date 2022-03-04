@@ -140,15 +140,21 @@ namespace interfaces
     //shooter CAN assignment (block 3)
     const int kShooterMotor = kCAN30;
 
+    // intake CAN and PWM assignments (block 2)
+
+    const int kRollerMotor = kCAN20;
+    const int kDeployServo1 = kPWM6;
+    const int kDeployServo2 = kPWM7;
+
     // climber CAN (block 4) and PWM assignments
 
-    const int kInnerArm1 = kCAN40;
-    const int kInnerArm2 = kCAN41;
-    const int kOuterArm1 = kCAN42;
-    const int kOuterArm2 = kCAN43;
-
-    const int kOuterArmRotation = kCAN44;
-    const int kInnerArmRotation = kCAN45;
+    const int kOuterArm1 = kCAN41;
+    const int kOuterArm2 = kCAN40;
+    const int kInnerArm1 = kCAN43;
+    const int kInnerArm2 = kCAN42;
+    
+    const int kInnerArmRotation = kCAN44;
+    const int kOuterArmRotation = kCAN45;
 
     const int kInnerRotationEncoder = kDIO3;
     const int kOuterRotationEncoder = kDIO4;
