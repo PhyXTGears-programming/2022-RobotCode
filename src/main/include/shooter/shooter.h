@@ -12,6 +12,8 @@ public:
     Shooter (std::shared_ptr<cpptoml::table> toml);
     
     void runShooter (double speed);
+    void shootFar ();
+    void shootNear ();
     void stopShooter ();
 
 private:

@@ -21,7 +21,15 @@ Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
 }
 
 void Shooter::runShooter (double speed) {
-    mShooterMotor.Set(speed);
+    mPID_ShooterMotor.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
+}
+
+void Shooter::shootFar() {
+    runShooter(config.speed.far);
+}
+
+void Shooter::shootNear() {
+    runShooter(config.speed.near);
 }
 
 void Shooter::stopShooter () {
