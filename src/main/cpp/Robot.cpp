@@ -34,6 +34,7 @@ void Robot::RobotInit()
     mSwerveDrive = new SwerveDrive(false);
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
+    mClimbMidbarOnly = new ClimbMidBarOnly(mClimber, toml->get_table_qualified("command.climb.midbar"));
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
     mShootCommand = new ShootCommand(mShooter);
 
@@ -128,9 +129,7 @@ void Robot::TeleopPeriodic()
 
     //Climber
     if (0 == operatorController->GetPOV()) { // Check up button
-
-    } else {
-
+        mClimbMidbarOnly->mReachMidBar->Schedule();
     }
     
     if (90 == operatorController->GetPOV()) { // Check right button
@@ -140,9 +139,7 @@ void Robot::TeleopPeriodic()
     }
 
     if (180 == operatorController->GetPOV()) { // Check down button
-
-    } else {
-
+      mClimbMidbarOnly->mClimbMidBarAndLock->Schedule();
     }
 
     if (270 == operatorController->GetPOV()) { // Check left button
