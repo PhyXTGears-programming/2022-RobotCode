@@ -12,6 +12,7 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/StartEndCommand.h>
 
 #include <frc/XboxController.h>
 
@@ -24,6 +25,7 @@
 #include "intake/intake.h"
 #include "shooter/shooter.h"
 
+#include "commands/climber/ClimbMidBarOnly.h"
 #include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 #include "commands/shooter/ShootCommand.h"
 #include "commands/intake/RunIntake.h"
@@ -48,7 +50,7 @@ private:
     frc::SendableChooser<std::string> m_chooser;
     const std::string kAutoNameDefault = "Default";
     const std::string kAutoNameCustom = "My Auto";
-    const std::string kAutoShootAndDrive = "Shoot and Drive";
+    const std::string kAutoDriveAndShoot = "Drive and Shoot";
     std::string m_autoSelected;
 
     frc::XboxController * driverController = nullptr;
@@ -60,8 +62,15 @@ private:
     SwerveDrive * mSwerveDrive = nullptr;
     
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
+    ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
     ShootCommand *mShootCommand = nullptr;
     RunIntakeCommand *mRunIntakeCommand = nullptr;
 
-    frc2::SequentialCommandGroup * mShootAndDrive = nullptr;
+    frc2::FunctionalCommand *mManualRetractInnerArms = nullptr;
+    frc2::FunctionalCommand *mManualExtendInnerArms = nullptr;
+
+    frc2::StartEndCommand *mShootNear = nullptr;
+    frc2::StartEndCommand *mShootFar = nullptr;
+
+    frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
 };

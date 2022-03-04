@@ -1,9 +1,9 @@
 #include "commands/climber/RotateInnerArms.h"
 #include "climber/lerp.h"
 
-const double kAcceptableAngleError = 0.1;
-const double kMinSpeed = 0.05;
-const double kMaxSpeed = 0.5;
+const double kAcceptableAngleError = 0.0001;
+const double kMinSpeed = 0.2;
+const double kMaxSpeed = 0.2;
 
 
 RotateInnerArmsCommand::RotateInnerArmsCommand(Climber * climber, double targetAngle) {
@@ -17,13 +17,18 @@ void RotateInnerArmsCommand::Initialize() {
 }
 
 void RotateInnerArmsCommand::Execute() {
+    // Angles are not radians or degrees.  They are duty cycle values...
+    // somewhere between -1.0 and 1.0 it seems.  So use error to set direction
+    // of rotation, (+) is lean forward, (-) is lean backward.
     double armAngle = mClimber->getInnerAngle();
     double err = mTargetAngle - armAngle;
-    double speed = lerp(kMinSpeed, kMaxSpeed, std::copysign(abs((err + 180.0) / 360.0), err));
+    double speed = std::copysign(kMinSpeed, err);
     mClimber->rotateInner(speed);
 }
 
-void RotateInnerArmsCommand::End(bool isInterrupted) {}
+void RotateInnerArmsCommand::End(bool isInterrupted) {
+    mClimber->rotateInner(0.0);
+}
 
 bool RotateInnerArmsCommand::IsFinished() {
     double armAngle = mClimber->getInnerAngle();
