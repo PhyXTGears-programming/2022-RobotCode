@@ -42,7 +42,7 @@ void Shooter::shootNear() {
 }
 
 void Shooter::stopShooter () {
-    runShooter(0.0);
+    mShooterMotor.StopMotor();
 }
 
 void Shooter::setPidValues(rev::SparkMaxPIDController PIDController, double k_P,
