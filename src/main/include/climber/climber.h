@@ -33,6 +33,9 @@ class Climber : public frc2::SubsystemBase{
         void rotateInner(double speed);
         void rotateOuter(double speed);
 
+        void setInnerMotorsCoast();
+        void setInnerMotorsBrake();
+
         void setRotateMotorsCoast();
         void setRotateMotorsBrake();
 
