@@ -50,7 +50,7 @@ private:
     frc::SendableChooser<std::string> m_chooser;
     const std::string kAutoNameDefault = "Default";
     const std::string kAutoNameCustom = "My Auto";
-    const std::string kAutoShootAndDrive = "Shoot and Drive";
+    const std::string kAutoDriveAndShoot = "Drive and Shoot";
     std::string m_autoSelected;
 
     frc::XboxController * driverController = nullptr;
@@ -72,5 +72,5 @@ private:
     frc2::StartEndCommand *mShootNear = nullptr;
     frc2::StartEndCommand *mShootFar = nullptr;
 
-    frc2::SequentialCommandGroup * mShootAndDrive = nullptr;
+    frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
 };
