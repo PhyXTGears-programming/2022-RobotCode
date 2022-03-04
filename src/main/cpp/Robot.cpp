@@ -37,8 +37,23 @@ void Robot::RobotInit()
     mShootCommand = new ShootCommand(mShooter);
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
-    m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
+    m_chooser.AddOption(kAutoShootAndDrive, kAutoShootAndDrive);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+    mShootAndDrive = new frc2::SequentialCommandGroup {
+      ShootCommand {mShooter}.WithTimeout(1_s),
+      frc2::FunctionalCommand { // drive backwards
+        [](){},
+        [&](){
+          mSwerveDrive->setMotion(0, -0.5, 0);
+        },
+        [&](bool _interrupted){ 
+          mSwerveDrive->setMotion(0, 0, 0); //stop swerve
+        }, 
+        [](){ return false; },
+        {mSwerveDrive}
+      }.WithTimeout(2_s)
+    };
 }
 
 /**
@@ -71,12 +86,9 @@ void Robot::AutonomousInit()
     //     kAutoNameDefault);
     std::cout << "Auto selected: " << m_autoSelected << std::endl;
 
-    if (m_autoSelected == kAutoNameCustom)
-    {
-        // Custom Auto goes here
-    }
-    else
-    {
+    if (m_autoSelected == kAutoShootAndDrive) {
+        mShootAndDrive->Schedule();
+    } else {
         // Default Auto goes here
     }
 }
