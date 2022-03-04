@@ -127,9 +127,9 @@ void Robot::RobotInit() {
     );
 
     mRetractInnerArms = new RetractInnerArmsCommand {mInnerReach, 1.0};
-    mExtendInnerArms = new ExtendInnerArmsCommand {mInnerReach, 30.0};
+    mExtendInnerArms = new ExtendInnerArmsCommand {mInnerReach, 10.0};
     mRetractOuterArms = new RetractOuterArmsCommand {mOuterReach, 1.0};
-    mExtendOuterArms = new ExtendOuterArmsCommand {mOuterReach, 30.0};
+    mExtendOuterArms = new ExtendOuterArmsCommand {mOuterReach, 10.0};
 }
 
 /**
