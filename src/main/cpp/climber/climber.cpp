@@ -99,6 +99,14 @@ void Climber::stopInner2() {
     mInnerHookMotor2.Set(0.0);
 }
 
+void Climber::runInner1(double speed) {
+    mInnerHookMotor1.Set(speed);
+}
+
+void Climber::runInner2(double speed) {
+    mInnerHookMotor2.Set(speed);
+}
+
 void Climber::lockArms() {
     mStopServo1.Set(config.servo1.lockPosition);
     mStopServo2.Set(config.servo2.lockPosition);

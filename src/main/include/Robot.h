@@ -65,5 +65,8 @@ private:
     ShootCommand *mShootCommand = nullptr;
     RunIntakeCommand *mRunIntakeCommand = nullptr;
 
+    frc2::FunctionalCommand *mManualRetractInnerArms = nullptr;
+    frc2::FunctionalCommand *mManualExtendInnerArms = nullptr;
+
     frc2::SequentialCommandGroup * mShootAndDrive = nullptr;
 };

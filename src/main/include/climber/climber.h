@@ -28,6 +28,8 @@ class Climber : public frc2::SubsystemBase{
         void retractInner2();
         void stopInner1();
         void stopInner2();
+        void runInner1(double speed);
+        void runInner2(double speed);
 
         void lockArms();
         void unlockArms();
