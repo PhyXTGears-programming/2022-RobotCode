@@ -19,6 +19,7 @@
 
 #include "cpptoml.h"
 
+#include "climber/climber.h"
 #include "drivetrain-swerve/SwerveDrive.h"
 #include "intake/intake.h"
 #include "shooter/shooter.h"
@@ -53,6 +54,7 @@ private:
     frc::XboxController * driverController = nullptr;
     frc::XboxController * operatorController = nullptr;
 
+    Climber *mClimber = nullptr;
     Intake *mIntake = nullptr;
     Shooter *mShooter = nullptr;
     SwerveDrive * mSwerveDrive = nullptr;
