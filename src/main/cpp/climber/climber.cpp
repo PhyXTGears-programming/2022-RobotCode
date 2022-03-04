@@ -137,18 +137,34 @@ void Climber::setOuterUnderLoad(bool isUnderLoad) {
     mIsOuterUnderLoad = isUnderLoad;
 }
 
+double Climber::getInner1Position() {
+    return (mInnerHook1Encoder.GetPosition() * config.inchesPerRevolution);
+}
+
+double Climber::getInner2Position() {
+    return (mInnerHook2Encoder.GetPosition() * config.inchesPerRevolution);
+}
+
+double Climber::getOuter1Position() {
+    return (mOuterHook1Encoder.GetPosition() * config.inchesPerRevolution);
+}
+
+double Climber::getOuter2Position() {
+    return (mOuterHook2Encoder.GetPosition() * config.inchesPerRevolution);
+}
+
 bool Climber::isOuter1NearTarget(double target) {
-    return abs(target - (mOuterHook1Encoder.GetPosition() * config.inchesPerRevolution)) < kAcceptablePositionError;
+    return abs(target - getOuter1Position()) < kAcceptablePositionError;
 }
 
 bool Climber::isOuter2NearTarget(double target) {
-    return abs(target - (mOuterHook2Encoder.GetPosition() * config.inchesPerRevolution)) < kAcceptablePositionError;
+    return abs(target - getOuter2Position()) < kAcceptablePositionError;
 }
 
 bool Climber::isInner1NearTarget(double target) {
-    return abs(target - (mInnerHook1Encoder.GetPosition() * config.inchesPerRevolution)) < kAcceptablePositionError;
+    return abs(target - getInner1Position()) < kAcceptablePositionError;
 }
 
 bool Climber::isInner2NearTarget(double target) {
-    return abs(target - (mInnerHook2Encoder.GetPosition() * config.inchesPerRevolution)) < kAcceptablePositionError;
+    return abs(target - getInner2Position()) < kAcceptablePositionError;
 }

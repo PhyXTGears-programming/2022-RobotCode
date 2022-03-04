@@ -45,6 +45,11 @@ class Climber : public frc2::SubsystemBase{
         void setInnerUnderLoad(bool isUnderLoad);
         void setOuterUnderLoad(bool isUnderLoad);
 
+        double getInner1Position();
+        double getInner2Position();
+        double getOuter1Position();
+        double getOuter2Position();
+
         bool isOuter1NearTarget(double target);
         bool isOuter2NearTarget(double target);
         bool isInner1NearTarget(double target);
