@@ -22,6 +22,12 @@ Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     mOuterHookMotor1.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     mOuterHookMotor2.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
+    mInnerHookMotor1.SetInverted(true);
+    mInnerHookMotor2.SetInverted(false);
+
+    mOuterHookMotor1.SetInverted(true);
+    mOuterHookMotor2.SetInverted(false);
+
     mOuterHook1Encoder.SetPosition(0.0);
     mOuterHook2Encoder.SetPosition(0.0);
     mInnerHook1Encoder.SetPosition(0.0);
