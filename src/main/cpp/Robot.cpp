@@ -112,15 +112,16 @@ void Robot::RobotInit()
         frc2::FunctionalCommand { // drive backwards
             [](){},
             [&](){
-                mSwerveDrive->setMotion(0, -0.5, 0);
+                // Turn slightly right to compensate for drift/drag.
+                mSwerveDrive->setMotion(0, -0.5, -0.03);
             },
             [&](bool _interrupted){ 
                 mSwerveDrive->setMotion(0, 0, 0); //stop swerve
             }, 
             [](){ return false; },
             {mSwerveDrive}
-        }.WithTimeout(2_s),
-        frc2::StartEndCommand(*mShootNear).WithTimeout(1_s)
+        }.WithTimeout(1.2_s),
+        frc2::StartEndCommand(*mShootNear).WithTimeout(3_s)
     };
 }
 
