@@ -31,6 +31,11 @@ outerStaticFriction = 0.0 # actual value unknown
 innerStaticFrictionWithLoad = 0.0 # actual value unknown
 outerStaticFrictionWithLoad = 0.0 # actual value unknown
 
+[command.climb.midbar]
+initialExtension = 16.0
+liftRetraction = 5.0
+verticalArmAngle = 0.0
+
 [cycleCommand]
 initalExtension = 0.0
 liftExtension = 2.42
