@@ -3,6 +3,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxPIDController.h>
+#include <rev/SparkMaxRelativeEncoder.h>
 
 #include "constants/interfaces.h"
 #include "cpptoml.h"
@@ -10,6 +11,8 @@
 class Shooter : public frc2::SubsystemBase {
 public:
     Shooter (std::shared_ptr<cpptoml::table> toml);
+
+    void Periodic () override;
     
     void runShooter (double speed);
     void shootFar ();
@@ -34,6 +37,8 @@ private:
     void setPidValues(rev::SparkMaxPIDController PIDController, double k_P, double k_I, double k_D, double k_FF, double k_minValue, double k_maxValue, double k_IZone = 0.0);
 
     rev::SparkMaxPIDController mPID_ShooterMotor = Shooter::mShooterMotor.GetPIDController();          
+
+    rev::SparkMaxRelativeEncoder mShooterEncoder = mShooterMotor.GetEncoder();
 
     struct {
         struct {

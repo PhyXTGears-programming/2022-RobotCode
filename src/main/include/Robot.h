@@ -12,6 +12,7 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/StartEndCommand.h>
 
 #include <frc/XboxController.h>
 
@@ -67,6 +68,9 @@ private:
 
     frc2::FunctionalCommand *mManualRetractInnerArms = nullptr;
     frc2::FunctionalCommand *mManualExtendInnerArms = nullptr;
+
+    frc2::StartEndCommand *mShootNear = nullptr;
+    frc2::StartEndCommand *mShootFar = nullptr;
 
     frc2::SequentialCommandGroup * mShootAndDrive = nullptr;
 };
