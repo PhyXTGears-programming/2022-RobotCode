@@ -127,25 +127,25 @@ void Robot::TeleopPeriodic()
     }
 
     //Climber
-    if (operatorController->GetPOV(0)) { // Check up button
+    if (0 == operatorController->GetPOV()) { // Check up button
 
     } else {
 
     }
     
-    if (operatorController->GetPOV(90)) { // Check right button
+    if (90 == operatorController->GetPOV()) { // Check right button
 
     } else {
 
     }
 
-    if (operatorController->GetPOV(180)) { // Check down button
+    if (180 == operatorController->GetPOV()) { // Check down button
 
     } else {
 
     }
 
-    if (operatorController->GetPOV(270)) { // Check left button
+    if (270 == operatorController->GetPOV()) { // Check left button
 
     } else {
         
