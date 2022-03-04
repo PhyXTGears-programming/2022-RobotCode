@@ -24,11 +24,12 @@ void Robot::RobotInit()
 #endif
 
     std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
-    mIntake = new Intake(toml->get_table("intake"));
 
     driverController = new frc::XboxController(interfaces::kXBoxDriver);
     operatorController = new frc::XboxController(interfaces::kXBoxOperator);
   
+    mClimber = new Climber(toml->get_table("climber"));
+    mIntake = new Intake(toml->get_table("intake"));
     mShooter = new Shooter(toml->get_table("shooter"));
     mSwerveDrive = new SwerveDrive(false);
    
