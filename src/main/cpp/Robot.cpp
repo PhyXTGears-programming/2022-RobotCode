@@ -109,18 +109,18 @@ void Robot::RobotInit()
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
     mDriveAndShoot = new frc2::SequentialCommandGroup {
-      frc2::FunctionalCommand { // drive backwards
-        [](){},
-        [&](){
-          mSwerveDrive->setMotion(0, -0.5, 0);
-        },
-        [&](bool _interrupted){ 
-          mSwerveDrive->setMotion(0, 0, 0); //stop swerve
-        }, 
-        [](){ return false; },
-        {mSwerveDrive}
-      }.WithTimeout(2_s),
-      frc2::StartEndCommand(*mShootNear).WithTimeout(1_s)
+        frc2::FunctionalCommand { // drive backwards
+            [](){},
+            [&](){
+                mSwerveDrive->setMotion(0, -0.5, 0);
+            },
+            [&](bool _interrupted){ 
+                mSwerveDrive->setMotion(0, 0, 0); //stop swerve
+            }, 
+            [](){ return false; },
+            {mSwerveDrive}
+        }.WithTimeout(2_s),
+        frc2::StartEndCommand(*mShootNear).WithTimeout(1_s)
     };
 }
 
