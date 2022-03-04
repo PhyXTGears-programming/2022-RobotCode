@@ -28,6 +28,7 @@ class Climber : public frc2::SubsystemBase{
         void stopInner2();
 
         void lockArms();
+        void unlockArms();
 
         void rotateInner(double speed);
         void rotateOuter(double speed);
@@ -71,7 +72,12 @@ class Climber : public frc2::SubsystemBase{
 
         struct {
             double extendSpeed, retractSpeed;
-            double lockServoPosition;
+
+            struct {
+                double unlockPosition;
+                double lockPosition;
+            } servo1, servo2;
+
             double inchesPerRevolution;
             struct {
                 double innerStaticFriction, outerStaticFriction;

@@ -3,7 +3,12 @@
 const double kAcceptablePositionError = 0.05;
 
 Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
-    config.lockServoPosition = toml->get_qualified_as<double>("lockServoPosition").value_or(0.0);
+    config.servo1.unlockPosition = toml->get_qualified_as<double>("servo1.unlockPosition").value_or(0.0);
+    config.servo1.lockPosition = toml->get_qualified_as<double>("servo1.lockPosition").value_or(0.0);
+
+    config.servo2.unlockPosition = toml->get_qualified_as<double>("servo2.unlockPosition").value_or(0.0);
+    config.servo2.lockPosition = toml->get_qualified_as<double>("servo2.lockPosition").value_or(0.0);
+
     config.extendSpeed = toml->get_qualified_as<double>("extendSpeed").value_or(0.5);
     config.retractSpeed = toml->get_qualified_as<double>("retractSpeed").value_or(-0.5);
     config.inchesPerRevolution = toml->get_qualified_as<double>("inchesPerRevolution").value_or(0.128325);
@@ -72,8 +77,13 @@ void Climber::stopInner2() {
 }
 
 void Climber::lockArms() {
-    mStopServo1.Set(config.lockServoPosition);
-    mStopServo2.Set(config.lockServoPosition);
+    mStopServo1.Set(config.servo1.lockPosition);
+    mStopServo2.Set(config.servo2.lockPosition);
+}
+
+void Climber::unlockArms() {
+    mStopServo1.Set(config.servo1.unlockPosition);
+    mStopServo2.Set(config.servo2.unlockPosition);
 }
 
 void Climber::rotateInner(double speed) {
