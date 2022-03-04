@@ -36,6 +36,10 @@ Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     mOuterHook2Encoder.SetPosition(0.0);
     mInnerHook1Encoder.SetPosition(0.0);
     mInnerHook2Encoder.SetPosition(0.0);
+
+    // FIXME: Move to toml.
+    mInnerRotationEncoder.SetPositionOffset(0.962);
+    mOuterRotationEncoder.SetPositionOffset(0.023);
 }
 
 void Climber::Periodic() {
