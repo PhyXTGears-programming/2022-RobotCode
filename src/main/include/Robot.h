@@ -9,6 +9,10 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
+#include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/FunctionalCommand.h>
+
 #include <frc/XboxController.h>
 
 #include "constants/interfaces.h"
@@ -43,6 +47,7 @@ private:
     frc::SendableChooser<std::string> m_chooser;
     const std::string kAutoNameDefault = "Default";
     const std::string kAutoNameCustom = "My Auto";
+    const std::string kAutoShootAndDrive = "Shoot and Drive";
     std::string m_autoSelected;
 
     frc::XboxController * driverController = nullptr;
@@ -55,4 +60,6 @@ private:
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ShootCommand *mShootCommand = nullptr;
     RunIntakeCommand *mRunIntakeCommand = nullptr;
+
+    frc2::SequentialCommandGroup * mShootAndDrive = nullptr;
 };
