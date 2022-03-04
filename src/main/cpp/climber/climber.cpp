@@ -61,11 +61,11 @@ void Climber::extendInner2() {
 }
 
 void Climber::retractInner1() {
-    mOuterHookMotor1.Set(config.retractSpeed + ((mIsInnerUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
+    mInnerHookMotor1.Set(config.retractSpeed + ((mIsInnerUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
 }
     
 void Climber::retractInner2() {
-    mOuterHookMotor2.Set(config.retractSpeed + ((mIsInnerUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
+    mInnerHookMotor2.Set(config.retractSpeed + ((mIsInnerUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
 }
 
 void Climber::stopInner1() {
