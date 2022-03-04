@@ -90,6 +90,19 @@ void Robot::RobotInit()
         { mClimber }
     );
 
+    // Shooter commands
+
+    mShootNear = new frc2::StartEndCommand(
+        [&]() { mShooter->shootNear(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
+
+    mShootFar = new frc2::StartEndCommand(
+        [&]() { mShooter->shootFar(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoShootAndDrive, kAutoShootAndDrive);
@@ -168,9 +181,15 @@ void Robot::TeleopPeriodic()
 #endif
     //Shooter
     if (operatorController->GetXButtonPressed()) {
-        mShootCommand->Schedule();
+        mShootNear->Schedule();
     } else if(operatorController->GetXButtonReleased()) {
-        mShootCommand->Cancel();
+        mShootNear->Cancel();
+    }
+
+    if (operatorController->GetYButtonPressed()) {
+        mShootFar->Schedule();
+    } else if(operatorController->GetYButtonReleased()) {
+        mShootFar->Cancel();
     }
 
     //Intake
