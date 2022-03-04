@@ -1,5 +1,7 @@
 #include "shooter/shooter.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
     config.speed.near = toml->get_qualified_as<double>("speed.near").value_or(0.1);
     config.speed.far = toml->get_qualified_as<double>("speed.far").value_or(0.5);
@@ -18,6 +20,10 @@ Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
         config.motor.maxValue, 
         config.motor.izone
     );
+}
+
+void Shooter::Periodic () {
+    frc::SmartDashboard::PutNumber("Shooter Speed (rpm)", mShooterEncoder.GetVelocity());
 }
 
 void Shooter::runShooter (double speed) {
