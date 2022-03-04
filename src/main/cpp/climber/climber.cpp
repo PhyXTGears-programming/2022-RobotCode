@@ -1,5 +1,7 @@
 #include "climber/climber.h"
 
+#include <cmath>
+
 const double kAcceptablePositionError = 0.3;
 
 Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
@@ -154,17 +156,17 @@ double Climber::getOuter2Position() {
 }
 
 bool Climber::isOuter1NearTarget(double target) {
-    return abs(target - getOuter1Position()) < kAcceptablePositionError;
+    return std::abs(target - getOuter1Position()) < kAcceptablePositionError;
 }
 
 bool Climber::isOuter2NearTarget(double target) {
-    return abs(target - getOuter2Position()) < kAcceptablePositionError;
+    return std::abs(target - getOuter2Position()) < kAcceptablePositionError;
 }
 
 bool Climber::isInner1NearTarget(double target) {
-    return abs(target - getInner1Position()) < kAcceptablePositionError;
+    return std::abs(target - getInner1Position()) < kAcceptablePositionError;
 }
 
 bool Climber::isInner2NearTarget(double target) {
-    return abs(target - getInner2Position()) < kAcceptablePositionError;
+    return std::abs(target - getInner2Position()) < kAcceptablePositionError;
 }
