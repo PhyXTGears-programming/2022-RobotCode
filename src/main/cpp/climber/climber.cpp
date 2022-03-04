@@ -56,19 +56,33 @@ void Climber::Periodic() {
 }
 
 void Climber::extendOuter1() {
-    mOuterHookMotor1.Set(config.extendSpeed + config.friction.outerStaticFriction);
+    double bonus = std::copysign(config.friction.outerStaticFriction, config.extendSpeed);
+    mOuterHookMotor1.Set(config.extendSpeed);
 }
 
 void Climber::extendOuter2() {
-    mOuterHookMotor2.Set(config.extendSpeed + config.friction.outerStaticFriction);
+    double bonus = std::copysign(config.friction.outerStaticFriction, config.extendSpeed);
+    mOuterHookMotor2.Set(config.extendSpeed + bonus);
 }
 
 void Climber::retractOuter1() {
-    mOuterHookMotor1.Set(config.retractSpeed + ((mIsOuterUnderLoad) ? config.friction.outerStaticFrictionWithLoad : config.friction.outerStaticFriction));
+    double bonus = (mIsOuterUnderLoad)
+        ? config.friction.outerStaticFrictionWithLoad
+        : config.friction.outerStaticFriction;
+
+    bonus = std::copysign(bonus, config.retractSpeed);
+
+    mOuterHookMotor1.Set(config.retractSpeed + bonus);
 }
 
 void Climber::retractOuter2() {
-    mOuterHookMotor2.Set(config.retractSpeed + ((mIsOuterUnderLoad) ? config.friction.outerStaticFrictionWithLoad : config.friction.outerStaticFriction));
+    double bonus = (mIsOuterUnderLoad)
+        ? config.friction.outerStaticFrictionWithLoad
+        : config.friction.outerStaticFriction;
+
+    bonus = std::copysign(bonus, config.retractSpeed);
+
+    mOuterHookMotor2.Set(config.retractSpeed + bonus);
 }
 
 void Climber::stopOuter1() {
@@ -80,19 +94,33 @@ void Climber::stopOuter2() {
 }
 
 void Climber::extendInner1() {
-    mInnerHookMotor1.Set(config.extendSpeed + config.friction.innerStaticFriction);
+    double bonus = std::copysign(config.friction.innerStaticFriction, config.extendSpeed);
+    mInnerHookMotor1.Set(config.extendSpeed + bonus);
 }
 
 void Climber::extendInner2() {
-    mInnerHookMotor2.Set(config.extendSpeed + config.friction.innerStaticFriction);
+    double bonus = std::copysign(config.friction.innerStaticFriction, config.extendSpeed);
+    mInnerHookMotor2.Set(config.extendSpeed + bonus);
 }
 
 void Climber::retractInner1() {
-    mInnerHookMotor1.Set(config.retractSpeed + ((mIsInnerUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
+    double bonus = (mIsInnerUnderLoad)
+        ? config.friction.innerStaticFrictionWithLoad
+        : config.friction.innerStaticFriction;
+
+    bonus = std::copysign(bonus, config.retractSpeed);
+
+    mInnerHookMotor1.Set(config.retractSpeed + bonus);
 }
     
 void Climber::retractInner2() {
-    mInnerHookMotor2.Set(config.retractSpeed + ((mIsInnerUnderLoad) ? config.friction.innerStaticFrictionWithLoad : config.friction.innerStaticFriction));
+    double bonus = (mIsInnerUnderLoad)
+        ? config.friction.innerStaticFrictionWithLoad
+        : config.friction.innerStaticFriction;
+
+    bonus = std::copysign(bonus, config.retractSpeed);
+
+    mInnerHookMotor2.Set(config.retractSpeed + bonus);
 }
 
 void Climber::stopInner1() {
