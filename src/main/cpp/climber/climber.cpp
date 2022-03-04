@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 const double kAcceptablePositionError = 0.3;
 
 Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
@@ -34,6 +36,19 @@ Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     mOuterHook2Encoder.SetPosition(0.0);
     mInnerHook1Encoder.SetPosition(0.0);
     mInnerHook2Encoder.SetPosition(0.0);
+}
+
+void Climber::Periodic() {
+    frc::SmartDashboard::PutNumber("Climb motor current", mInnerHookMotor1.GetOutputCurrent());
+
+    frc::SmartDashboard::PutNumber("Clmb In L Pos", getInner1Position());
+    frc::SmartDashboard::PutNumber("Clmb In R Pos", getInner2Position());
+
+    frc::SmartDashboard::PutNumber("Clmb Out L Pos", getOuter1Position());
+    frc::SmartDashboard::PutNumber("Clmb Out R Pos", getOuter2Position());
+
+    frc::SmartDashboard::PutNumber("Clmb In Angle", getInnerAngle());
+    frc::SmartDashboard::PutNumber("Clmb Out Angle", getOuterAngle());
 }
 
 void Climber::extendOuter1() {

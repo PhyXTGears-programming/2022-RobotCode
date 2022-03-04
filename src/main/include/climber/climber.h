@@ -13,6 +13,8 @@ class Climber : public frc2::SubsystemBase{
     public:
         Climber(std::shared_ptr<cpptoml::table> toml); // constructor
 
+        void Periodic() override;
+
         void extendOuter1();
         void extendOuter2();
         void retractOuter1();
