@@ -3,11 +3,14 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
-    config.speed.near = toml->get_qualified_as<double>("speed.near").value_or(0.1);
-    config.speed.far = toml->get_qualified_as<double>("speed.far").value_or(0.5);
-    config.motor.p = toml->get_qualified_as<double>("motor.p").value_or(0.001);
+    config.speed.near = toml->get_qualified_as<double>("speed.near").value_or(2700);
+    config.speed.far = toml->get_qualified_as<double>("speed.far").value_or(3200);
+    config.motor.p = toml->get_qualified_as<double>("motor.p").value_or(0.01);
     config.motor.i = toml->get_qualified_as<double>("motor.i").value_or(0.0);
     config.motor.d = toml->get_qualified_as<double>("motor.d").value_or(0.0);
+    config.motor.ff = toml->get_qualified_as<double>("motor.ff").value_or(0.0);
+    config.motor.minValue = toml->get_qualified_as<double>("motor.minValue").value_or(-1.0);
+    config.motor.maxValue = toml->get_qualified_as<double>("motor.maxValue").value_or(1.0);
     config.motor.izone = toml->get_qualified_as<double>("motor.izone").value_or(1.0);
 
     Shooter::setPidValues(
