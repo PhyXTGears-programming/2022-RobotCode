@@ -33,7 +33,7 @@ outerStaticFrictionWithLoad = 0.25 # actual value unknown
 
 [command.climb.midbar]
 initialExtension = 16.0
-liftRetraction = 5.0
+liftRetraction = 1.0
 verticalArmAngle = 0.0
 
 [cycleCommand]
