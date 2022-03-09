@@ -227,15 +227,21 @@ void Robot::TeleopPeriodic()
     double opY = operatorController->GetLeftY();
     opY = fabs(opY) < 0.3 ? 0.0 : opY;
     if (opY < 0.0) {
-        mManualRetractOuterArms->Schedule();
+        // mManualRetractOuterArms->Schedule();
+        mClimber->runOuter1(0.2);
+        mClimber->runOuter2(0.2);
     } else if (opY > 0.0) {
-        mManualExtendOuterArms->Schedule();
+        mClimber->runOuter1(-0.2);
+        mClimber->runOuter2(-0.2);
+        // mManualExtendOuterArms->Schedule();
     } else {
-        if (mManualRetractOuterArms->IsScheduled()) {
-            mManualRetractOuterArms->Cancel();
-        } else if (mManualExtendOuterArms->IsScheduled()) {
-            mManualExtendOuterArms->Cancel();
-        }
+        mClimber->stopOuter1();
+        mClimber->stopOuter2();
+        // if (mManualRetractOuterArms->IsScheduled()) {
+        //     mManualRetractOuterArms->Cancel();
+        // } else if (mManualExtendOuterArms->IsScheduled()) {
+        //     mManualExtendOuterArms->Cancel();
+        // }
     }
 }
 
