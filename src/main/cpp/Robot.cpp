@@ -9,6 +9,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "RobotCompileModes.h"
+#include <frc/Filesystem.h>
+#include <wpi/fs.h>
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
@@ -22,7 +24,8 @@ void Robot::RobotInit()
     frc::SmartDashboard::PutString("Robot mode", "TESTING, RobotCompileModes.h");
 #endif
 
-    std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
+    std::string deployDir = frc::filesystem::GetDeployDirectory();
+    std::shared_ptr<cpptoml::table> toml = LoadConfig( deployDir + "/config.toml");
     mIntake = new Intake(toml->get_table("intake"));
     mDrivetrain = new Drivetrain(toml->get_table("drivetrain"));
 
