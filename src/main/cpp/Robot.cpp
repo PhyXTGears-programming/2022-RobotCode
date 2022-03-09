@@ -121,7 +121,7 @@ void Robot::RobotInit()
             [](){},
             [&](){
                 // Turn slightly right to compensate for drift/drag.
-                mSwerveDrive->setMotion(0, -0.5, -0.03);
+                mSwerveDrive->setMotion(0, -0.5, -0.035);
             },
             [&](bool _interrupted){ 
                 mSwerveDrive->setMotion(0, 0, 0); //stop swerve
