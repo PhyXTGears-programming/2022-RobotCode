@@ -3,6 +3,8 @@
 #include "drivetrain/drivetrain.h"
 #include <functional>
 #include <iostream>
+
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 #include "constants/constants.h"
@@ -86,17 +88,8 @@ void DriveTeleopCommand::grabJoystickValues()
 
 double DriveTeleopCommand::theeta(double x, double y)
 {
-    double theta = atan(y / x);
+    double theta = atan2(y, x);
     double angle = theta * (180.0 / M_PI);
-
-    if ((x < 0) && (y > 0))
-    {
-        angle += 180;
-    }
-    else if ((x < 0) && (y < 0))
-    {
-        angle -= 180;
-    }
     return angle;
 }
 
