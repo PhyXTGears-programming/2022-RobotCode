@@ -12,7 +12,6 @@
 #include <frc/Filesystem.h>
 #include <wpi/fs.h>
 
-
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
 static Drivetrain drivetrain;
