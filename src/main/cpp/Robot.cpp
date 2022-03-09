@@ -105,6 +105,13 @@ void Robot::RobotInit()
         { mShooter }
     );
 
+    
+    mShootAuto = new frc2::StartEndCommand(
+        [&]() { mShooter->shootAuto(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
+
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);

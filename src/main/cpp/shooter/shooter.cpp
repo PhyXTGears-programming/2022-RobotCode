@@ -5,6 +5,7 @@
 Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
     config.speed.near = toml->get_qualified_as<double>("speed.near").value_or(2700);
     config.speed.far = toml->get_qualified_as<double>("speed.far").value_or(3200);
+    config.speed.auton = toml->get_qualified_as<double>("speed.auto").value_or(2500);
     config.motor.p = toml->get_qualified_as<double>("motor.p").value_or(0.01);
     config.motor.i = toml->get_qualified_as<double>("motor.i").value_or(0.0);
     config.motor.d = toml->get_qualified_as<double>("motor.d").value_or(0.0);
@@ -39,6 +40,10 @@ void Shooter::shootFar() {
 
 void Shooter::shootNear() {
     runShooter(config.speed.near);
+}
+
+void Shooter::shootAuto() {
+    runShooter(config.speed.auton);
 }
 
 void Shooter::stopShooter () {

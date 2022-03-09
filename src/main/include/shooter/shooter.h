@@ -17,6 +17,7 @@ public:
     void runShooter (double speed);
     void shootFar ();
     void shootNear ();
+    void shootAuto ();
     void stopShooter ();
 
 private:
@@ -44,6 +45,7 @@ private:
         struct {
             double near;
             double far;
+            double auton;
         } speed;
 
         struct {

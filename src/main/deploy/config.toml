@@ -6,6 +6,7 @@ intakeExtendedPosition = 1.0
 
 [shooter]
 speed.near = 2400 # RPM
+speed.auto = 2200 # RPM
 speed.far = 2750
 motor.p = 0.0005
 motor.i = 0.0
