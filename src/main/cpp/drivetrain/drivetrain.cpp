@@ -40,11 +40,13 @@ nt::NetworkTableEntry PIDposition;
 
 #define DEG_TO_ROT(deg) (deg/360)
 
+#define RAD_TO_ROT(rad) ((rad / M_PI) / 2)
+
 //feet to inches (1ft = 12in), then to centimeters (1in = 2.54cm), then to meters (1cm = 0.01m) = 0.3048ft = 1meter
 #define FEET_TO_METERS(feet) (feet * 0.3048)
 
-//the motor revolutions and the wheel revolutions for steering are not the same, so we have to divide it by this number to get a single rotation
-#define MOTOR_TURN_CONVERSION_FACTOR(angle) ((angle) * 55.75) //was in radians, now in rotations (-pi to pi)
+//the motor revolutions and the wheel revolutions for steering are not the same, so we have to multiply it by this number to get a single revolution
+#define MOTOR_TURN_CONVERSION_FACTOR(rad) ((RAD_TO_ROT(rad)) * 55.75) //was in radians, now in rotations (-pi to pi)
 
 //radius of the swerve modeule drive wheel
 #define DRIVE_WHEEL_RADIUS 0.0381 //done in meters
@@ -53,7 +55,7 @@ nt::NetworkTableEntry PIDposition;
 //meters per second to rotations per second (of the wheel, omega) is MPS/radius (speed/radius)
 //wheel-rps to motor-rps is Wheel-RPS/gear-ratio (omega-wheel*gear-ratio)
 //motor-rps to motor-rpm is Motor-rps/60 (omega-motor*seconds-per-minute)
-#define ROBOT_SPEED_TO_MOTOR_SPEED(speed) (((speed/DRIVE_WHEEL_RADIUS)*5.25)*60)
+#define ROBOT_SPEED_TO_MOTOR_SPEED(speed) (((speed/DRIVE_WHEEL_RADIUS)*GEARING_RATIO)*60)
 
 Tables tables;
 
