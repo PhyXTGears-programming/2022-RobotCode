@@ -6,6 +6,7 @@
 #include <rev/SparkMaxRelativeEncoder.h>
 #include <frc/Servo.h>
 
+
 #include "cpptoml.h"
 #include "constants/interfaces.h"
 
@@ -15,74 +16,109 @@ class Climber : public frc2::SubsystemBase{
 
         void Periodic() override;
 
-        void extendOuter1();
-        void extendOuter2();
-        void retractOuter1();
-        void retractOuter2();
-        void stopOuter1();
-        void stopOuter2();
+        class InnerReach : public frc2::SubsystemBase {
+            InnerReach();
 
-        void extendInner1();
-        void extendInner2();
-        void retractInner1();
-        void retractInner2();
-        void stopInner1();
-        void stopInner2();
-        void runInner1(double speed);
-        void runInner2(double speed);
+            void extend1();
+            void extend2();
+            void retract1();
+            void retract2();
+            void stop1();
+            void stop2();
+            void run1(double speed);
+            void run2(double speed);
 
-        void lockArms();
-        void unlockArms();
+            void setMotorsCoast();
+            void setMotorsBrake();
 
-        void rotateInner(double speed);
-        void rotateOuter(double speed);
+            void lockArms();
+            void unlockArms();
 
-        void setInnerMotorsCoast();
-        void setInnerMotorsBrake();
+            double getMotor1Position();
+            double getMotor2Position();
 
-        void setRotateMotorsCoast();
-        void setRotateMotorsBrake();
+            bool isMotor1NearTarget(double target);
+            bool isMotor2NearTarget(double target);
 
-        double getInnerAngle();
-        double getOuterAngle();
+            void setUnderLoad(bool isUnderLoad);
 
-        void setInnerUnderLoad(bool isUnderLoad);
-        void setOuterUnderLoad(bool isUnderLoad);
+            bool mIsUnderLoad = false;
 
-        double getInner1Position();
-        double getInner2Position();
-        double getOuter1Position();
-        double getOuter2Position();
+            rev::CANSparkMax mMotor1 {interfaces::kInnerArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+            rev::CANSparkMax mMotor2 {interfaces::kInnerArm2, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
 
-        bool isOuter1NearTarget(double target);
-        bool isOuter2NearTarget(double target);
-        bool isInner1NearTarget(double target);
-        bool isInner2NearTarget(double target);
+            rev::SparkMaxRelativeEncoder mEncoder1 {mMotor1.GetEncoder()};
+            rev::SparkMaxRelativeEncoder mEncoder2 {mMotor2.GetEncoder()};
 
-    private:
-        bool mIsInnerUnderLoad = false;
-        bool mIsOuterUnderLoad = false;
+            frc::Servo mStopServo1 {interfaces::kStopServo1};
+            frc::Servo mStopServo2 {interfaces::kStopServo2};
+        };
 
-        rev::CANSparkMax mInnerHookMotor1 {interfaces::kInnerArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
-        rev::CANSparkMax mInnerHookMotor2 {interfaces::kInnerArm2, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
-        rev::CANSparkMax mOuterHookMotor1 {interfaces::kOuterArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
-        rev::CANSparkMax mOuterHookMotor2 {interfaces::kOuterArm2, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+        class OuterReach : public frc2::SubsystemBase {
+            OuterReach();
 
-        rev::CANSparkMax mOuterArmRotationMotor {interfaces::kOuterArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
-        rev::CANSparkMax mInnerArmRotationMotor {interfaces::kInnerArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+            void extend1();
+            void extend2();
+            void retract1();
+            void retract2();
+            void stop1();
+            void stop2();
+            void run1(double speed);
+            void run2(double speed);
 
-        frc::DutyCycleEncoder mInnerRotationEncoder {interfaces::kInnerRotationEncoder};
-        frc::DutyCycleEncoder mOuterRotationEncoder {interfaces::kOuterRotationEncoder};
+            void setMotorsCoast();
+            void setMotorsBrake();
 
-        rev::SparkMaxRelativeEncoder mInnerHook1Encoder {mInnerHookMotor1.GetEncoder()};
-        rev::SparkMaxRelativeEncoder mInnerHook2Encoder {mInnerHookMotor2.GetEncoder()};
-        rev::SparkMaxRelativeEncoder mOuterHook1Encoder {mOuterHookMotor1.GetEncoder()};
-        rev::SparkMaxRelativeEncoder mOuterHook2Encoder {mOuterHookMotor2.GetEncoder()};
+            double getMotor1Position();
+            double getMotor2Position();
 
-        frc::Servo mStopServo1 {interfaces::kStopServo1};
-        frc::Servo mStopServo2 {interfaces::kStopServo2};
+            bool isMotor1NearTarget(double target);
+            bool isMotor2NearTarget(double target);
 
-        struct {
+            void setUnderLoad(bool isUnderLoad);
+
+            bool mIsUnderLoad = false;
+
+            rev::CANSparkMax mMotor1 {interfaces::kOuterArm1, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+            rev::CANSparkMax mMotor2 {interfaces::kOuterArm2, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+
+            rev::SparkMaxRelativeEncoder mEncoder1 {mMotor1.GetEncoder()};
+            rev::SparkMaxRelativeEncoder mEncoder2 {mMotor2.GetEncoder()};
+        };
+
+        class InnerRotate : public frc2::SubsystemBase {
+            InnerRotate();
+
+            void rotate(double speed);
+            
+            double getAngle();
+
+            void setMotorCoast();
+            void setMotorBrake();
+
+            rev::CANSparkMax mMotor {interfaces::kInnerArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+
+            frc::DutyCycleEncoder mEncoder {interfaces::kInnerRotationEncoder};
+        };
+
+        class OuterRotate : public frc2::SubsystemBase {
+            public:
+                OuterRotate();
+
+                void rotate(double speed);
+            
+                double getAngle();
+
+                void setMotorCoast();
+                void setMotorBrake();
+            
+            private:
+                rev::CANSparkMax mMotor {interfaces::kOuterArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+
+                frc::DutyCycleEncoder mEncoder {interfaces::kOuterRotationEncoder};
+        };
+
+        static struct {
             double extendSpeed, retractSpeed;
 
             struct {
@@ -96,4 +132,6 @@ class Climber : public frc2::SubsystemBase{
                 double innerStaticFrictionWithLoad, outerStaticFrictionWithLoad;
             } friction;
         } config;
+
+        static const double kAcceptablePositionError = 0.3;
 };
