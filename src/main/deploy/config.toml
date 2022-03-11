@@ -93,7 +93,7 @@ restingExtension = 0.0
                 k_FF = 0.001
                 k_IZone = 0.05
     [drivetrain.EncoderSetpoint]
-        Steer1GlobalOffset = 342.773
-        Steer2GlobalOffset = 276.064
-        Steer3GlobalOffset = 297.422
-        Steer4GlobalOffset = 95.537
+        Steer1GlobalOffset = 99.7
+        Steer2GlobalOffset = 53.3
+        Steer3GlobalOffset = 100.3
+        Steer4GlobalOffset = -33.2
