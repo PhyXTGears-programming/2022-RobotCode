@@ -17,6 +17,11 @@
 
 #define BOUNDS 1.0f
 
+#define LEFT_X 0
+#define LEFT_Y 1
+#define RIGHT_X 2
+#define RIGHT_Y 3
+
 DriveTeleopCommand::DriveTeleopCommand(Drivetrain *drivetrain, frc::XboxController *driverController)
 {
     AddRequirements(drivetrain);
@@ -40,9 +45,9 @@ void DriveTeleopCommand::Execute()
     std::cout << "execute" << std::endl;
     grabJoystickValues();
 
-    double m_LeftX = DEADZONE(mJoystickAxis[0]);
-    double m_LeftY = DEADZONE(mJoystickAxis[1]);
-    double m_RightX = DEADZONE(mJoystickAxis[2]);
+    double m_LeftX = DEADZONE(mJoystickAxis[LEFT_X]);
+    double m_LeftY = DEADZONE(mJoystickAxis[LEFT_Y]);
+    double m_RightX = DEADZONE(mJoystickAxis[RIGHT_X]);
     // double m_RightY = DEADZONE(mJoystickAxis[3]);
     angle = DriveTeleopCommand::theeta(m_LeftX, m_LeftY);
     radius = DriveTeleopCommand::cartToPolar(m_LeftX, m_LeftY);
@@ -80,10 +85,10 @@ bool DriveTeleopCommand::IsFinished()
 
 void DriveTeleopCommand::grabJoystickValues()
 {
-    mJoystickAxis[0] = mJoystick->GetLeftX();
-    mJoystickAxis[1] = mJoystick->GetLeftY();
-    mJoystickAxis[2] = mJoystick->GetRightX();
-    mJoystickAxis[3] = mJoystick->GetRightY();
+    mJoystickAxis[LEFT_X] = mJoystick->GetLeftX();
+    mJoystickAxis[LEFT_Y] = mJoystick->GetLeftY();
+    mJoystickAxis[RIGHT_X] = mJoystick->GetRightX();
+    mJoystickAxis[RIGHT_Y] = mJoystick->GetRightY();
 }
 
 double DriveTeleopCommand::theeta(double x, double y)
