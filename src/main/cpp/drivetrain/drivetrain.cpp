@@ -184,10 +184,10 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     Drivetrain::mSteerEncoder4.ConfigSensorInitializationStrategy(ctre::phoenix::sensors::SensorInitializationStrategy::BootToAbsolutePosition);
 
     //sets the global offsets tuned from the toml file from pheonix tuner
-    Drivetrain::mSteerEncoder1.ConfigMagnetOffset((config.Encoders.Encoder1GlobalOffset-180));
-    Drivetrain::mSteerEncoder2.ConfigMagnetOffset((config.Encoders.Encoder2GlobalOffset-180));
-    Drivetrain::mSteerEncoder3.ConfigMagnetOffset((config.Encoders.Encoder3GlobalOffset-180));
-    Drivetrain::mSteerEncoder4.ConfigMagnetOffset((config.Encoders.Encoder4GlobalOffset-180));
+    Drivetrain::mSteerEncoder1.ConfigMagnetOffset((config.Encoders.Encoder1GlobalOffset));
+    Drivetrain::mSteerEncoder2.ConfigMagnetOffset((config.Encoders.Encoder2GlobalOffset));
+    Drivetrain::mSteerEncoder3.ConfigMagnetOffset((config.Encoders.Encoder3GlobalOffset));
+    Drivetrain::mSteerEncoder4.ConfigMagnetOffset((config.Encoders.Encoder4GlobalOffset));
 
     Drivetrain::InitialOffsetAngle1 = DEG_TO_RAD(Drivetrain::mSteerEncoder1.GetPosition());
     Drivetrain::InitialOffsetAngle2 = DEG_TO_RAD(Drivetrain::mSteerEncoder2.GetPosition());
