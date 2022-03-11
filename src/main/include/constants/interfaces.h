@@ -111,10 +111,10 @@ namespace interfaces
     }
 
     /*
-    |1       2|
-    |         |
-    |         |
-    |4       3|
+    |1   ↑   2|
+    |    ↑    |
+    |    ↑    |
+    |4   ↑   3|
     */
     //drivetrain CAN assignments (block 0)
     const int kDrive1 = kCAN01;
