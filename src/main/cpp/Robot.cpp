@@ -42,9 +42,6 @@ void Robot::RobotInit() {
     mInnerRotate = new ClimberInnerRotate(toml->get_table("climber"));
     mOuterReach = new ClimberOuterReach(toml->get_table("climber"));
     mOuterRotate = new ClimberOuterRotate(toml->get_table("climber"));
-    mIntake = new Intake(toml->get_table("intake"));
-    mShooter = new Shooter(toml->get_table("shooter"));
-    mSwerveDrive = new SwerveDrive(false);
 
     mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
     mHighClimb = new HighBarClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
