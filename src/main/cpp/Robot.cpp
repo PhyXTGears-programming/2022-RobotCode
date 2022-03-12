@@ -14,6 +14,20 @@
 static Drivetrain drivetrain;
 #endif
 
+frc2::FunctionalCommand * makeInnerReachCommand(
+    double limitPosition,
+    double speed,
+    ClimberInnerReach * innerReach,
+    std::function<bool(double, double)>
+);
+
+frc2::FunctionalCommand * makeOuterReachCommand(
+    double limitPosition,
+    double speed,
+    ClimberOuterReach * outerReach,
+    std::function<bool(double, double)>
+);
+
 void Robot::RobotInit() {
     #ifdef ROBOTCMH_TESTING_MODE
     #warning (In robot.cpp, testing mode is enabled)
@@ -243,6 +257,79 @@ std::shared_ptr<cpptoml::table> Robot::LoadConfig(std::string path)
                   << ex.what() << std::endl;
         exit(1);
     }
+}
+
+
+frc2::FunctionalCommand * makeInnerReachCommand(
+    double limitPosition,
+    double speed,
+    ClimberInnerReach * innerReach,
+    std::function<bool(double limit, double position)> isAtLimit
+) {
+    return new frc2::FunctionalCommand(
+        [=]() {},
+        [=]() {
+            bool is1NearTarget = isAtLimit(limitPosition, innerReach->getMotor1Position());
+            bool is2NearTarget = isAtLimit(limitPosition, innerReach->getMotor2Position());
+
+            if (is1NearTarget) {
+                innerReach->stop1();
+            } else {
+                innerReach->run1(speed);
+            }
+
+            if (is2NearTarget) {
+                innerReach->stop2();
+            } else {
+                innerReach->run2(speed);
+            }
+        },
+        [=](bool) {
+            innerReach->stop1();
+            innerReach->stop2();
+        },
+        [=]() {
+            return isAtLimit(limitPosition, innerReach->getMotor1Position())
+                && isAtLimit(limitPosition, innerReach->getMotor2Position());
+        },
+        { innerReach }
+    );
+}
+
+frc2::FunctionalCommand * makeOuterReachCommand(
+    double limitPosition,
+    double speed,
+    ClimberOuterReach * outerReach,
+    std::function<bool(double limit, double position)> isAtLimit
+) {
+    return new frc2::FunctionalCommand(
+        [=]() {},
+        [=]() {
+            bool is1NearTarget = isAtLimit(limitPosition, outerReach->getMotor1Position());
+            bool is2NearTarget = isAtLimit(limitPosition, outerReach->getMotor2Position());
+
+            if (is1NearTarget) {
+                outerReach->stop1();
+            } else {
+                outerReach->run1(speed);
+            }
+
+            if (is2NearTarget) {
+                outerReach->stop2();
+            } else {
+                outerReach->run2(speed);
+            }
+        },
+        [=](bool) {
+            outerReach->stop1();
+            outerReach->stop2();
+        },
+        [=]() {
+            return isAtLimit(limitPosition, outerReach->getMotor1Position())
+                && isAtLimit(limitPosition, outerReach->getMotor2Position());
+        },
+        { outerReach }
+    );
 }
 
 #ifndef RUNNING_FRC_TESTS
