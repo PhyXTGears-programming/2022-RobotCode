@@ -122,17 +122,33 @@ void Robot::TeleopPeriodic()
         
     }
 
-    double opY = -operatorController->GetLeftY();
-    opY = fabs(opY) < 0.3 ? 0.0 : opY;
-    if (opY < 0.0) {
+    // Manually operate outer arm reach with left analog Y.
+    double leftY = operatorController->GetLeftY();
+    leftY = fabs(leftY) < 0.3 ? 0.0 : leftY;
+    if (leftY < 0.0) {
         mManualRetractOuterArms->Schedule();
-    } else if (opY > 0.0) {
+    } else if (leftY > 0.0) {
         mManualExtendOuterArms->Schedule();
     } else {
         if (mManualRetractOuterArms->IsScheduled()) {
             mManualRetractOuterArms->Cancel();
         } else if (mManualExtendOuterArms->IsScheduled()) {
             mManualExtendOuterArms->Cancel();
+        }
+    }
+
+    // Manually operate inner arm reach with right analog Y.
+    double rightY = operatorController->GetRightY();
+    rightY = fabs(rightY) < 0.3 ? 0.0 : rightY;
+    if (rightY < 0.0) {
+        mManualRetractInnerArms->Schedule();
+    } else if (rightY > 0.0) {
+        mManualExtendInnerArms->Schedule();
+    } else {
+        if (mManualRetractInnerArms->IsScheduled()) {
+            mManualRetractInnerArms->Cancel();
+        } else if (mManualExtendInnerArms->IsScheduled()) {
+            mManualExtendInnerArms->Cancel();
         }
     }
 
