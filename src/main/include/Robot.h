@@ -76,6 +76,9 @@ private:
     frc2::FunctionalCommand *mManualRetractOuterArms = nullptr;
     frc2::FunctionalCommand *mManualExtendOuterArms = nullptr;
 
+    frc2::FunctionalCommand *mManualRetractInnerArms = nullptr;
+    frc2::FunctionalCommand *mManualExtendInnerArms = nullptr;
+
     RetractInnerArmsCommand * mRetractInnerArms = nullptr;
     ExtendInnerArmsCommand * mExtendInnerArms = nullptr;
     RetractOuterArmsCommand * mRetractOuterArms = nullptr;
