@@ -50,6 +50,9 @@ void Robot::RobotInit() {
     mHighClimb = new HighBarClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
     mTraversalClimb = new TraversalClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
 
+    mManualRetractInnerArms = makeInnerReachCommand(1.0, -0.2, mInnerReach, [](double limit, double pos) { return pos <= limit; });
+    mManualExtendInnerArms = makeInnerReachCommand(20.0, 0.2, mInnerReach, [](double limit, double pos) { return pos >= limit; });
+
     mManualRetractOuterArms = makeOuterReachCommand(1.0, -0.2, mOuterReach, [](double limit, double pos) { return pos <= limit; });
     mManualExtendOuterArms = makeOuterReachCommand(20.0, 0.2, mOuterReach, [](double limit, double pos) { return pos >= limit; });
 
@@ -122,8 +125,8 @@ void Robot::TeleopPeriodic()
         
     }
 
-    // Manually operate outer arm reach with left analog Y.
-    double leftY = operatorController->GetLeftY();
+    // Manually operate inner arm reach with left analog Y.
+    double leftY = -operatorController->GetLeftY();      // Convert (-1 is up, +1 is down) to (+1 up, -1 down).
     leftY = fabs(leftY) < 0.3 ? 0.0 : leftY;
     if (leftY < 0.0) {
         mManualRetractOuterArms->Schedule();
@@ -137,8 +140,8 @@ void Robot::TeleopPeriodic()
         }
     }
 
-    // Manually operate inner arm reach with right analog Y.
-    double rightY = operatorController->GetRightY();
+    // Manually operate outer arm reach with right analog Y.
+    double rightY = -operatorController->GetRightY();    // Convert (-1 is up, +1 is down) to (+1 up, -1 down).
     rightY = fabs(rightY) < 0.3 ? 0.0 : rightY;
     if (rightY < 0.0) {
         mManualRetractInnerArms->Schedule();
