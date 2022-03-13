@@ -24,8 +24,10 @@ Cycle::Cycle(InnerReach * innerReach, InnerRotate * innerRotate,
 
     mHighCycle = new frc2::SequentialCommandGroup(
         frc2::InstantCommand {[&]() { innerReach->setUnderLoad(true); }},
-        RetractInnerArmsCommand {innerReach, config.liftExtension},
-        RotateOuterArmsCommand {outerRotate, config.armAngleForNextBar},
+        frc2::ParallelCommandGroup {
+          RetractInnerArmsCommand {innerReach, config.liftExtension},
+          RotateOuterArmsCommand {outerRotate, config.armAngleForNextBar}
+        },
         ExtendOuterArmsCommand {outerReach, config.extendToNextBarExtension},
         RotateOuterArmsCommand {outerRotate, config.dropToNextBar},
         RetractOuterArmsCommand {outerReach, config.grabNextBarExtension},
@@ -57,9 +59,11 @@ Cycle::Cycle(InnerReach * innerReach, InnerRotate * innerRotate,
         frc2::InstantCommand {[&]() { outerReach->setUnderLoad(false); }},
         ExtendOuterArmsCommand {outerReach, config.releaseRearBar},
         RotateOuterArmsCommand {outerRotate, config.dropOffRearBar},
-        RetractOuterArmsCommand {outerReach, config.restingExtension},
-        LockArmsCommand {innerReach}, // this command stops the arms from extending or retracting
-        RotateOuterArmsCommand {outerRotate, config.armAngleVertical}
+        frc2::ParallelCommandGroup {
+            LockArmsCommand {innerReach}, // this command stops the arms from extending or retracting
+            RetractOuterArmsCommand {outerReach, config.restingExtension},
+            RotateOuterArmsCommand {outerRotate, config.armAngleVertical}
+        }
     );
 }
 
