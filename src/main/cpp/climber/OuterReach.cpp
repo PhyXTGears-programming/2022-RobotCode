@@ -25,7 +25,7 @@ OuterReach::OuterReach(std::shared_ptr<cpptoml::table> toml) {
 
 void OuterReach::extend1() {
     double bonus = std::copysign(config.friction.outerStaticFriction, config.extendSpeed);
-    mMotor1.Set(config.extendSpeed);
+    mMotor1.Set(config.extendSpeed + bonus);
 }
 
 void OuterReach::extend2() {
