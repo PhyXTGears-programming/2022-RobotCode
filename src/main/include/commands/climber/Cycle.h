@@ -2,7 +2,10 @@
 
 #include "cpptoml.h"
 
-#include "climber/climber.h"
+#include "climber/InnerReach.h"
+#include "climber/InnerRotate.h"
+#include "climber/OuterReach.h"
+#include "climber/OuterRotate.h"
 
 #include "commands/climber/ExtendInnerArms.h"
 #include "commands/climber/ExtendOuterArms.h"
@@ -19,7 +22,7 @@
 
 class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
     public:
-        Cycle(Climber * climber, std::shared_ptr<cpptoml::table> toml);
+        Cycle(InnerReach * innerReach, InnerRotate * innerRotate, OuterReach * outerReach, OuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
 
         void Initialize() override;
         void Execute() override;
@@ -27,7 +30,10 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
         bool IsFinished() override;
 
     private:
-        Climber * mClimber;
+        InnerReach * mInnerReach = nullptr;
+        OuterReach * mOuterReach = nullptr;
+        InnerRotate * mInnerRotate = nullptr;
+        OuterRotate * mOuterRotate = nullptr;
 
         enum CycleState {HIGH, TRAVERSE, INOPERATIVE = -1};
         CycleState mGoal = HIGH;

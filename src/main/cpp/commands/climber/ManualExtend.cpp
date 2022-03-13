@@ -1,24 +1,24 @@
 #include "commands/climber/ManualExtend.h"
 
-ManualExtendCommand::ManualExtendCommand(Climber * climber) {
-    AddRequirements(climber);
-    mClimber = climber;
+ManualExtendCommand::ManualExtendCommand(InnerReach * innerArms) {
+    AddRequirements(innerArms);
+    mInnerArms = innerArms;
     
-    mRetract = new RetractInnerArmsCommand {mClimber, kRestingExtension};
+    mRetract = new RetractInnerArmsCommand {mInnerArms, kRestingExtension};
 }
 
 void ManualExtendCommand::Initialize() {}
 
 void ManualExtendCommand::Execute() {
-    if (mClimber->isInner1NearTarget(kTargetExtension)) {
-        mClimber->stopInner1();
+    if (mInnerArms->isMotor1NearTarget(kTargetExtension)) {
+        mInnerArms->stop1();
     } else {
-        mClimber->extendInner1();
+        mInnerArms->extend1();
     }
-    if (mClimber->isInner2NearTarget(kTargetExtension)) {
-        mClimber->stopInner2();
+    if (mInnerArms->isMotor2NearTarget(kTargetExtension)) {
+        mInnerArms->stop2();
     } else {
-        mClimber->extendInner2();
+        mInnerArms->extend2();
     }
 }
 
@@ -27,5 +27,5 @@ void ManualExtendCommand::End(bool isInterrupted) {
 }
 
 bool ManualExtendCommand::IsFinished() {
-    return mClimber->isInner1NearTarget(kTargetExtension) && mClimber->isInner2NearTarget(kTargetExtension);
+    return mInnerArms->isMotor1NearTarget(kTargetExtension) && mInnerArms->isMotor2NearTarget(kTargetExtension);
 }

@@ -2,32 +2,32 @@
 
 const double kAcceptableExtensionError = 0.05;
 
-ExtendOuterArmsCommand::ExtendOuterArmsCommand(Climber * climber, double targetExtension) {
-    AddRequirements(climber);
-    mClimber = climber;
+ExtendOuterArmsCommand::ExtendOuterArmsCommand(OuterReach * outerArms, double targetExtension) {
+    AddRequirements(outerArms);
+    mOuterArms = outerArms;
     mTargetExtension = targetExtension;
 }
 
 void ExtendOuterArmsCommand::Initialize() {}
 
 void ExtendOuterArmsCommand::Execute() {
-    if (mClimber->isOuter1NearTarget(mTargetExtension)) {
-        mClimber->stopOuter1();
+    if (mOuterArms->isMotor1NearTarget(mTargetExtension)) {
+        mOuterArms->stop1();
     } else {
-        mClimber->extendOuter1();
+        mOuterArms->extend1();
     }
-    if (mClimber->isOuter2NearTarget(mTargetExtension)) {
-        mClimber->stopOuter2();
+    if (mOuterArms->isMotor2NearTarget(mTargetExtension)) {
+        mOuterArms->stop2();
     } else {
-        mClimber->extendOuter2();
+        mOuterArms->extend2();
     }
 }
 
 void ExtendOuterArmsCommand::End(bool isInterrupted) {
-    mClimber->stopOuter1();
-    mClimber->stopOuter2();
+    mOuterArms->stop1();
+    mOuterArms->stop2();
 }
 
 bool ExtendOuterArmsCommand::IsFinished() {
-    return mClimber->isOuter1NearTarget(mTargetExtension) && mClimber->isOuter2NearTarget(mTargetExtension);
+    return mOuterArms->isMotor1NearTarget(mTargetExtension) && mOuterArms->isMotor2NearTarget(mTargetExtension);
 }

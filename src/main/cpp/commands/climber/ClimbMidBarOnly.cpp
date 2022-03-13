@@ -10,7 +10,7 @@
 // DO NOT SCHEDULE THIS CLASS.  It is a container for related commands.  Use
 // mReachMidBar and mClimbMidbarAndLock directly.
 
-ClimbMidBarOnly::ClimbMidBarOnly(Climber * climber, std::shared_ptr<cpptoml::table> toml) {
+ClimbMidBarOnly::ClimbMidBarOnly(InnerReach * innerArms, InnerRotate * innerRotate, std::shared_ptr<cpptoml::table> toml) {
     config.initialExtension = toml->get_qualified_as<double>("initialExtension").value_or(config.initialExtension);
     config.liftRetraction = toml->get_qualified_as<double>("liftRetraction").value_or(config.liftRetraction);
     config.verticalArmAngle = toml->get_qualified_as<double>("verticalArmAngle").value_or(config.verticalArmAngle);
@@ -18,23 +18,23 @@ ClimbMidBarOnly::ClimbMidBarOnly(Climber * climber, std::shared_ptr<cpptoml::tab
     mReachMidBar = new frc2::SequentialCommandGroup(
         frc2::InstantCommand {
             [=]() {
-                climber->unlockArms();
-                climber->setInnerUnderLoad(false);
+                innerArms->unlockArms();
+                innerArms->setUnderLoad(false);
             },
-            { climber }
+            { innerArms }
         },
-        RotateInnerArmsCommand { climber, config.verticalArmAngle },
-        ExtendInnerArmsCommand { climber, config.initialExtension }
+        RotateInnerArmsCommand { innerRotate, config.verticalArmAngle },
+        ExtendInnerArmsCommand { innerArms, config.initialExtension }
     );
 
     mClimbMidBarAndLock = new frc2::SequentialCommandGroup(
         frc2::InstantCommand {
             [=] () {
-                climber->setInnerUnderLoad(true);
+                innerArms->setUnderLoad(true);
             },
-            { climber }
+            { innerArms }
         },
-        RetractInnerArmsCommand { climber, config.liftRetraction },
-        LockArmsCommand { climber }
+        RetractInnerArmsCommand { innerArms, config.liftRetraction },
+        LockArmsCommand { innerArms }
     );
 }

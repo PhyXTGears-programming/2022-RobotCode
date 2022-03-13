@@ -1,31 +1,31 @@
 #include "commands/climber/ExtendInnerArms.h"
 
-ExtendInnerArmsCommand::ExtendInnerArmsCommand(Climber * climber, double targetExtension) {
-    AddRequirements(climber);
-    mClimber = climber;
+ExtendInnerArmsCommand::ExtendInnerArmsCommand(InnerReach * innerArms, double targetExtension) {
+    AddRequirements(innerArms);
+    mInnerArms = innerArms;
     mTargetExtension = targetExtension;
 }
 
 void ExtendInnerArmsCommand::Initialize() {}
 
 void ExtendInnerArmsCommand::Execute() {
-    if (mClimber->isInner1NearTarget(mTargetExtension)) {
-        mClimber->stopInner1();
+    if (mInnerArms->isMotor1NearTarget(mTargetExtension)) {
+        mInnerArms->stop1();
     } else {
-        mClimber->extendInner1();
+        mInnerArms->extend1();
     }
-    if (mClimber->isInner2NearTarget(mTargetExtension)) {
-        mClimber->stopInner2();
+    if (mInnerArms->isMotor2NearTarget(mTargetExtension)) {
+        mInnerArms->stop2();
     } else {
-        mClimber->extendInner2();
+        mInnerArms->extend2();
     }
 }
 
 void ExtendInnerArmsCommand::End(bool isInterrupted) {
-    mClimber->stopInner1();
-    mClimber->stopInner2();
+    mInnerArms->stop1();
+    mInnerArms->stop2();
 }
 
 bool ExtendInnerArmsCommand::IsFinished() {
-    return mClimber->isInner1NearTarget(mTargetExtension) && mClimber->isInner2NearTarget(mTargetExtension);
+    return mInnerArms->isMotor1NearTarget(mTargetExtension) && mInnerArms->isMotor2NearTarget(mTargetExtension);
 }
