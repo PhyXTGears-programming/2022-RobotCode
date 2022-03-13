@@ -28,66 +28,69 @@ void Robot::RobotInit()
     driverController = new frc::XboxController(interfaces::kXBoxDriver);
     operatorController = new frc::XboxController(interfaces::kXBoxOperator);
   
-    mClimber = new Climber(toml->get_table("climber"));
+    mInnerReach = new InnerReach(toml->get_table("climber"));
+    mInnerRotate = new InnerRotate(toml->get_table("climber"));
+    mOuterReach = new OuterReach(toml->get_table("climber"));
+    mOuterRotate = new OuterRotate(toml->get_table("climber"));
     mIntake = new Intake(toml->get_table("intake"));
     mShooter = new Shooter(toml->get_table("shooter"));
     mSwerveDrive = new SwerveDrive(false);
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
-    mClimbMidbarOnly = new ClimbMidBarOnly(mClimber, toml->get_table_qualified("command.climb.midbar"));
+    mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
     mShootCommand = new ShootCommand(mShooter);
 
     mManualRetractInnerArms = new frc2::FunctionalCommand(
         [&]() {},
         [&]() {
-            bool isInner1NearTarget = mClimber->isInner1NearTarget(0.0);
-            bool isInner2NearTarget = mClimber->isInner2NearTarget(0.0);
+            bool isInner1NearTarget = mInnerReach->isMotor1NearTarget(0.0);
+            bool isInner2NearTarget = mInnerReach->isMotor2NearTarget(0.0);
 
             if (isInner1NearTarget) {
-                mClimber->stopInner1();
+                mInnerReach->stop1();
             } else {
-                mClimber->runInner1(0.2);
+                mInnerReach->run1(0.2);
             }
 
             if (isInner2NearTarget) {
-                mClimber->stopInner2();
+                mInnerReach->stop2();
             } else {
-                mClimber->runInner2(0.2);
+                mInnerReach->run2(0.2);
             }
         },
         [&](bool) {
-            mClimber->stopInner1();
-            mClimber->stopInner2();
+            mInnerReach->stop1();
+            mInnerReach->stop2();
         },
-        [&]() { return mClimber->isInner1NearTarget(0.0) || mClimber->isInner2NearTarget(0.0); },
-        { mClimber }
+        [&]() { return mInnerReach->isMotor1NearTarget(0.0) || mInnerReach->isMotor2NearTarget(0.0); },
+        { mInnerReach }
     );
 
     mManualExtendInnerArms = new frc2::FunctionalCommand(
         [&]() {},
         [&]() {
-            bool isInner1NearTarget = mClimber->isInner1NearTarget(20.0);
-            bool isInner2NearTarget = mClimber->isInner2NearTarget(20.0);
+            bool isInner1NearTarget = mInnerReach->isMotor1NearTarget(20.0);
+            bool isInner2NearTarget = mInnerReach->isMotor2NearTarget(20.0);
 
             if (isInner1NearTarget) {
-                mClimber->stopInner1();
+                mInnerReach->stop1();
             } else {
-                mClimber->runInner1(-0.2);
+                mInnerReach->run1(-0.2);
             }
 
             if (isInner2NearTarget) {
-                mClimber->stopInner2();
+                mInnerReach->stop2();
             } else {
-                mClimber->runInner2(-0.2);
+                mInnerReach->run2(-0.2);
             }
         },
         [&](bool) {
-            mClimber->stopInner1();
-            mClimber->stopInner2();
+            mInnerReach->stop1();
+            mInnerReach->stop2();
         },
-        [&]() { return mClimber->isInner1NearTarget(20.0) || mClimber->isInner2NearTarget(20.0); },
-        { mClimber }
+        [&]() { return mInnerReach->isMotor1NearTarget(20.0) || mInnerReach->isMotor2NearTarget(20.0); },
+        { mInnerReach }
     );
 
     // Shooter commands
