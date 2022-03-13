@@ -1,8 +1,24 @@
-#include "climber/climber.h"
+#include "climber/InnerReach.h"
 
 #include <cmath>
 
-Climber::InnerReach::InnerReach() {
+const double kAcceptablePositionError = 0.3;
+
+InnerReach::InnerReach(std::shared_ptr<cpptoml::table> toml) {
+    config.servo1.unlockPosition = toml->get_qualified_as<double>("servo1.unlockPosition").value_or(0.0);
+    config.servo1.lockPosition = toml->get_qualified_as<double>("servo1.lockPosition").value_or(0.0);
+
+    config.servo2.unlockPosition = toml->get_qualified_as<double>("servo2.unlockPosition").value_or(0.0);
+    config.servo2.lockPosition = toml->get_qualified_as<double>("servo2.lockPosition").value_or(0.0);
+
+    config.extendSpeed = toml->get_qualified_as<double>("extendSpeed").value_or(0.5);
+    config.retractSpeed = toml->get_qualified_as<double>("retractSpeed").value_or(-0.5);
+    config.inchesPerRevolution = toml->get_qualified_as<double>("inchesPerRevolution").value_or(0.128325);
+    config.friction.innerStaticFriction = toml->get_qualified_as<double>("innerStaticFriction").value_or(0.0);
+    config.friction.outerStaticFriction = toml->get_qualified_as<double>("outerStaticFriction").value_or(0.0);
+    config.friction.innerStaticFrictionWithLoad = toml->get_qualified_as<double>("innerStaticFrictionWithLoad").value_or(0.0);
+    config.friction.outerStaticFrictionWithLoad = toml->get_qualified_as<double>("outerStaticFrictionWithLoad").value_or(0.0);
+
     mMotor1.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     mMotor2.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
@@ -13,17 +29,17 @@ Climber::InnerReach::InnerReach() {
     mEncoder2.SetPosition(0.0);
 }
 
-void Climber::InnerReach::extend1() {
+void InnerReach::extend1() {
     double bonus = std::copysign(config.friction.innerStaticFriction, config.extendSpeed);
     mMotor1.Set(config.extendSpeed + bonus);
 }
 
-void Climber::InnerReach::extend2() {
+void InnerReach::extend2() {
     double bonus = std::copysign(config.friction.innerStaticFriction, config.extendSpeed);
     mMotor2.Set(config.extendSpeed + bonus);
 }
 
-void Climber::InnerReach::retract1() {
+void InnerReach::retract1() {
     double bonus = (mIsUnderLoad)
         ? config.friction.innerStaticFrictionWithLoad
         : config.friction.innerStaticFriction;
@@ -33,7 +49,7 @@ void Climber::InnerReach::retract1() {
     mMotor1.Set(config.retractSpeed + bonus);
 }
     
-void Climber::InnerReach::retract2() {
+void InnerReach::retract2() {
     double bonus = (mIsUnderLoad)
         ? config.friction.innerStaticFrictionWithLoad
         : config.friction.innerStaticFriction;
@@ -43,58 +59,58 @@ void Climber::InnerReach::retract2() {
     mMotor2.Set(config.retractSpeed + bonus);
 }
 
-void Climber::InnerReach::stop1() {
+void InnerReach::stop1() {
     mMotor1.Set(0.0);
 }
 
-void Climber::InnerReach::stop2() {
+void InnerReach::stop2() {
     mMotor2.Set(0.0);
 }
 
-void Climber::InnerReach::run1(double speed) {
+void InnerReach::run1(double speed) {
     mMotor1.Set(speed);
 }
 
-void Climber::InnerReach::run2(double speed) {
+void InnerReach::run2(double speed) {
     mMotor2.Set(speed);
 }
 
-double Climber::InnerReach::getMotor1Position() {
+double InnerReach::getMotor1Position() {
     return (mEncoder1.GetPosition() * config.inchesPerRevolution);
 }
 
-double Climber::InnerReach::getMotor2Position() {
+double InnerReach::getMotor2Position() {
     return (mEncoder2.GetPosition() * config.inchesPerRevolution);
 }
 
-bool Climber::InnerReach::isMotor1NearTarget(double target) {
+bool InnerReach::isMotor1NearTarget(double target) {
     return std::abs(target - getMotor1Position()) < kAcceptablePositionError;
 }
 
-bool Climber::InnerReach::isMotor2NearTarget(double target) {
+bool InnerReach::isMotor2NearTarget(double target) {
     return std::abs(target - getMotor2Position()) < kAcceptablePositionError;
 }
 
-void Climber::InnerReach::setMotorsCoast() {
+void InnerReach::setMotorsCoast() {
     mMotor1.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     mMotor2.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 }
 
-void Climber::InnerReach::setMotorsBrake() {
+void InnerReach::setMotorsBrake() {
     mMotor1.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     mMotor2.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 }
 
-void Climber::InnerReach::setUnderLoad(bool isUnderLoad) {
+void InnerReach::setUnderLoad(bool isUnderLoad) {
     mIsUnderLoad = isUnderLoad;
 }
 
-void Climber::InnerReach::lockArms() {
+void InnerReach::lockArms() {
     mStopServo1.Set(config.servo1.lockPosition);
     mStopServo2.Set(config.servo2.lockPosition);
 }
 
-void Climber::InnerReach::unlockArms() {
+void InnerReach::unlockArms() {
     mStopServo1.Set(config.servo1.unlockPosition);
     mStopServo2.Set(config.servo2.unlockPosition);
 }

@@ -1,22 +1,21 @@
-#include "climber/climber.h"
+#include "climber/InnerRotate.h"
 
-Climber::InnerRotate::InnerRotate() {
-    mEncoder.SetPositionOffset(0.962);
-    //mInnerRotationEncoder.SetPositionOffset(toml->get_qualified_as<double>("outerPositionOffset").value_or(0.962));
+InnerRotate::InnerRotate(std::shared_ptr<cpptoml::table> toml) {
+    mEncoder.SetPositionOffset(toml->get_qualified_as<double>("outerPositionOffset").value_or(0.962));
 }
 
-void Climber::InnerRotate::rotate(double speed) {
+void InnerRotate::rotate(double speed) {
     mMotor.Set(speed);
 }
 
-double Climber::InnerRotate::getAngle() {
+double InnerRotate::getAngle() {
     return mEncoder.GetAbsolutePosition();
 }
 
-void Climber::InnerRotate::setMotorCoast() {
+void InnerRotate::setMotorCoast() {
     mMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 }
 
-void Climber::InnerRotate::setMotorBrake() {
+void InnerRotate::setMotorBrake() {
     mMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 }

@@ -1,22 +1,21 @@
-#include "climber/climber.h"
+#include "climber/OuterRotate.h"
 
-Climber::OuterRotate::OuterRotate() {
-    mEncoder.SetPositionOffset(0.023);
-    //mOuterRotationEncoder.SetPositionOffset(toml->get_qualified_as<double>("outerPositionOffset").value_or(0.023));
+OuterRotate::OuterRotate(std::shared_ptr<cpptoml::table> toml) {
+    mEncoder.SetPositionOffset(toml->get_qualified_as<double>("outerPositionOffset").value_or(0.023));
 }
 
-void Climber::OuterRotate::rotate(double speed) {
+void OuterRotate::rotate(double speed) {
     mMotor.Set(speed);
 }
 
-double Climber::OuterRotate::getAngle() {
+double OuterRotate::getAngle() {
     return mEncoder.GetAbsolutePosition();
 }
 
-void Climber::OuterRotate::setMotorCoast() {
+void OuterRotate::setMotorCoast() {
     mMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 }
 
-void Climber::OuterRotate::setMotorBrake() {
+void OuterRotate::setMotorBrake() {
     mMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 }
