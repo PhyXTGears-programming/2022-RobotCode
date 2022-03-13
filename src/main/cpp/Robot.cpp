@@ -35,6 +35,8 @@ void Robot::RobotInit()
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
     mClimbMidbarOnly = new ClimbMidBarOnly(mClimber, toml->get_table_qualified("command.climb.midbar"));
+    mExtendIntakeCommand = new ExtendIntakeCommand(mIntake);
+    mRetractIntakeCommand = new RetractIntakeCommand(mIntake);
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
     mShootCommand = new ShootCommand(mShooter);
 
@@ -198,6 +200,14 @@ void Robot::TeleopPeriodic()
         mRunIntakeCommand->Schedule();
     } else if(operatorController->GetAButtonReleased()) {
         mRunIntakeCommand->Cancel();
+    }
+
+    if (operatorController->GetRightBumperPressed()) {
+        if (mIntake->isExtended()) {
+            mRetractIntakeCommand->Schedule();
+        } else {
+            mExtendIntakeCommand->Schedule();
+        }
     }
 
     //Climber
