@@ -108,6 +108,10 @@ namespace interfaces
         const int kDIO7 = 7;
         const int kDIO8 = 8;
         const int kDIO9 = 9;
+
+        // Solenoids
+        const int kAIR0 = 0;
+        const int kAIR1 = 1;
     }
 
     /*
@@ -136,6 +140,9 @@ namespace interfaces
     const int kRollerMotor = kCAN20;
     const int kDeployServo1 = kPWM6;
     const int kDeployServo2 = kPWM7;
+
+    const int kIntakeExtend = kAIR0;
+    const int kIntakeRetract = kAIR1;
 
     //shooter CAN assignment (block 3)
     const int kShooterMotor = kCAN30;

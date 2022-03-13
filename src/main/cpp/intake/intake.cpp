@@ -13,3 +13,17 @@ void Intake::runRollers () {
 void Intake::stopRollers () {
     mRollerMotor.Set(0.0);
 }
+
+void Intake::extend () {
+    mRetract.Set(false);
+    mExtend.Set(true);
+}
+
+void Intake::retract () {
+    mExtend.Set(false);
+    mRetract.Set(true);
+}
+
+bool Intake::isExtended () {
+    return mIsExtended;
+}
