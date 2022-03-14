@@ -18,7 +18,7 @@ ClimbMidBarOnly::ClimbMidBarOnly(InnerReach * innerArms, InnerRotate * innerRota
     mReachMidBar = new frc2::SequentialCommandGroup(
         frc2::InstantCommand {
             [=]() {
-                innerArms->unlockArms();
+                //innerArms->unlockArms();
                 innerArms->setUnderLoad(false);
             },
             { innerArms }
@@ -27,14 +27,14 @@ ClimbMidBarOnly::ClimbMidBarOnly(InnerReach * innerArms, InnerRotate * innerRota
         ExtendInnerArmsCommand { innerArms, config.initialExtension }
     );
 
-    mClimbMidBarAndLock = new frc2::SequentialCommandGroup(
-        frc2::InstantCommand {
-            [=] () {
-                innerArms->setUnderLoad(true);
-            },
-            { innerArms }
-        },
-        RetractInnerArmsCommand { innerArms, config.liftRetraction },
-        LockArmsCommand { innerArms }
-    );
+    // mClimbMidBarAndLock = new frc2::SequentialCommandGroup(
+    //     frc2::InstantCommand {
+    //         [=] () {
+    //             innerArms->setUnderLoad(true);
+    //         },
+    //         { innerArms }
+    //     },
+    //     RetractInnerArmsCommand { innerArms, config.liftRetraction },
+    //     LockArmsCommand { innerArms }
+    // );
 }

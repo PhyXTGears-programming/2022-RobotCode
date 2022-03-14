@@ -59,11 +59,14 @@ Cycle::Cycle(InnerReach * innerReach, InnerRotate * innerRotate,
         frc2::InstantCommand {[&]() { outerReach->setUnderLoad(false); }},
         ExtendOuterArmsCommand {outerReach, config.releaseRearBar},
         RotateOuterArmsCommand {outerRotate, config.dropOffRearBar},
-        frc2::ParallelCommandGroup {
-            LockArmsCommand {innerReach}, // this command stops the arms from extending or retracting
-            RetractOuterArmsCommand {outerReach, config.restingExtension},
+        ExtendOuterArmsCommand {outerReach, config.liftExtension}, // pulls arms in so they don't hit bar on next step
+        frc2::ParallelCommandGroup { // extend and rotate to vertical to grab traversal with both sets of arms
+            //LockArmsCommand {innerReach}, // this command stops the arms from extending or retracting
+            RetractOuterArmsCommand {outerReach, config.extendToNextBarExtension},
             RotateOuterArmsCommand {outerRotate, config.armAngleVertical}
-        }
+        },
+        frc2::InstantCommand {[&]() { outerReach->setUnderLoad(true); }},
+        RetractOuterArmsCommand {outerReach, config.liftExtension} // tighten grip
     );
 }
 

@@ -2,15 +2,11 @@
 
 #include <cmath>
 
-const double kAcceptablePositionError = 0.3;
-
 OuterReach::OuterReach(std::shared_ptr<cpptoml::table> toml) {
     config.extendSpeed = toml->get_qualified_as<double>("extendSpeed").value_or(0.5);
     config.retractSpeed = toml->get_qualified_as<double>("retractSpeed").value_or(-0.5);
     config.inchesPerRevolution = toml->get_qualified_as<double>("inchesPerRevolution").value_or(0.128325);
-    config.friction.innerStaticFriction = toml->get_qualified_as<double>("innerStaticFriction").value_or(0.0);
     config.friction.outerStaticFriction = toml->get_qualified_as<double>("outerStaticFriction").value_or(0.0);
-    config.friction.innerStaticFrictionWithLoad = toml->get_qualified_as<double>("innerStaticFrictionWithLoad").value_or(0.0);
     config.friction.outerStaticFrictionWithLoad = toml->get_qualified_as<double>("outerStaticFrictionWithLoad").value_or(0.0);
 
     mMotor1.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
@@ -70,11 +66,11 @@ double OuterReach::getMotor2Position() {
 }
 
 bool OuterReach::isMotor1NearTarget(double target) {
-    return std::abs(target - getMotor1Position()) < kAcceptablePositionError;
+    return std::abs(target - getMotor1Position()) < constants::climb::kAcceptablePositionError;
 }
 
 bool OuterReach::isMotor2NearTarget(double target) {
-    return std::abs(target - getMotor2Position()) < kAcceptablePositionError;
+    return std::abs(target - getMotor2Position()) < constants::climb::kAcceptablePositionError;
 }
 
 void OuterReach::setUnderLoad(bool isUnderLoad) {

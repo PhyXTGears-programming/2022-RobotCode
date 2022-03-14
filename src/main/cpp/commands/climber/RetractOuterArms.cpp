@@ -11,12 +11,15 @@ RetractOuterArmsCommand::RetractOuterArmsCommand(OuterReach * outerArms, double 
 void RetractOuterArmsCommand::Initialize() {}
 
 void RetractOuterArmsCommand::Execute() {
-    if (mOuterArms->isMotor1NearTarget(mTargetExtension)) {
+    bool is1NearTarget = mOuterArms->isMotor1NearTarget(mTargetExtension);
+    bool is2NearTarget = mOuterArms->isMotor2NearTarget(mTargetExtension);
+
+    if (is1NearTarget) {
         mOuterArms->stop1();
     } else {
         mOuterArms->retract1();
     }
-    if (mOuterArms->isMotor2NearTarget(mTargetExtension)) {
+    if (is2NearTarget) {
         mOuterArms->stop2();
     } else {
         mOuterArms->retract2();

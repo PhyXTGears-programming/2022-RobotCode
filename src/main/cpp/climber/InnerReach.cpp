@@ -2,22 +2,18 @@
 
 #include <cmath>
 
-const double kAcceptablePositionError = 0.3;
-
 InnerReach::InnerReach(std::shared_ptr<cpptoml::table> toml) {
-    config.servo1.unlockPosition = toml->get_qualified_as<double>("servo1.unlockPosition").value_or(0.0);
-    config.servo1.lockPosition = toml->get_qualified_as<double>("servo1.lockPosition").value_or(0.0);
+    // config.servo1.unlockPosition = toml->get_qualified_as<double>("servo1.unlockPosition").value_or(0.0);
+    // config.servo1.lockPosition = toml->get_qualified_as<double>("servo1.lockPosition").value_or(0.0);
 
-    config.servo2.unlockPosition = toml->get_qualified_as<double>("servo2.unlockPosition").value_or(0.0);
-    config.servo2.lockPosition = toml->get_qualified_as<double>("servo2.lockPosition").value_or(0.0);
+    // config.servo2.unlockPosition = toml->get_qualified_as<double>("servo2.unlockPosition").value_or(0.0);
+    // config.servo2.lockPosition = toml->get_qualified_as<double>("servo2.lockPosition").value_or(0.0);
 
     config.extendSpeed = toml->get_qualified_as<double>("extendSpeed").value_or(0.5);
     config.retractSpeed = toml->get_qualified_as<double>("retractSpeed").value_or(-0.5);
     config.inchesPerRevolution = toml->get_qualified_as<double>("inchesPerRevolution").value_or(0.128325);
     config.friction.innerStaticFriction = toml->get_qualified_as<double>("innerStaticFriction").value_or(0.0);
-    config.friction.outerStaticFriction = toml->get_qualified_as<double>("outerStaticFriction").value_or(0.0);
     config.friction.innerStaticFrictionWithLoad = toml->get_qualified_as<double>("innerStaticFrictionWithLoad").value_or(0.0);
-    config.friction.outerStaticFrictionWithLoad = toml->get_qualified_as<double>("outerStaticFrictionWithLoad").value_or(0.0);
 
     mMotor1.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     mMotor2.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
@@ -84,11 +80,11 @@ double InnerReach::getMotor2Position() {
 }
 
 bool InnerReach::isMotor1NearTarget(double target) {
-    return std::abs(target - getMotor1Position()) < kAcceptablePositionError;
+    return std::abs(target - getMotor1Position()) < constants::climb::kAcceptablePositionError;
 }
 
 bool InnerReach::isMotor2NearTarget(double target) {
-    return std::abs(target - getMotor2Position()) < kAcceptablePositionError;
+    return std::abs(target - getMotor2Position()) < constants::climb::kAcceptablePositionError;
 }
 
 void InnerReach::setMotorsCoast() {
@@ -105,12 +101,12 @@ void InnerReach::setUnderLoad(bool isUnderLoad) {
     mIsUnderLoad = isUnderLoad;
 }
 
-void InnerReach::lockArms() {
-    mStopServo1.Set(config.servo1.lockPosition);
-    mStopServo2.Set(config.servo2.lockPosition);
-}
+// void InnerReach::lockArms() {
+//     mStopServo1.Set(config.servo1.lockPosition);
+//     mStopServo2.Set(config.servo2.lockPosition);
+// }
 
-void InnerReach::unlockArms() {
-    mStopServo1.Set(config.servo1.unlockPosition);
-    mStopServo2.Set(config.servo2.unlockPosition);
-}
+// void InnerReach::unlockArms() {
+//     mStopServo1.Set(config.servo1.unlockPosition);
+//     mStopServo2.Set(config.servo2.unlockPosition);
+// }

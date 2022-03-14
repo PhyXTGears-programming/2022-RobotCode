@@ -23,8 +23,8 @@ servo1.lockPosition = 0.2
 servo2.unlockPosition = 0.65
 servo2.lockPosition = 1.0
 
-innerPositionOffset = 0.962
-outerPositionOffset = 0.023
+innerRotationZeroOffset = 0.962
+outerRotationZeroOffset = 0.023
 
 extendSpeed = 0.45
 retractSpeed = -0.45

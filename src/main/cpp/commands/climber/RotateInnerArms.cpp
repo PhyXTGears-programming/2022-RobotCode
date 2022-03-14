@@ -27,7 +27,7 @@ void RotateInnerArmsCommand::Execute() {
 }
 
 void RotateInnerArmsCommand::End(bool isInterrupted) {
-    mInnerArms->rotate(0.0);
+    mInnerArms->stop();
 }
 
 bool RotateInnerArmsCommand::IsFinished() {

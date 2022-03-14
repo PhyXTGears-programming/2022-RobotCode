@@ -12,6 +12,7 @@ class InnerRotate : public frc2::SubsystemBase {
         InnerRotate(std::shared_ptr<cpptoml::table> toml);
 
         void rotate(double speed);
+        void stop();
         
         double getAngle();
 

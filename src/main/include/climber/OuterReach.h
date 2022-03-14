@@ -6,6 +6,7 @@
 
 #include "cpptoml.h"
 #include "constants/interfaces.h"
+#include "constants/constants.h"
 
 class OuterReach : public frc2::SubsystemBase {
     public:
@@ -45,8 +46,8 @@ class OuterReach : public frc2::SubsystemBase {
 
             double inchesPerRevolution;
             struct {
-                double innerStaticFriction, outerStaticFriction;
-                double innerStaticFrictionWithLoad, outerStaticFrictionWithLoad;
+                double outerStaticFriction;
+                double outerStaticFrictionWithLoad;
             } friction;
         } config;
 };

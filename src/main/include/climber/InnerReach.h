@@ -7,6 +7,7 @@
 
 #include "cpptoml.h"
 #include "constants/interfaces.h"
+#include "constants/constants.h"
 
 class InnerReach : public frc2::SubsystemBase {
     public:
@@ -24,8 +25,8 @@ class InnerReach : public frc2::SubsystemBase {
         void setMotorsCoast();
         void setMotorsBrake();
 
-        void lockArms();
-        void unlockArms();
+        // void lockArms();
+        // void unlockArms();
 
         double getMotor1Position();
         double getMotor2Position();
@@ -44,21 +45,21 @@ class InnerReach : public frc2::SubsystemBase {
         rev::SparkMaxRelativeEncoder mEncoder1 {mMotor1.GetEncoder()};
         rev::SparkMaxRelativeEncoder mEncoder2 {mMotor2.GetEncoder()};
 
-        frc::Servo mStopServo1 {interfaces::kStopServo1};
-        frc::Servo mStopServo2 {interfaces::kStopServo2};
+        // frc::Servo mStopServo1 {interfaces::kStopServo1};
+        // frc::Servo mStopServo2 {interfaces::kStopServo2};
 
         struct {
             double extendSpeed, retractSpeed;
 
-            struct {
-                double unlockPosition;
-                double lockPosition;
-            } servo1, servo2;
+            // struct {
+            //     double unlockPosition;
+            //     double lockPosition;
+            // } servo1, servo2;
 
             double inchesPerRevolution;
             struct {
-                double innerStaticFriction, outerStaticFriction;
-                double innerStaticFrictionWithLoad, outerStaticFrictionWithLoad;
+                double innerStaticFriction;
+                double innerStaticFrictionWithLoad;
             } friction;
         } config;
 };

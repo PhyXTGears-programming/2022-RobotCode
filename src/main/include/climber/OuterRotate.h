@@ -12,6 +12,7 @@ class OuterRotate : public frc2::SubsystemBase {
         OuterRotate(std::shared_ptr<cpptoml::table> toml);
 
         void rotate(double speed);
+        void stop();
     
         double getAngle();
 

@@ -11,12 +11,15 @@ ExtendOuterArmsCommand::ExtendOuterArmsCommand(OuterReach * outerArms, double ta
 void ExtendOuterArmsCommand::Initialize() {}
 
 void ExtendOuterArmsCommand::Execute() {
-    if (mOuterArms->isMotor1NearTarget(mTargetExtension)) {
+    bool is1NearTarget = mOuterArms->isMotor1NearTarget(mTargetExtension);
+    bool is2NearTarget = mOuterArms->isMotor2NearTarget(mTargetExtension);
+    
+    if (is1NearTarget) {
         mOuterArms->stop1();
     } else {
         mOuterArms->extend1();
     }
-    if (mOuterArms->isMotor2NearTarget(mTargetExtension)) {
+    if (is2NearTarget) {
         mOuterArms->stop2();
     } else {
         mOuterArms->extend2();

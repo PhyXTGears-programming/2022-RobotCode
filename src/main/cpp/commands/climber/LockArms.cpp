@@ -6,7 +6,7 @@ LockArmsCommand::LockArmsCommand(InnerReach * innerArms) {
 }
 
 void LockArmsCommand::Initialize() {
-    mInnerArms->lockArms();
+    //mInnerArms->lockArms();
 }
 
 void LockArmsCommand::Execute() {}
