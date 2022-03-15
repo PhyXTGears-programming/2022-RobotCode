@@ -204,90 +204,87 @@ private:
 
     //global constants for the motors
 
-    struct
-    {
-    	struct
-		{
-			struct
-			{
-				struct
-				{
-					double k_P = 0.0;
-					double k_I = 0.0;
-					double k_D = 0.0;
-					double k_FF = 0.0;
-					double k_IZone = 0.0;
-				} motor1;
-				struct
-				{
-					double k_P = 0.0;
-					double k_I = 0.0;
-					double k_D = 0.0;
-					double k_FF = 0.0;
-					double k_IZone = 0.0;
-				} motor2;
-				struct
-				{
-					double k_P = 0.0;
-					double k_I = 0.0;
-					double k_D = 0.0;
-					double k_FF = 0.0;
-					double k_IZone = 0.0;
-				} motor3;
-				struct
-				{
-					double k_P = 0.0;
-					double k_I = 0.0;
-					double k_D = 0.0;
-					double k_FF = 0.0;
-					double k_IZone = 0.0;
-				} motor4;
-			} Drive;
-			struct
-			{
-				struct
-				{
-					double k_P = 0.0;
-					double k_I = 0.0;
-					double k_D = 0.0;
-					double k_FF = 0.0;
-					double k_IZone = 0.0;
-				} motor1;
-				struct
-				{
-					double k_P = 0.0;
-					double k_I = 0.0;
-					double k_D = 0.0;
-					double k_FF = 0.0;
-					double k_IZone = 0.0;
-				} motor2;
-				struct
-				{
-					double k_P = 0.0;
-					double k_I = 0.0;
-					double k_D = 0.0;
-					double k_FF = 0.0;
-					double k_IZone = 0.0;
-				} motor3;
-				struct
-				{
-					double k_P = 0.0;
-					double k_I = 0.0;
-					double k_D = 0.0;
-					double k_FF = 0.0;
-					double k_IZone = 0.0;
-				} motor4;
-			} Steer;
-		double k_maxOutput = 1.0;
-		double k_minOutput = -1.0;
-		} PID;
-          struct{
+    struct {
+          struct {
+               struct {
+                    struct {
+                         double k_P = 0.0;
+                         double k_I = 0.0;
+                         double k_D = 0.0;
+                         double k_FF = 0.0;
+                         double k_IZone = 0.0;
+                    } motor1;
+
+                    struct {
+                         double k_P = 0.0;
+                         double k_I = 0.0;
+                         double k_D = 0.0;
+                         double k_FF = 0.0;
+                         double k_IZone = 0.0;
+                    } motor2;
+
+                    struct {
+                         double k_P = 0.0;
+                         double k_I = 0.0;
+                         double k_D = 0.0;
+                         double k_FF = 0.0;
+                         double k_IZone = 0.0;
+                    } motor3;
+
+                    struct {
+                         double k_P = 0.0;
+                         double k_I = 0.0;
+                         double k_D = 0.0;
+                         double k_FF = 0.0;
+                         double k_IZone = 0.0;
+                    } motor4;
+               } Drive;
+
+               struct {
+                    struct {
+                         double k_P = 0.0;
+                         double k_I = 0.0;
+                         double k_D = 0.0;
+                         double k_FF = 0.0;
+                         double k_IZone = 0.0;
+                    } motor1;
+
+                    struct {
+                         double k_P = 0.0;
+                         double k_I = 0.0;
+                         double k_D = 0.0;
+                         double k_FF = 0.0;
+                         double k_IZone = 0.0;
+                    } motor2;
+
+                    struct {
+                         double k_P = 0.0;
+                         double k_I = 0.0;
+                         double k_D = 0.0;
+                         double k_FF = 0.0;
+                         double k_IZone = 0.0;
+                    } motor3;
+
+                    struct {
+                         double k_P = 0.0;
+                         double k_I = 0.0;
+                         double k_D = 0.0;
+                         double k_FF = 0.0;
+                         double k_IZone = 0.0;
+                    } motor4;
+               } Steer;
+
+               double k_maxOutput = 1.0;
+               double k_minOutput = -1.0;
+          } PID;
+
+          struct {
                double Encoder1GlobalOffset = 0.0;
                double Encoder2GlobalOffset = 0.0;
                double Encoder3GlobalOffset = 0.0;
                double Encoder4GlobalOffset = 0.0;
           } Encoders;
-    } config;
+     } config;
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
     rev::CANSparkMax &currentController = Drivetrain::mDriveMotor1;

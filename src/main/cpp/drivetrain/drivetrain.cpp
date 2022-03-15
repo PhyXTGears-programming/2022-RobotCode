@@ -38,9 +38,9 @@ nt::NetworkTableEntry PIDposition;
 
 #define RAD_TO_DEG(deg) ((deg / M_PI) / 180)
 
-#define DEG_TO_ROT(deg) (deg/360)
+#define DEG_TO_ROT(deg) (deg / 360.0)
 
-#define RAD_TO_ROT(rad) ((rad / M_PI) / 2)
+#define RAD_TO_ROT(rad) ((rad) / (M_PI * 2.0))
 
 //feet to inches (1ft = 12in), then to centimeters (1in = 2.54cm), then to meters (1cm = 0.01m) = 0.3048ft = 1meter
 #define FEET_TO_METERS(feet) (feet * 0.3048)
