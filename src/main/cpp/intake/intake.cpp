@@ -20,6 +20,8 @@ void Intake::extend () {
 
     mExtendRight.Set(true);
     mExtendLeft.Set(true);
+
+    mIsExtended = true;
 }
 
 void Intake::retract () {
@@ -28,6 +30,8 @@ void Intake::retract () {
     
     mRetractRight.Set(true);
     mRetractLeft.Set(true);
+
+    mIsExtended = false;
 }
 
 bool Intake::isExtended () {
