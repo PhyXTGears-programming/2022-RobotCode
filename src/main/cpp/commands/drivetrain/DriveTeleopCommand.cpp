@@ -9,11 +9,11 @@
 
 #include "constants/constants.h"
 
-#define JOYSTICK_DEADZONE 0.1
+#define JOYSTICK_DEADZONE 0.3
 #define MAKE_VALUE_FULL_RANGE(deadzonedInput) (1 / (1 - JOYSTICK_DEADZONE) * (deadzonedInput - std::copysign(JOYSTICK_DEADZONE, deadzonedInput)))
 #define DEADZONE(input) ((fabs(input) < JOYSTICK_DEADZONE) ? 0.0 : MAKE_VALUE_FULL_RANGE(input))
 
-#define HYPOTENUSE_PYTHAGORUS(x, y) (sqrt((x * x) + (y * y)))
+#define HYPOTENUSE_PYTHAGORUS(x, y) (sqrt(((x) * (x)) + ((y) * (y))))
 
 #define BOUNDS 1.0f
 
@@ -51,15 +51,14 @@ void DriveTeleopCommand::Execute()
     angle = DriveTeleopCommand::theeta(m_LeftX, m_LeftY);
     radius = DriveTeleopCommand::cartToPolar(m_LeftX, m_LeftY);
 
-    if ((m_LeftX == 0) && (m_LeftY == 0))
-    {
+    if ((m_LeftX == 0) && (m_LeftY == 0)) {
         radius = 0;
+    } else {
+        mDrivetrain->setHeadingRadians(angle);
+        mDrivetrain->setVelocityMeters(radius);
+        //mDrivetrain->setSpinDegreesPerSecond(m_RightX * 45);
+        mDrivetrain->setWheels();
     }
-
-    mDrivetrain->setHeadingRadians(angle);
-    mDrivetrain->setVelocityMeters(radius);
-    mDrivetrain->setSpinDegreesPerSecond(m_RightX * 45);
-    mDrivetrain->setWheels();
 }
 
 void DriveTeleopCommand::End(bool interrupted)

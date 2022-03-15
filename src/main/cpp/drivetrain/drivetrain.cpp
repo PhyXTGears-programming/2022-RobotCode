@@ -15,6 +15,9 @@
 
 #include "RobotCompileModes.h" //set all robot modes here
 
+#include <frc/DriverStation.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include <iostream>
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
@@ -202,6 +205,11 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     mRelEncoder3.SetVelocityConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR / 60.0);
     mRelEncoder4.SetVelocityConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR / 60.0);
 
+    mSteerEncoder1.SetPosition(std::remainder(mSteerEncoder1.GetPosition(), 360.0));
+    mSteerEncoder2.SetPosition(std::remainder(mSteerEncoder2.GetPosition(), 360.0));
+    mSteerEncoder3.SetPosition(std::remainder(mSteerEncoder3.GetPosition(), 360.0));
+    mSteerEncoder4.SetPosition(std::remainder(mSteerEncoder4.GetPosition(), 360.0));
+
     // Initialize the current angle for relative encoders.
     Drivetrain::InitialOffsetAngle1 = DEG_TO_RAD(Drivetrain::mSteerEncoder1.GetPosition());
     Drivetrain::InitialOffsetAngle2 = DEG_TO_RAD(Drivetrain::mSteerEncoder2.GetPosition());
@@ -212,6 +220,64 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     mRelEncoder2.SetPosition(InitialOffsetAngle2);
     mRelEncoder3.SetPosition(InitialOffsetAngle3);
     mRelEncoder4.SetPosition(InitialOffsetAngle4);
+
+    // Create text fields for dashboard input.
+    frc::SmartDashboard::PutNumber("Set Steer FR Angle (deg)", 0.0);
+
+    frc::SmartDashboard::PutNumber("Set Steer FR PID P", config.PID.Steer.motor1.k_P);
+    frc::SmartDashboard::PutNumber("Set Steer FR PID I", config.PID.Steer.motor1.k_I);
+    frc::SmartDashboard::PutNumber("Set Steer FR PID D", config.PID.Steer.motor1.k_D);
+    frc::SmartDashboard::PutNumber("Set Steer FR PID FF", config.PID.Steer.motor1.k_FF);
+}
+
+void updateNumberFromDashboard(std::string_view name, double & target, std::function<void(double)> onChange) {
+    double desired = frc::SmartDashboard::GetNumber(name, target);
+
+    if (desired != target) {
+        target = desired;
+        onChange(target);
+    }
+}
+
+void Drivetrain::Periodic()
+{
+    frc::SmartDashboard::PutNumber("Steer FR Abs", mSteerEncoder1.GetPosition());
+    frc::SmartDashboard::PutNumber("Steer BR Abs", mSteerEncoder2.GetPosition());
+    frc::SmartDashboard::PutNumber("Steer BL Abs", mSteerEncoder3.GetPosition());
+    frc::SmartDashboard::PutNumber("Steer FL Abs", mSteerEncoder4.GetPosition());
+
+    frc::SmartDashboard::PutNumber("Steer FR Rel", RAD_TO_DEG(mRelEncoder1.GetPosition()));
+    frc::SmartDashboard::PutNumber("Steer BR Rel", RAD_TO_DEG(mRelEncoder2.GetPosition()));
+    frc::SmartDashboard::PutNumber("Steer BL Rel", RAD_TO_DEG(mRelEncoder3.GetPosition()));
+    frc::SmartDashboard::PutNumber("Steer FL Rel", RAD_TO_DEG(mRelEncoder4.GetPosition()));
+
+    frc::SmartDashboard::PutNumber("Steer FR Amps", mSteerMotor1.GetOutputCurrent());
+
+    frc::SmartDashboard::PutNumber("Steer FR PID P", mPID_SteerMotor1.GetP());
+    frc::SmartDashboard::PutNumber("Steer FR PID I", mPID_SteerMotor1.GetI());
+    frc::SmartDashboard::PutNumber("Steer FR PID D", mPID_SteerMotor1.GetD());
+    frc::SmartDashboard::PutNumber("Steer FR PID FF", mPID_SteerMotor1.GetFF());
+
+    static double targetAngleDeg = mRelEncoder1.GetPosition();
+    updateNumberFromDashboard("Set Steer FR Angle (deg)", targetAngleDeg, [this](double angleDeg) {
+        if (frc::DriverStation::IsTeleopEnabled()) {
+            setHeadingRadians(DEG_TO_RAD(angleDeg));
+        }
+    });
+
+    frc::SmartDashboard::PutNumber("Steer FR Angle (deg)", targetAngleDeg - mSteerEncoder1.GetPosition());
+
+    static double targetP = mPID_SteerMotor1.GetP();
+    updateNumberFromDashboard("Set Steer FR PID P", targetP, [this](double p) { this->mPID_SteerMotor1.SetP(p); });
+
+    static double targetI = mPID_SteerMotor1.GetI();
+    updateNumberFromDashboard("Set Steer FR PID I", targetI, [this](double i) { this->mPID_SteerMotor1.SetI(i); });
+
+    static double targetD = mPID_SteerMotor1.GetD();
+    updateNumberFromDashboard("Set Steer FR PID D", targetD, [this](double d) { this->mPID_SteerMotor1.SetD(d); });
+
+    static double targetFF = mPID_SteerMotor1.GetFF();
+    updateNumberFromDashboard("Set Steer FR PID FF", targetFF, [this](double ff) { this->mPID_SteerMotor1.SetFF(ff); });
 }
 
 void Drivetrain::setPidValues(rev::SparkMaxPIDController PIDController, double k_P,
@@ -294,6 +360,13 @@ void Drivetrain::setWheelMotorSpeeds(std::vector<double> speeds)
     mPID_DriveMotor4.SetReference(ROBOT_SPEED_TO_MOTOR_SPEED(speeds[3] * constants::kMaxWheelSpeed), rev::CANSparkMax::ControlType::kVelocity);
 }
 
+void Drivetrain::setWheelMotorSpeeds(DriveLayout<double> & speeds) {
+    mPID_DriveMotor1.SetReference(ROBOT_SPEED_TO_MOTOR_SPEED(speeds.frontRight) * constants::kMaxWheelSpeed, rev::CANSparkMax::ControlType::kVelocity);
+    mPID_DriveMotor2.SetReference(ROBOT_SPEED_TO_MOTOR_SPEED(speeds.backRight)  * constants::kMaxWheelSpeed, rev::CANSparkMax::ControlType::kVelocity);
+    mPID_DriveMotor3.SetReference(ROBOT_SPEED_TO_MOTOR_SPEED(speeds.backLeft)   * constants::kMaxWheelSpeed, rev::CANSparkMax::ControlType::kVelocity);
+    mPID_DriveMotor4.SetReference(ROBOT_SPEED_TO_MOTOR_SPEED(speeds.frontLeft)  * constants::kMaxWheelSpeed, rev::CANSparkMax::ControlType::kVelocity);
+}
+
 void Drivetrain::setWheelMotorAngles(std::vector<double> angles)
 {
     mPID_SteerMotor1.SetReference(angles[0], rev::CANSparkMax::ControlType::kPosition);//front left
@@ -317,7 +390,6 @@ void Drivetrain::turnOffMotors()
 void Drivetrain::setWheels()
 {
     Drivetrain::setWheelMotorAngles(Drivetrain::getWheelDirection(Drivetrain::mVelocityMetersCentric, Drivetrain::mRotationRadiansCentric, Drivetrain::mSpinRobotVelocity, 0));
-    // Drivetrain::setWheelMotorAngles(std::vector<double>{0,0,0,0});
     Drivetrain::setWheelMotorSpeeds(Drivetrain::getWheelSpeeds(Drivetrain::mVelocityMetersCentric, Drivetrain::mRotationRadiansCentric, Drivetrain::mSpinRobotVelocity, 0));
 }
 

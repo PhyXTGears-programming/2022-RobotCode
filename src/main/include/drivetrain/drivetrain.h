@@ -21,10 +21,25 @@
      |3   ↑   2|
 */
 
+struct WheelPose {
+     double speed;  // Velocity of drivewheel in m/s.
+     double angle;  // Angle in radians where zero is +Y, and rotation is clockwise.
+};
+
+template <typename T>
+struct DriveLayout {
+     T frontLeft;
+     T frontRight;
+     T backLeft;
+     T backRight;
+};
+
 class Drivetrain : public frc2::SubsystemBase
 {
 public:
     Drivetrain (std::shared_ptr<cpptoml::table> toml); // constructor
+
+    void Periodic() override;
 
     /**
          * @brief used to turn the swerve modules to have a heading centric to the field in radians (put in terms of pi)
@@ -147,10 +162,13 @@ private:
     std::vector<double> getWheelSpeeds(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
     //gets the angle of the drive modules in radians (from -pi to +pi)
     std::vector<double> getWheelDirection(double speed, double angle, double clockwiseSpin, double centerFieldAngle);
+    DriveLayout<WheelPose> getDriveLayout(double fwd, double strafe, double clockwiseSpin, double robotHeading);
     //control the motor controller speeds
     void setWheelMotorSpeeds(std::vector<double> speeds);
+    void setWheelMotorSpeeds(DriveLayout<double> & speeds);
     //control the motor controller angles
     void setWheelMotorAngles(std::vector<double> angles);
+    void setWheelMotorAngles(DriveLayout<double> & angles);
 
     double findMod(double a, double b);
 
@@ -191,6 +209,12 @@ private:
     rev::SparkMaxPIDController mPID_SteerMotor2 = Drivetrain::mSteerMotor2.GetPIDController();
     rev::SparkMaxPIDController mPID_SteerMotor3 = Drivetrain::mSteerMotor3.GetPIDController();
     rev::SparkMaxPIDController mPID_SteerMotor4 = Drivetrain::mSteerMotor4.GetPIDController();
+
+    // Initialize the relative encoders built into the spark maxes and neos.
+    rev::SparkMaxRelativeEncoder mRelEncoder1 = mSteerMotor1.GetEncoder();
+    rev::SparkMaxRelativeEncoder mRelEncoder2 = mSteerMotor2.GetEncoder();
+    rev::SparkMaxRelativeEncoder mRelEncoder3 = mSteerMotor3.GetEncoder();
+    rev::SparkMaxRelativeEncoder mRelEncoder4 = mSteerMotor4.GetEncoder();
 
     ctre::phoenix::sensors::CANCoder mSteerEncoder1{interfaces::kSteerEncoder1};
     ctre::phoenix::sensors::CANCoder mSteerEncoder2{interfaces::kSteerEncoder2};

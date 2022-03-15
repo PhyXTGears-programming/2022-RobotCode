@@ -24,6 +24,8 @@ void Robot::RobotInit()
     frc::SmartDashboard::PutString("Robot mode", "TESTING, RobotCompileModes.h");
 #endif
 
+    std::cout << std::fixed;
+
     std::string deployDir = frc::filesystem::GetDeployDirectory();
     std::shared_ptr<cpptoml::table> toml = LoadConfig( deployDir + "/config.toml");
     mIntake = new Intake(toml->get_table("intake"));

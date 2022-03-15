@@ -44,16 +44,16 @@ restingExtension = 0.0
     k_minOutput = -1.0
         [drivetrain.PID.Drive]
             [drivetrain.PID.Drive.Motor1]
-                k_P = 0.0
-                k_I = 0.0
+                k_P = 6e-5
+                k_I = 1e-6
                 k_D = 0.0
-                k_FF = 0.0
+                k_FF = 0.000015
                 k_IZone = 0.0
             [drivetrain.PID.Drive.Motor2]
-                k_P = 0.0
-                k_I = 0.0
+                k_P = 6e-5
+                k_I = 1e-6
                 k_D = 0.0
-                k_FF = 0.0
+                k_FF = 0.000015
                 k_IZone = 0.0
             [drivetrain.PID.Drive.Motor3]
                 k_P = 6e-5

@@ -6,7 +6,7 @@
 
 
 //grabs the offset from the encoders and applies it to the angle
-#define INCLUDE_ABSOLUTE_OFFSET
+//#define INCLUDE_ABSOLUTE_OFFSET
 //makes sure the rotations stay within pi to -pi
 //#define INCLUDE_ROTATION_NORMALIZE
 
@@ -91,7 +91,7 @@ std::vector<double> Drivetrain::getWheelDirection(double speed, double angle, do
     double WheelAngle4 = (atan2(A, C));
 #endif // !INCLUDE_ABSOLUTE_OFFSET
 
-    std::vector<double> wheelSpeeds{ WheelAngle1, WheelAngle2, WheelAngle3, WheelAngle4 };
+    std::vector<double> wheelAngles{ WheelAngle1, WheelAngle2, WheelAngle3, WheelAngle4 };
 
 #ifdef INCLUDE_ROTATION_NORMALIZE
     //normalize to be within -pi and pi
@@ -105,7 +105,34 @@ std::vector<double> Drivetrain::getWheelDirection(double speed, double angle, do
     }
 #endif // INCLUDE_ROTATION_NORMALIZE
 
-    return wheelSpeeds;
+    return wheelAngles;
+}
+
+DriveLayout<WheelPose> Drivetrain::getDriveLayout(double fwd, double strafe, double clockwiseSpin, double robotHeading = 0.0) 
+{
+    double a = strafe - clockwiseSpin * (constants::kWheelBase  / constants::kDiameter);
+    double b = strafe + clockwiseSpin * (constants::kWheelBase  / constants::kDiameter);
+    double c = fwd    - clockwiseSpin * (constants::kTrackWidth / constants::kDiameter);
+    double d = fwd    + clockwiseSpin * (constants::kTrackWidth / constants::kDiameter);
+
+    // Wheel Speed Front Right, Front Left, Back Left, and Back Right.
+    double wsfr = std::sqrt(b * b + c * c);
+    double wsfl = std::sqrt(b * b + d * d);
+    double wsbl = std::sqrt(a * a + d * d);
+    double wsbr = std::sqrt(a * a + c * c);
+
+    double wafr = atan2(b, c);
+    double wafl = atan2(b, d);
+    double wabl = atan2(a, d);
+    double wabr = atan2(a, c);
+
+    // return DrivePose
+    return {
+        /* front left  */ { wsfl, wafl },
+        /* front right */ { wsfr, wafr },
+        /* back  left  */ { wsbl, wabl },
+        /* back  right */ { wsbr, wabr },
+    };
 }
 
 
