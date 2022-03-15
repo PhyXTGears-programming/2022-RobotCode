@@ -208,6 +208,10 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     Drivetrain::InitialOffsetAngle3 = DEG_TO_RAD(Drivetrain::mSteerEncoder3.GetPosition());
     Drivetrain::InitialOffsetAngle4 = DEG_TO_RAD(Drivetrain::mSteerEncoder4.GetPosition());
 
+    mRelEncoder1.SetPosition(InitialOffsetAngle1);
+    mRelEncoder2.SetPosition(InitialOffsetAngle2);
+    mRelEncoder3.SetPosition(InitialOffsetAngle3);
+    mRelEncoder4.SetPosition(InitialOffsetAngle4);
 }
 
 void Drivetrain::setPidValues(rev::SparkMaxPIDController PIDController, double k_P,
