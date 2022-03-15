@@ -62,7 +62,8 @@ void DriveTeleopCommand::Execute()
     {
         radius = 0;
     }
-    mDrivetrain->setHeadingDegrees(angle);
+
+    mDrivetrain->setHeadingRadians(angle);
     mDrivetrain->setVelocityMeters(radius);
     mDrivetrain->setSpinDegreesPerSecond(m_RightX * 45);
     mDrivetrain->setWheels();
@@ -90,11 +91,10 @@ void DriveTeleopCommand::grabJoystickValues()
     mJoystickAxis[RIGHT_Y] = mJoystick->GetRightY();
 }
 
+// Take x and y components and compute angle in radians.
 double DriveTeleopCommand::theeta(double x, double y)
 {
-    double theta = atan2(y, x);
-    double angle = theta * (180.0 / M_PI);
-    return angle;
+    return atan2(y, x);
 }
 
 float DriveTeleopCommand::cartToPolar(float inputX, float inputY)
