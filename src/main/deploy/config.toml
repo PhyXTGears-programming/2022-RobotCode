@@ -43,17 +43,30 @@ liftRetraction = 1.0
 verticalArmAngle = 0.0
 
 [cycleCommand]
-initalExtension = 0.0
-liftExtension = 2.42
-armAngleForNextBar = 0.0
-extendToNextBarExtension = 0.0
-dropToNextBar = 0.0
-grabNextBarExtension = 0.0
-releaseRearBar = 0.0
-dropOffRearBar = 0.0
-extendToRearBar = 0.0
-armAngleVertical = 0.5
-restingExtension = 0.0
+# initalExtension = 0.0
+# liftExtension = 2.42
+# armAngleForNextBar = 0.0
+# extendToNextBarExtension = 0.0
+# dropToNextBar = 0.0
+# grabNextBarExtension = 0.0
+# releaseRearBar = 0.0
+# dropOffRearBar = 0.0
+# extendToRearBar = 0.0
+# armAngleVertical = 0.5
+# restingExtension = 0.0
+    [cycleCommand.cycle]
+    liftOffExtension = 0.0
+    backOffAngle = 0.0
+    nextBarAngle = 0.0
+    nextBarExtension = 0.0
+    dropToNextBarAngle = 0.0
+    grabNextBarExtension = 0.0
+    verticalArmAngle = 0.5
+    liftExtension = 2.42
+    toPreviousBarExtension = 0.0
+    zeroExtension = 0.0
+    releasePreviousBarExtension = 0.0
+    dropOffPreviousBarAngle = 0.0
 
 [drivetrain]
     [drivetrain.PID]
