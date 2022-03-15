@@ -12,6 +12,15 @@
 
 #include "RobotCompileModes.h"
 
+/*
+     Motor layout
+
+     |4   ↑   1|
+     |    ↑    |
+     |    ↑    |
+     |3   ↑   2|
+*/
+
 class Drivetrain : public frc2::SubsystemBase
 {
 public:
@@ -161,12 +170,6 @@ private:
 
 
 
-    /*
-    |1       2|
-    |         |
-    |         |
-    |4       3|
-    */
     //initialised the motors
 
     rev::CANSparkMax mDriveMotor1{interfaces::kDrive1, rev::CANSparkMax::MotorType::kBrushless};
