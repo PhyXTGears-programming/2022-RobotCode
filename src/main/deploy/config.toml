@@ -1,5 +1,5 @@
 [intake]
-rollerSpeed = 1.0
+rollerSpeed = 0.70
 extendTargetSpeed = 0.7
 intakeRetractedPosition = 0.0
 intakeExtendedPosition = 1.0
