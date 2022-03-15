@@ -1,13 +1,13 @@
 #pragma once
 
-#include "climber/climber.h"
+#include "climber/InnerReach.h"
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
 class RetractInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, RetractInnerArmsCommand> {
     public:
-        RetractInnerArmsCommand(Climber* climber, double targetExtension);
+        RetractInnerArmsCommand(ClimberInnerReach * innerArms, double targetExtension);
 
         void Initialize() override;
         void Execute() override;
@@ -15,6 +15,6 @@ class RetractInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Re
         bool IsFinished() override;
 
     private:
-        Climber * mClimber;
+        ClimberInnerReach * mInnerArms;
         double mTargetExtension;
 };

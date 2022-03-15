@@ -2,13 +2,14 @@
 
 #include "cpptoml.h"
 
-#include "climber/climber.h"
+#include "climber/InnerReach.h"
+#include "climber/InnerRotate.h"
 
 #include <frc2/command/SequentialCommandGroup.h>
 
 class ClimbMidBarOnly {
     public:
-        ClimbMidBarOnly(Climber * climber, std::shared_ptr<cpptoml::table> toml);
+        ClimbMidBarOnly(ClimberInnerReach * innerArms, ClimberInnerRotate * innerRotate, std::shared_ptr<cpptoml::table> toml);
 
         
         frc2::SequentialCommandGroup * mReachMidBar = nullptr;

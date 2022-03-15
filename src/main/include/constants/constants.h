@@ -19,4 +19,7 @@ namespace constants
 
     const double kMaxWheelSpeed = 4.5; //meters per sec
 
+    namespace climb {
+        const double kAcceptablePositionError = 0.3;
+    }
 }

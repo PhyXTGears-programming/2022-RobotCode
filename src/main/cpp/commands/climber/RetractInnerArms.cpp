@@ -2,32 +2,35 @@
 
 const double kAcceptableExtensionError = 0.05;
 
-RetractInnerArmsCommand::RetractInnerArmsCommand(Climber * climber, double targetExtension) {
-    AddRequirements(climber);
-    mClimber = climber;
+RetractInnerArmsCommand::RetractInnerArmsCommand(ClimberInnerReach * innerArms, double targetExtension) {
+    AddRequirements(innerArms);
+    mInnerArms = innerArms;
     mTargetExtension = targetExtension;
 }
 
 void RetractInnerArmsCommand::Initialize() {}
 
 void RetractInnerArmsCommand::Execute() {
-    if (mClimber->isInner1NearTarget(mTargetExtension)) {
-        mClimber->stopInner1();
+    bool is1NearTarget = mInnerArms->isMotor1NearTarget(mTargetExtension);
+    bool is2NearTarget = mInnerArms->isMotor2NearTarget(mTargetExtension);
+    
+    if (is1NearTarget) {
+        mInnerArms->stop1();
     } else {
-        mClimber->retractInner1();
+        mInnerArms->retract1();
     }
-    if (mClimber->isInner2NearTarget(mTargetExtension)) {
-        mClimber->stopInner2();
+    if (is2NearTarget) {
+        mInnerArms->stop2();
     } else {
-        mClimber->retractInner2();
+        mInnerArms->retract2();
     }
 }
 
 void RetractInnerArmsCommand::End(bool isInterrupted) {
-    mClimber->stopInner1();
-    mClimber->stopInner2();
+    mInnerArms->stop1();
+    mInnerArms->stop2();
 }
 
 bool RetractInnerArmsCommand::IsFinished() {
-    return mClimber->isInner1NearTarget(mTargetExtension) && mClimber->isInner2NearTarget(mTargetExtension);
+    return mInnerArms->isMotor1NearTarget(mTargetExtension) && mInnerArms->isMotor2NearTarget(mTargetExtension);
 }

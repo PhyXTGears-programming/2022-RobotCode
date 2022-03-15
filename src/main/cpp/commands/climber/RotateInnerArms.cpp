@@ -6,32 +6,32 @@ const double kMinSpeed = 0.2;
 const double kMaxSpeed = 0.2;
 
 
-RotateInnerArmsCommand::RotateInnerArmsCommand(Climber * climber, double targetAngle) {
-    AddRequirements(climber);
-    mClimber = climber;
+RotateInnerArmsCommand::RotateInnerArmsCommand(ClimberInnerRotate * innerArms, double targetAngle) {
+    AddRequirements(innerArms);
+    mInnerArms = innerArms;
     mTargetAngle = targetAngle;
 }
 
 void RotateInnerArmsCommand::Initialize() {
-    mClimber->setRotateMotorsBrake();
+    mInnerArms->setMotorBrake();
 }
 
 void RotateInnerArmsCommand::Execute() {
     // Angles are not radians or degrees.  They are duty cycle values...
     // somewhere between -1.0 and 1.0 it seems.  So use error to set direction
     // of rotation, (+) is lean forward, (-) is lean backward.
-    double armAngle = mClimber->getInnerAngle();
+    double armAngle = mInnerArms->getAngle();
     double err = mTargetAngle - armAngle;
     double speed = std::copysign(kMinSpeed, err);
-    mClimber->rotateInner(speed);
+    mInnerArms->rotate(speed);
 }
 
 void RotateInnerArmsCommand::End(bool isInterrupted) {
-    mClimber->rotateInner(0.0);
+    mInnerArms->stop();
 }
 
 bool RotateInnerArmsCommand::IsFinished() {
-    double armAngle = mClimber->getInnerAngle();
+    double armAngle = mInnerArms->getAngle();
     double err = mTargetAngle - armAngle;
     return abs(err) < kAcceptableAngleError;
 }
