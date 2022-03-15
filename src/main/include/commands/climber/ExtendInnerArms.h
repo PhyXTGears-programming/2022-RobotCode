@@ -7,7 +7,7 @@
 
 class ExtendInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, ExtendInnerArmsCommand> {
     public:
-        ExtendInnerArmsCommand(InnerReach* innerArms, double targetExtension);
+        ExtendInnerArmsCommand(ClimberInnerReach* innerArms, double targetExtension);
 
         void Initialize() override;
         void Execute() override;
@@ -15,6 +15,6 @@ class ExtendInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Ext
         bool IsFinished() override;
 
     private:
-        InnerReach * mInnerArms;
+        ClimberInnerReach * mInnerArms;
         double mTargetExtension;
 };

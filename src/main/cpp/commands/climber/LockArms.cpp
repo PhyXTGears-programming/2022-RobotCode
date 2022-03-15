@@ -1,6 +1,6 @@
 #include "commands/climber/LockArms.h"
 
-LockArmsCommand::LockArmsCommand(InnerReach * innerArms) {
+LockArmsCommand::LockArmsCommand(ClimberInnerReach * innerArms) {
     AddRequirements(innerArms);
     mInnerArms = innerArms;
 }

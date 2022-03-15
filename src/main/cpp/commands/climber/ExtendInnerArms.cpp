@@ -1,6 +1,6 @@
 #include "commands/climber/ExtendInnerArms.h"
 
-ExtendInnerArmsCommand::ExtendInnerArmsCommand(InnerReach * innerArms, double targetExtension) {
+ExtendInnerArmsCommand::ExtendInnerArmsCommand(ClimberInnerReach * innerArms, double targetExtension) {
     AddRequirements(innerArms);
     mInnerArms = innerArms;
     mTargetExtension = targetExtension;

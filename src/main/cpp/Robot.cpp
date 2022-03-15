@@ -28,10 +28,10 @@ void Robot::RobotInit()
     driverController = new frc::XboxController(interfaces::kXBoxDriver);
     operatorController = new frc::XboxController(interfaces::kXBoxOperator);
   
-    mInnerReach = new InnerReach(toml->get_table("climber"));
-    mInnerRotate = new InnerRotate(toml->get_table("climber"));
-    mOuterReach = new OuterReach(toml->get_table("climber"));
-    mOuterRotate = new OuterRotate(toml->get_table("climber"));
+    mInnerReach = new ClimberInnerReach(toml->get_table("climber"));
+    mInnerRotate = new ClimberInnerRotate(toml->get_table("climber"));
+    mOuterReach = new ClimberOuterReach(toml->get_table("climber"));
+    mOuterRotate = new ClimberOuterRotate(toml->get_table("climber"));
     mIntake = new Intake(toml->get_table("intake"));
     mShooter = new Shooter(toml->get_table("shooter"));
     mSwerveDrive = new SwerveDrive(false);

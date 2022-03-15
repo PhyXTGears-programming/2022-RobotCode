@@ -8,9 +8,9 @@
 #include "constants/interfaces.h"
 #include "constants/constants.h"
 
-class OuterReach : public frc2::SubsystemBase {
+class ClimberOuterReach : public frc2::SubsystemBase {
     public:
-        OuterReach(std::shared_ptr<cpptoml::table> toml);
+        ClimberOuterReach(std::shared_ptr<cpptoml::table> toml);
 
         void extend1();
         void extend2();

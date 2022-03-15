@@ -8,7 +8,7 @@
 
 class ManualExtendCommand : public frc2::CommandHelper<frc2::CommandBase, ManualExtendCommand> {
     public:
-        ManualExtendCommand(InnerReach * innerArms);
+        ManualExtendCommand(ClimberInnerReach * innerArms);
 
         void Initialize() override;
         void Execute() override;
@@ -16,7 +16,7 @@ class ManualExtendCommand : public frc2::CommandHelper<frc2::CommandBase, Manual
         bool IsFinished() override;
 
     private:
-        InnerReach * mInnerArms;
+        ClimberInnerReach * mInnerArms;
         const double kTargetExtension = 10.0;
         const double kRestingExtension = 0.0;
 

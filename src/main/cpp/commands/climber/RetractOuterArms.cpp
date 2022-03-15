@@ -2,7 +2,7 @@
 
 const double kAcceptableExtensionError = 0.05;
 
-RetractOuterArmsCommand::RetractOuterArmsCommand(OuterReach * outerArms, double targetExtension) {
+RetractOuterArmsCommand::RetractOuterArmsCommand(ClimberOuterReach * outerArms, double targetExtension) {
     AddRequirements(outerArms);
     mOuterArms = outerArms;
     mTargetExtension = targetExtension;

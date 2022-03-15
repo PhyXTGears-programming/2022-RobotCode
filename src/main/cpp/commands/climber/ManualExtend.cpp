@@ -1,6 +1,6 @@
 #include "commands/climber/ManualExtend.h"
 
-ManualExtendCommand::ManualExtendCommand(InnerReach * innerArms) {
+ManualExtendCommand::ManualExtendCommand(ClimberInnerReach * innerArms) {
     AddRequirements(innerArms);
     mInnerArms = innerArms;
     

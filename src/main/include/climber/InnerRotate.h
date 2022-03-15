@@ -7,9 +7,9 @@
 #include "cpptoml.h"
 #include "constants/interfaces.h"
 
-class InnerRotate : public frc2::SubsystemBase {
+class ClimberInnerRotate : public frc2::SubsystemBase {
     public:
-        InnerRotate(std::shared_ptr<cpptoml::table> toml);
+        ClimberInnerRotate(std::shared_ptr<cpptoml::table> toml);
 
         void rotate(double speed);
         void stop();

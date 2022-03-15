@@ -9,7 +9,7 @@
 
 class ClimbMidBarOnly {
     public:
-        ClimbMidBarOnly(InnerReach * innerArms, InnerRotate * innerRotate, std::shared_ptr<cpptoml::table> toml);
+        ClimbMidBarOnly(ClimberInnerReach * innerArms, ClimberInnerRotate * innerRotate, std::shared_ptr<cpptoml::table> toml);
 
         
         frc2::SequentialCommandGroup * mReachMidBar = nullptr;

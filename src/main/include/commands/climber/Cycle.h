@@ -22,7 +22,7 @@
 
 class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
     public:
-        Cycle(InnerReach * innerReach, InnerRotate * innerRotate, OuterReach * outerReach, OuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
+        Cycle(ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
 
         void Initialize() override;
         void Execute() override;
@@ -30,10 +30,10 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
         bool IsFinished() override;
 
     private:
-        InnerReach * mInnerReach = nullptr;
-        OuterReach * mOuterReach = nullptr;
-        InnerRotate * mInnerRotate = nullptr;
-        OuterRotate * mOuterRotate = nullptr;
+        ClimberInnerReach * mInnerReach = nullptr;
+        ClimberOuterReach * mOuterReach = nullptr;
+        ClimberInnerRotate * mInnerRotate = nullptr;
+        ClimberOuterRotate * mOuterRotate = nullptr;
 
         enum CycleState {HIGH, TRAVERSE, INOPERATIVE = -1};
         CycleState mGoal = HIGH;

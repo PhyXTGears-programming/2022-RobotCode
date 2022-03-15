@@ -59,10 +59,10 @@ private:
     frc::XboxController * driverController = nullptr;
     frc::XboxController * operatorController = nullptr;
 
-    InnerReach * mInnerReach = nullptr;
-    InnerRotate * mInnerRotate = nullptr;
-    OuterReach * mOuterReach = nullptr;
-    OuterRotate * mOuterRotate = nullptr;
+    ClimberInnerReach * mInnerReach = nullptr;
+    ClimberInnerRotate * mInnerRotate = nullptr;
+    ClimberOuterReach * mOuterReach = nullptr;
+    ClimberOuterRotate * mOuterRotate = nullptr;
     Intake *mIntake = nullptr;
     Shooter *mShooter = nullptr;
     SwerveDrive * mSwerveDrive = nullptr;

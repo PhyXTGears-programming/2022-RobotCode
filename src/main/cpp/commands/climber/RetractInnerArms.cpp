@@ -2,7 +2,7 @@
 
 const double kAcceptableExtensionError = 0.05;
 
-RetractInnerArmsCommand::RetractInnerArmsCommand(InnerReach * innerArms, double targetExtension) {
+RetractInnerArmsCommand::RetractInnerArmsCommand(ClimberInnerReach * innerArms, double targetExtension) {
     AddRequirements(innerArms);
     mInnerArms = innerArms;
     mTargetExtension = targetExtension;

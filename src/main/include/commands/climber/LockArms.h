@@ -7,7 +7,7 @@
 
 class LockArmsCommand : public frc2::CommandHelper<frc2::CommandBase, LockArmsCommand> {
     public:
-        LockArmsCommand(InnerReach * innerArms);
+        LockArmsCommand(ClimberInnerReach * innerArms);
 
         void Initialize() override;
         void Execute() override;
@@ -15,5 +15,5 @@ class LockArmsCommand : public frc2::CommandHelper<frc2::CommandBase, LockArmsCo
         bool IsFinished() override;
 
     private:
-        InnerReach * mInnerArms;
+        ClimberInnerReach * mInnerArms;
 };

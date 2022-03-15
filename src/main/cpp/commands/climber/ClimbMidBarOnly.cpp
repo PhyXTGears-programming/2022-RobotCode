@@ -10,7 +10,7 @@
 // DO NOT SCHEDULE THIS CLASS.  It is a container for related commands.  Use
 // mReachMidBar and mClimbMidbarAndLock directly.
 
-ClimbMidBarOnly::ClimbMidBarOnly(InnerReach * innerArms, InnerRotate * innerRotate, std::shared_ptr<cpptoml::table> toml) {
+ClimbMidBarOnly::ClimbMidBarOnly(ClimberInnerReach * innerArms, ClimberInnerRotate * innerRotate, std::shared_ptr<cpptoml::table> toml) {
     config.initialExtension = toml->get_qualified_as<double>("initialExtension").value_or(config.initialExtension);
     config.liftRetraction = toml->get_qualified_as<double>("liftRetraction").value_or(config.liftRetraction);
     config.verticalArmAngle = toml->get_qualified_as<double>("verticalArmAngle").value_or(config.verticalArmAngle);

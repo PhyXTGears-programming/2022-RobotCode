@@ -7,7 +7,7 @@
 
 class RetractInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, RetractInnerArmsCommand> {
     public:
-        RetractInnerArmsCommand(InnerReach * innerArms, double targetExtension);
+        RetractInnerArmsCommand(ClimberInnerReach * innerArms, double targetExtension);
 
         void Initialize() override;
         void Execute() override;
@@ -15,6 +15,6 @@ class RetractInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Re
         bool IsFinished() override;
 
     private:
-        InnerReach * mInnerArms;
+        ClimberInnerReach * mInnerArms;
         double mTargetExtension;
 };

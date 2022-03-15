@@ -8,7 +8,7 @@
 
 class RotateInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, RotateInnerArmsCommand> {
     public:
-        RotateInnerArmsCommand(InnerRotate * innerArms, double targetAngle);
+        RotateInnerArmsCommand(ClimberInnerRotate * innerArms, double targetAngle);
 
         void Initialize() override;
         void Execute() override;
@@ -16,6 +16,6 @@ class RotateInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Rot
         bool IsFinished() override;
 
     private:
-        InnerRotate * mInnerArms;
+        ClimberInnerRotate * mInnerArms;
         double mTargetAngle;
 };

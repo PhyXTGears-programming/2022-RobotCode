@@ -2,7 +2,7 @@
 
 const double kAcceptableExtensionError = 0.05;
 
-ExtendOuterArmsCommand::ExtendOuterArmsCommand(OuterReach * outerArms, double targetExtension) {
+ExtendOuterArmsCommand::ExtendOuterArmsCommand(ClimberOuterReach * outerArms, double targetExtension) {
     AddRequirements(outerArms);
     mOuterArms = outerArms;
     mTargetExtension = targetExtension;

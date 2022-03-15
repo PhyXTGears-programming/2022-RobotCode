@@ -6,7 +6,7 @@ const double kMinSpeed = 0.2;
 const double kMaxSpeed = 0.2;
 
 
-RotateInnerArmsCommand::RotateInnerArmsCommand(InnerRotate * innerArms, double targetAngle) {
+RotateInnerArmsCommand::RotateInnerArmsCommand(ClimberInnerRotate * innerArms, double targetAngle) {
     AddRequirements(innerArms);
     mInnerArms = innerArms;
     mTargetAngle = targetAngle;

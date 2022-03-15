@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-OuterReach::OuterReach(std::shared_ptr<cpptoml::table> toml) {
+ClimberOuterReach::ClimberOuterReach(std::shared_ptr<cpptoml::table> toml) {
     config.extendSpeed = toml->get_qualified_as<double>("extendSpeed").value_or(0.5);
     config.retractSpeed = toml->get_qualified_as<double>("retractSpeed").value_or(-0.5);
     config.inchesPerRevolution = toml->get_qualified_as<double>("inchesPerRevolution").value_or(0.128325);
@@ -19,17 +19,17 @@ OuterReach::OuterReach(std::shared_ptr<cpptoml::table> toml) {
     mEncoder2.SetPosition(0.0);
 }
 
-void OuterReach::extend1() {
+void ClimberOuterReach::extend1() {
     double bonus = std::copysign(config.friction.outerStaticFriction, config.extendSpeed);
     mMotor1.Set(config.extendSpeed + bonus);
 }
 
-void OuterReach::extend2() {
+void ClimberOuterReach::extend2() {
     double bonus = std::copysign(config.friction.outerStaticFriction, config.extendSpeed);
     mMotor2.Set(config.extendSpeed + bonus);
 }
 
-void OuterReach::retract1() {
+void ClimberOuterReach::retract1() {
     double bonus = (mIsUnderLoad)
         ? config.friction.outerStaticFrictionWithLoad
         : config.friction.outerStaticFriction;
@@ -39,7 +39,7 @@ void OuterReach::retract1() {
     mMotor1.Set(config.retractSpeed + bonus);
 }
 
-void OuterReach::retract2() {
+void ClimberOuterReach::retract2() {
     double bonus = (mIsUnderLoad)
         ? config.friction.outerStaticFrictionWithLoad
         : config.friction.outerStaticFriction;
@@ -49,30 +49,30 @@ void OuterReach::retract2() {
     mMotor2.Set(config.retractSpeed + bonus);
 }
 
-void OuterReach::stop1() {
+void ClimberOuterReach::stop1() {
     mMotor1.Set(0.0);
 }
 
-void OuterReach::stop2() {
+void ClimberOuterReach::stop2() {
     mMotor2.Set(0.0);
 }
 
-double OuterReach::getMotor1Position() {
+double ClimberOuterReach::getMotor1Position() {
     return (mEncoder1.GetPosition() * config.inchesPerRevolution);
 }
 
-double OuterReach::getMotor2Position() {
+double ClimberOuterReach::getMotor2Position() {
     return (mEncoder2.GetPosition() * config.inchesPerRevolution);
 }
 
-bool OuterReach::isMotor1NearTarget(double target) {
+bool ClimberOuterReach::isMotor1NearTarget(double target) {
     return std::abs(target - getMotor1Position()) < constants::climb::kAcceptablePositionError;
 }
 
-bool OuterReach::isMotor2NearTarget(double target) {
+bool ClimberOuterReach::isMotor2NearTarget(double target) {
     return std::abs(target - getMotor2Position()) < constants::climb::kAcceptablePositionError;
 }
 
-void OuterReach::setUnderLoad(bool isUnderLoad) {
+void ClimberOuterReach::setUnderLoad(bool isUnderLoad) {
     mIsUnderLoad = isUnderLoad;
 }
