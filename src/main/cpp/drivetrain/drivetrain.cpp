@@ -45,8 +45,10 @@ nt::NetworkTableEntry PIDposition;
 //feet to inches (1ft = 12in), then to centimeters (1in = 2.54cm), then to meters (1cm = 0.01m) = 0.3048ft = 1meter
 #define FEET_TO_METERS(feet) (feet * 0.3048)
 
+#define STEER_MOTOR_FACTOR 56.00    // 56.00 revolutions of steering motor = 1 revolution of steering wheel
+
 //the motor revolutions and the wheel revolutions for steering are not the same, so we have to multiply it by this number to get a single revolution
-#define MOTOR_TURN_CONVERSION_FACTOR(rad) ((RAD_TO_ROT(rad)) * 55.75) //was in radians, now in rotations (-pi to pi)
+#define MOTOR_TURN_CONVERSION_FACTOR(rad) ((RAD_TO_ROT(rad)) * STEER_MOTOR_FACTOR) //was in radians, now in rotations (-pi to pi)
 
 //radius of the swerve modeule drive wheel
 #define DRIVE_WHEEL_RADIUS 0.0381 //done in meters
