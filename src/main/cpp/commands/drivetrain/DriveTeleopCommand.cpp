@@ -44,9 +44,9 @@ void DriveTeleopCommand::Execute()
 {
     grabJoystickValues();
 
-    double m_LeftX = DEADZONE(mJoystickAxis[LEFT_X]);
-    double m_LeftY = DEADZONE(mJoystickAxis[LEFT_Y]);
-    double m_RightX = DEADZONE(mJoystickAxis[RIGHT_X]);
+    double m_LeftX = -DEADZONE(mJoystickAxis[LEFT_X]);
+    double m_LeftY = -DEADZONE(mJoystickAxis[LEFT_Y]);
+    double m_RightX = -DEADZONE(mJoystickAxis[RIGHT_X]);
     // double m_RightY = DEADZONE(mJoystickAxis[3]);
     angle = DriveTeleopCommand::theeta(m_LeftX, m_LeftY);
     radius = DriveTeleopCommand::cartToPolar(m_LeftX, m_LeftY);
