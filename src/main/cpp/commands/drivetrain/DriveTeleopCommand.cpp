@@ -50,14 +50,7 @@ void DriveTeleopCommand::Execute()
     // double m_RightY = DEADZONE(mJoystickAxis[3]);
     angle = DriveTeleopCommand::theeta(m_LeftX, m_LeftY);
     radius = DriveTeleopCommand::cartToPolar(m_LeftX, m_LeftY);
-    if (isnan(angle))
-    {
-        angle = prevGoodAngle;
-    }
-    else
-    {
-        prevGoodAngle = angle;
-    }
+
     if ((m_LeftX == 0) && (m_LeftY == 0))
     {
         radius = 0;
