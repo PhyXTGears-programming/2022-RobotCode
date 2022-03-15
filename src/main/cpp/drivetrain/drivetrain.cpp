@@ -126,6 +126,8 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     Drivetrain::config.PID.Steer.motor4.k_FF = toml->get_qualified_as<double>("PID.Steer.Motor4.k_FF").value_or(config.PID.Steer.motor4.k_FF);
     Drivetrain::config.PID.Steer.motor4.k_IZone = toml->get_qualified_as<double>("PID.Steer.Motor4.k_IZone").value_or(config.PID.Steer.motor4.k_IZone);
 
+    Drivetrain::config.PID.Steer.k_maxOutput = toml->get_qualified_as<double>("PID.Steer.k_maxOutput").value_or(config.PID.Steer.k_maxOutput);
+    Drivetrain::config.PID.Steer.k_minOutput = toml->get_qualified_as<double>("PID.Steer.k_minOutput").value_or(config.PID.Steer.k_minOutput);
     
     Drivetrain::config.PID.k_maxOutput = toml->get_qualified_as<double>("PID.k_maxOutput").value_or(config.PID.k_maxOutput);
     Drivetrain::config.PID.k_minOutput = toml->get_qualified_as<double>("PID.k_minOutput").value_or(config.PID.k_minOutput);
@@ -160,10 +162,10 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     Drivetrain::setPidValues(mPID_DriveMotor3, config.PID.Drive.motor3.k_P, config.PID.Drive.motor3.k_I, config.PID.Drive.motor3.k_D, config.PID.Drive.motor3.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "DriveMotor3", config.PID.Drive.motor3.k_IZone);
     Drivetrain::setPidValues(mPID_DriveMotor4, config.PID.Drive.motor4.k_P, config.PID.Drive.motor4.k_I, config.PID.Drive.motor4.k_D, config.PID.Drive.motor4.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "DriveMotor4", config.PID.Drive.motor4.k_IZone);
     //initial steering PID values
-    Drivetrain::setPidValues(mPID_SteerMotor1, config.PID.Steer.motor1.k_P, config.PID.Steer.motor1.k_I, config.PID.Steer.motor1.k_D, config.PID.Steer.motor1.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor1", config.PID.Steer.motor1.k_IZone);
-    Drivetrain::setPidValues(mPID_SteerMotor2, config.PID.Steer.motor2.k_P, config.PID.Steer.motor2.k_I, config.PID.Steer.motor2.k_D, config.PID.Steer.motor2.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor2", config.PID.Steer.motor2.k_IZone);
-    Drivetrain::setPidValues(mPID_SteerMotor3, config.PID.Steer.motor3.k_P, config.PID.Steer.motor3.k_I, config.PID.Steer.motor3.k_D, config.PID.Steer.motor3.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor3", config.PID.Steer.motor3.k_IZone);
-    Drivetrain::setPidValues(mPID_SteerMotor4, config.PID.Steer.motor4.k_P, config.PID.Steer.motor4.k_I, config.PID.Steer.motor4.k_D, config.PID.Steer.motor4.k_FF, config.PID.k_minOutput, config.PID.k_maxOutput, "SteerMotor4", config.PID.Steer.motor4.k_IZone);
+    Drivetrain::setPidValues(mPID_SteerMotor1, config.PID.Steer.motor1.k_P, config.PID.Steer.motor1.k_I, config.PID.Steer.motor1.k_D, config.PID.Steer.motor1.k_FF, config.PID.Steer.k_minOutput, config.PID.Steer.k_maxOutput, "SteerMotor1", config.PID.Steer.motor1.k_IZone);
+    Drivetrain::setPidValues(mPID_SteerMotor2, config.PID.Steer.motor2.k_P, config.PID.Steer.motor2.k_I, config.PID.Steer.motor2.k_D, config.PID.Steer.motor2.k_FF, config.PID.Steer.k_minOutput, config.PID.Steer.k_maxOutput, "SteerMotor2", config.PID.Steer.motor2.k_IZone);
+    Drivetrain::setPidValues(mPID_SteerMotor3, config.PID.Steer.motor3.k_P, config.PID.Steer.motor3.k_I, config.PID.Steer.motor3.k_D, config.PID.Steer.motor3.k_FF, config.PID.Steer.k_minOutput, config.PID.Steer.k_maxOutput, "SteerMotor3", config.PID.Steer.motor3.k_IZone);
+    Drivetrain::setPidValues(mPID_SteerMotor4, config.PID.Steer.motor4.k_P, config.PID.Steer.motor4.k_I, config.PID.Steer.motor4.k_D, config.PID.Steer.motor4.k_FF, config.PID.Steer.k_minOutput, config.PID.Steer.k_maxOutput, "SteerMotor4", config.PID.Steer.motor4.k_IZone);
 
     //makes all encoders absolutely positioned
     mSteerEncoder1.SetPositionToAbsolute();

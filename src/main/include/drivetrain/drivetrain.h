@@ -240,7 +240,10 @@ private:
                     } motor4;
                } Drive;
 
-               struct {
+               struct {  // Steer
+                    double k_maxOutput = 1.0;
+                    double k_minOutput = -1.0;
+
                     struct {
                          double k_P = 0.0;
                          double k_I = 0.0;

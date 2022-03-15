@@ -68,6 +68,8 @@ restingExtension = 0.0
                 k_FF = 0.000015
                 k_IZone = 0.0
         [drivetrain.PID.Steer]
+            k_maxOutput =  0.7
+            k_minOutput = -0.7
             [drivetrain.PID.Steer.Motor1]
                 k_P  = 0.25
                 k_I  = 0.0005
