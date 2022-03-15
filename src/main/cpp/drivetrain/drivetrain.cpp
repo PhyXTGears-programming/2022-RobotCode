@@ -208,10 +208,6 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     Drivetrain::InitialOffsetAngle3 = DEG_TO_RAD(Drivetrain::mSteerEncoder3.GetPosition());
     Drivetrain::InitialOffsetAngle4 = DEG_TO_RAD(Drivetrain::mSteerEncoder4.GetPosition());
 
-    std::cout << DEG_TO_RAD(Drivetrain::mSteerEncoder1.GetPosition()) << std::endl;
-    std::cout << DEG_TO_RAD(Drivetrain::mSteerEncoder2.GetPosition()) << std::endl;
-    std::cout << DEG_TO_RAD(Drivetrain::mSteerEncoder3.GetPosition()) << std::endl;
-    std::cout << DEG_TO_RAD(Drivetrain::mSteerEncoder4.GetPosition()) << std::endl;
 }
 
 void Drivetrain::setPidValues(rev::SparkMaxPIDController PIDController, double k_P,
@@ -288,11 +284,6 @@ void Drivetrain::setSpinDegreesPerSecond(double degreesPerSecond)
 
 void Drivetrain::setWheelMotorSpeeds(std::vector<double> speeds)
 {
-    std::cout << "Speed 1: " << speeds[0] << std::endl;
-    std::cout << "Speed 2: " << speeds[1] << std::endl;
-    std::cout << "Speed 3: " << speeds[2] << std::endl;
-    std::cout << "Speed 4: " << speeds[3] << std::endl;
-
     mPID_DriveMotor1.SetReference(ROBOT_SPEED_TO_MOTOR_SPEED(speeds[0] * constants::kMaxWheelSpeed), rev::CANSparkMax::ControlType::kVelocity);
     mPID_DriveMotor2.SetReference(ROBOT_SPEED_TO_MOTOR_SPEED(speeds[1] * constants::kMaxWheelSpeed), rev::CANSparkMax::ControlType::kVelocity);
     mPID_DriveMotor3.SetReference(ROBOT_SPEED_TO_MOTOR_SPEED(speeds[2] * constants::kMaxWheelSpeed), rev::CANSparkMax::ControlType::kVelocity);
@@ -301,20 +292,10 @@ void Drivetrain::setWheelMotorSpeeds(std::vector<double> speeds)
 
 void Drivetrain::setWheelMotorAngles(std::vector<double> angles)
 {
-    std::cout << "Angle 1: " << MOTOR_TURN_CONVERSION_FACTOR(angles[0]) << std::endl;
-    std::cout << "Angle 2: " << MOTOR_TURN_CONVERSION_FACTOR(angles[1]) << std::endl;
-    std::cout << "Angle 3: " << MOTOR_TURN_CONVERSION_FACTOR(angles[2]) << std::endl;
-    std::cout << "Angle 4: " << MOTOR_TURN_CONVERSION_FACTOR(angles[3]) << std::endl;
-
     mPID_SteerMotor1.SetReference(angles[0], rev::CANSparkMax::ControlType::kPosition);//front left
     mPID_SteerMotor2.SetReference(angles[1], rev::CANSparkMax::ControlType::kPosition);//front right
     mPID_SteerMotor3.SetReference(angles[2], rev::CANSparkMax::ControlType::kPosition);//back right
     mPID_SteerMotor4.SetReference(angles[3], rev::CANSparkMax::ControlType::kPosition);//back left
-
-    // std::cout << mSteerMotor1.GetEncoder().GetPosition();
-    // std::cout << mSteerMotor2.GetEncoder().GetPosition();
-    // std::cout << mSteerMotor3.GetEncoder().GetPosition();
-    // std::cout << mSteerMotor4.GetEncoder().GetPosition();
 }
 
 void Drivetrain::turnOffMotors()

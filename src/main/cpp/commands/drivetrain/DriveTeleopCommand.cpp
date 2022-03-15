@@ -42,7 +42,6 @@ void DriveTeleopCommand::Initialize()
 
 void DriveTeleopCommand::Execute()
 {
-    std::cout << "execute" << std::endl;
     grabJoystickValues();
 
     double m_LeftX = DEADZONE(mJoystickAxis[LEFT_X]);
