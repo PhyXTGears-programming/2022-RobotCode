@@ -36,7 +36,7 @@ nt::NetworkTableEntry PIDposition;
 
 #define DEG_TO_RAD(deg) ((deg / 180.0) * M_PI)
 
-#define RAD_TO_DEG(deg) ((deg / M_PI) / 180)
+#define RAD_TO_DEG(rad) ((rad) / M_PI * 180.0)
 
 #define DEG_TO_ROT(deg) (deg / 360.0)
 
@@ -51,11 +51,11 @@ nt::NetworkTableEntry PIDposition;
 //radius of the swerve modeule drive wheel
 #define DRIVE_WHEEL_RADIUS 0.0381 //done in meters
 #define GEARING_RATIO 5.25
-//the conversion from the floor speed to the motor's speed (outputted in meters per second, goes to morot RPMs)
-//meters per second to rotations per second (of the wheel, omega) is MPS/radius (speed/radius)
-//wheel-rps to motor-rps is Wheel-RPS/gear-ratio (omega-wheel*gear-ratio)
-//motor-rps to motor-rpm is Motor-rps/60 (omega-motor*seconds-per-minute)
-#define ROBOT_SPEED_TO_MOTOR_SPEED(speed) (((speed/DRIVE_WHEEL_RADIUS)*GEARING_RATIO)*60)
+// the conversion from the floor speed (m/s) to the motor's speed (rpm)
+// meters per second to rotations per second (of the wheel, omega) is MPS/radius (speed/radius)
+// wheel-rps to motor-rps is Wheel-RPS*gear-ratio (omega-wheel*gear-ratio)
+// motor-rps to motor-rpm is Motor-rps*60 (omega-motor*seconds-per-minute)
+#define ROBOT_SPEED_TO_MOTOR_SPEED(speed) ((speed) / (2 * M_PI * DRIVE_WHEEL_RADIUS) * GEARING_RATIO * 60)
 
 Tables tables;
 
