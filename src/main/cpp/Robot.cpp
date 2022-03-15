@@ -232,7 +232,7 @@ void Robot::TeleopPeriodic()
     }
 
     if (180 == operatorController->GetPOV()) { // Check down button
-      mClimbMidbarOnly->mClimbMidBarAndLock->Schedule();
+      mClimbMidbarOnly->mClimbMidBar->Schedule();
     }
 
     if (270 == operatorController->GetPOV()) { // Check left button
