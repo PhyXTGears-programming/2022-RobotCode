@@ -66,6 +66,7 @@ private:
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
     ShootCommand *mShootCommand = nullptr;
+    
     RunIntakeCommand *mRunIntakeCommand = nullptr;
     RetractIntakeCommand *mRetractIntakeCommand = nullptr;
     ExtendIntakeCommand *mExtendIntakeCommand = nullptr;

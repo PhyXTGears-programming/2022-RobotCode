@@ -16,11 +16,6 @@ public:
 
 private:
 
-    // Wow you found the PFVICIYPSMWEI ()
-    //      __  __
-    //     / o--o  \
-    //    |   U    |
-
     Intake* mIntake;
 
 };

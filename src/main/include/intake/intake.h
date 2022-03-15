@@ -23,8 +23,10 @@ public:
 private:
     rev::CANSparkMax mRollerMotor {interfaces::kRollerMotor, rev::CANSparkMaxLowLevel::MotorType::kBrushless}; // the motor that turns the rollers to pull the ball in
     
-    frc::Solenoid mExtend {frc::PneumaticsModuleType::CTREPCM, interfaces::kIntakeExtend};
-    frc::Solenoid mRetract {frc::PneumaticsModuleType::CTREPCM, interfaces::kIntakeRetract};
+    frc::Solenoid mExtendLeft {frc::PneumaticsModuleType::CTREPCM, interfaces::kIntakeExtendLeft};
+    frc::Solenoid mRetractLeft {frc::PneumaticsModuleType::CTREPCM, interfaces::kIntakeRetractLeft};
+    frc::Solenoid mExtendRight {frc::PneumaticsModuleType::CTREPCM, interfaces::kIntakeExtendRight};
+    frc::Solenoid mRetractRight {frc::PneumaticsModuleType::CTREPCM, interfaces::kIntakeRetractRight};
 
     bool mIsExtended = false;
 

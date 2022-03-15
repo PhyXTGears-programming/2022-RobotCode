@@ -112,6 +112,8 @@ namespace interfaces
         // Solenoids
         const int kAIR0 = 0;
         const int kAIR1 = 1;
+        const int kAIR2 = 2;
+        const int kAIR3 = 3;
     }
 
     /*
@@ -141,8 +143,17 @@ namespace interfaces
     const int kDeployServo1 = kPWM6;
     const int kDeployServo2 = kPWM7;
 
-    const int kIntakeExtend = kAIR0;
-    const int kIntakeRetract = kAIR1;
+
+    /*  
+        /OO(rollers)00\
+Intake: |             |
+       0,1           2,3
+        V Back of Bot V
+    */
+    const int kIntakeExtendLeft = kAIR0;
+    const int kIntakeRetractLeft = kAIR1;
+    const int kIntakeExtendRight = kAIR2;
+    const int kIntakeRetractRight = kAIR3;
 
     //shooter CAN assignment (block 3)
     const int kShooterMotor = kCAN30;

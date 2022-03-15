@@ -15,13 +15,19 @@ void Intake::stopRollers () {
 }
 
 void Intake::extend () {
-    mRetract.Set(false);
-    mExtend.Set(true);
+    mRetractRight.Set(false);
+    mRetractLeft.Set(false);
+
+    mExtendRight.Set(true);
+    mExtendLeft.Set(true);
 }
 
 void Intake::retract () {
-    mExtend.Set(false);
-    mRetract.Set(true);
+    mExtendRight.Set(false);
+    mExtendLeft.Set(false);
+    
+    mRetractRight.Set(true);
+    mRetractLeft.Set(true);
 }
 
 bool Intake::isExtended () {
