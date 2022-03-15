@@ -13,7 +13,7 @@ class ClimbMidBarOnly {
 
         
         frc2::SequentialCommandGroup * mReachMidBar = nullptr;
-        frc2::SequentialCommandGroup * mClimbMidBarAndLock = nullptr;
+        frc2::SequentialCommandGroup * mClimbMidBar = nullptr;
 
     private:
         struct {
