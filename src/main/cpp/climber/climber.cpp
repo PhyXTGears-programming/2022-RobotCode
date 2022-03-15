@@ -4,7 +4,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-const double kAcceptablePositionError = 0.3;
+const double kAcceptablePositionError = 0.5;
 
 Climber::Climber(std::shared_ptr<cpptoml::table> toml) {
     config.servo1.unlockPosition = toml->get_qualified_as<double>("servo1.unlockPosition").value_or(0.0);
@@ -137,6 +137,14 @@ void Climber::runInner1(double speed) {
 
 void Climber::runInner2(double speed) {
     mInnerHookMotor2.Set(speed);
+}
+
+void Climber::runOuter1(double speed) {
+    mOuterHookMotor1.Set(speed);
+}
+
+void Climber::runOuter2(double speed) {
+    mOuterHookMotor2.Set(speed);
 }
 
 void Climber::lockArms() {

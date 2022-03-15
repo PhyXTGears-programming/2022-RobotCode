@@ -6,6 +6,7 @@ intakeExtendedPosition = 1.0
 
 [shooter]
 speed.near = 2400 # RPM
+speed.auto = 2200 # RPM
 speed.far = 2750
 motor.p = 0.0005
 motor.i = 0.0
@@ -23,17 +24,17 @@ servo1.lockPosition = 0.2
 servo2.unlockPosition = 0.65
 servo2.lockPosition = 1.0
 
-extendSpeed = 0.45
-retractSpeed = -0.45
+extendSpeed = -0.45
+retractSpeed = 0.45
 inchesPerRevolution = 0.128325 # equal to 2.5665 / 20, meaning 2.5665 inches per 20 revolutions
 innerStaticFriction = 0.05 # actual value unknown
-outerStaticFriction = 0.00 # actual value unknown
+outerStaticFriction = 0.05 # actual value unknown
 innerStaticFrictionWithLoad = 0.25 # actual value unknown
-outerStaticFrictionWithLoad = 0.0 # actual value unknown
+outerStaticFrictionWithLoad = 0.25 # actual value unknown
 
 [command.climb.midbar]
 initialExtension = 16.0
-liftRetraction = 5.0
+liftRetraction = 1.0
 verticalArmAngle = 0.0
 
 [cycleCommand]

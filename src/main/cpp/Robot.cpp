@@ -38,55 +38,56 @@ void Robot::RobotInit()
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
     mShootCommand = new ShootCommand(mShooter);
 
-    mManualRetractInnerArms = new frc2::FunctionalCommand(
+    mManualRetractOuterArms = new frc2::FunctionalCommand(
         [&]() {},
         [&]() {
-            bool isInner1NearTarget = mClimber->isInner1NearTarget(0.0);
-            bool isInner2NearTarget = mClimber->isInner2NearTarget(0.0);
+            bool isOuter1NearTarget = mClimber->isOuter1NearTarget(0.0);
+            bool isOuter2NearTarget = mClimber->isOuter2NearTarget(0.0);
 
-            if (isInner1NearTarget) {
-                mClimber->stopInner1();
+            if (isOuter1NearTarget) {
+                mClimber->stopOuter1();
             } else {
-                mClimber->runInner1(0.2);
+                mClimber->runOuter1(0.4);
             }
 
-            if (isInner2NearTarget) {
-                mClimber->stopInner2();
+            if (isOuter2NearTarget) {
+                mClimber->stopOuter2();
             } else {
-                mClimber->runInner2(0.2);
+                mClimber->runOuter2(0.4);
             }
         },
         [&](bool) {
-            mClimber->stopInner1();
-            mClimber->stopInner2();
+            mClimber->stopOuter1();
+            mClimber->stopOuter2();
         },
-        [&]() { return mClimber->isInner1NearTarget(0.0) || mClimber->isInner2NearTarget(0.0); },
+        [&]() { return mClimber->isOuter1NearTarget(0.0) || mClimber->isOuter2NearTarget(0.0); },
         { mClimber }
     );
 
-    mManualExtendInnerArms = new frc2::FunctionalCommand(
+    mManualExtendOuterArms = new frc2::FunctionalCommand(
         [&]() {},
         [&]() {
-            bool isInner1NearTarget = mClimber->isInner1NearTarget(20.0);
-            bool isInner2NearTarget = mClimber->isInner2NearTarget(20.0);
+            bool isOuter1NearTarget = mClimber->isOuter1NearTarget(20.0);
+            bool isOuter2NearTarget = mClimber->isOuter2NearTarget(20.0);
 
-            if (isInner1NearTarget) {
-                mClimber->stopInner1();
+            if (isOuter1NearTarget) {
+                mClimber->stopOuter1();
             } else {
-                mClimber->runInner1(-0.2);
+                mClimber->runOuter1(-0.4);
             }
 
-            if (isInner2NearTarget) {
-                mClimber->stopInner2();
+            if (isOuter2NearTarget) {
+                mClimber->stopOuter2();
             } else {
-                mClimber->runInner2(-0.2);
+                mClimber->runOuter2(-0.4);
             }
         },
         [&](bool) {
-            mClimber->stopInner1();
-            mClimber->stopInner2();
+            mClimber->stopOuter1();
+            mClimber->stopOuter2();
         },
-        [&]() { return mClimber->isInner1NearTarget(20.0) || mClimber->isInner2NearTarget(20.0); },
+        
+        [&]() { return mClimber->isOuter1NearTarget(20.0) || mClimber->isOuter2NearTarget(20.0); },
         { mClimber }
     );
 
@@ -104,6 +105,13 @@ void Robot::RobotInit()
         { mShooter }
     );
 
+    
+    mShootAuto = new frc2::StartEndCommand(
+        [&]() { mShooter->shootAuto(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
+
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
@@ -113,7 +121,7 @@ void Robot::RobotInit()
             [](){},
             [&](){
                 // Turn slightly right to compensate for drift/drag.
-                mSwerveDrive->setMotion(0, -0.5, -0.03);
+                mSwerveDrive->setMotion(0, -0.5, -0.035);
             },
             [&](bool _interrupted){ 
                 mSwerveDrive->setMotion(0, 0, 0); //stop swerve
@@ -226,15 +234,21 @@ void Robot::TeleopPeriodic()
     double opY = operatorController->GetLeftY();
     opY = fabs(opY) < 0.3 ? 0.0 : opY;
     if (opY < 0.0) {
-        mManualRetractInnerArms->Schedule();
+        // mManualRetractOuterArms->Schedule();
+        mClimber->runOuter1(0.2);
+        mClimber->runOuter2(0.2);
     } else if (opY > 0.0) {
-        mManualExtendInnerArms->Schedule();
+        mClimber->runOuter1(-0.2);
+        mClimber->runOuter2(-0.2);
+        // mManualExtendOuterArms->Schedule();
     } else {
-        if (mManualRetractInnerArms->IsScheduled()) {
-            mManualRetractInnerArms->Cancel();
-        } else if (mManualExtendInnerArms->IsScheduled()) {
-            mManualExtendInnerArms->Cancel();
-        }
+        mClimber->stopOuter1();
+        mClimber->stopOuter2();
+        // if (mManualRetractOuterArms->IsScheduled()) {
+        //     mManualRetractOuterArms->Cancel();
+        // } else if (mManualExtendOuterArms->IsScheduled()) {
+        //     mManualExtendOuterArms->Cancel();
+        // }
     }
 }
 

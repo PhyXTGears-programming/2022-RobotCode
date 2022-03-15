@@ -3,6 +3,11 @@
 #include "commands/climber/ExtendInnerArms.h"
 #include "commands/climber/RetractInnerArms.h"
 #include "commands/climber/RotateInnerArms.h"
+
+#include "commands/climber/ExtendOuterArms.h"
+#include "commands/climber/RetractOuterArms.h"
+#include "commands/climber/RotateOuterArms.h"
+
 #include "commands/climber/LockArms.h"
 
 #include <frc2/command/InstantCommand.h>
@@ -18,23 +23,21 @@ ClimbMidBarOnly::ClimbMidBarOnly(Climber * climber, std::shared_ptr<cpptoml::tab
     mReachMidBar = new frc2::SequentialCommandGroup(
         frc2::InstantCommand {
             [=]() {
-                climber->unlockArms();
-                climber->setInnerUnderLoad(false);
+                climber->setOuterUnderLoad(false);
             },
             { climber }
         },
-        RotateInnerArmsCommand { climber, config.verticalArmAngle },
-        ExtendInnerArmsCommand { climber, config.initialExtension }
+        // RotateOuterArmsCommand { climber, config.verticalArmAngle },
+        ExtendOuterArmsCommand { climber, config.initialExtension }
     );
 
     mClimbMidBarAndLock = new frc2::SequentialCommandGroup(
         frc2::InstantCommand {
             [=] () {
-                climber->setInnerUnderLoad(true);
+                climber->setOuterUnderLoad(true);
             },
             { climber }
         },
-        RetractInnerArmsCommand { climber, config.liftRetraction },
-        LockArmsCommand { climber }
+        RetractOuterArmsCommand { climber, config.liftRetraction }
     );
 }
