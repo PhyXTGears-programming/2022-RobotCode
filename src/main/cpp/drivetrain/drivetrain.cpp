@@ -47,9 +47,6 @@ nt::NetworkTableEntry PIDposition;
 
 #define STEER_MOTOR_FACTOR 56.00    // 56.00 revolutions of steering motor = 1 revolution of steering wheel
 
-//the motor revolutions and the wheel revolutions for steering are not the same, so we have to multiply it by this number to get a single revolution
-#define MOTOR_TURN_CONVERSION_FACTOR(rad) ((RAD_TO_ROT(rad)) * STEER_MOTOR_FACTOR) //was in radians, now in rotations (-pi to pi)
-
 //radius of the swerve modeule drive wheel
 #define DRIVE_WHEEL_RADIUS 0.0381 //done in meters
 #define GEARING_RATIO 5.25
@@ -193,6 +190,19 @@ Drivetrain::Drivetrain(std::shared_ptr<cpptoml::table> toml)
     Drivetrain::mSteerEncoder3.ConfigMagnetOffset((config.Encoders.Encoder3GlobalOffset));
     Drivetrain::mSteerEncoder4.ConfigMagnetOffset((config.Encoders.Encoder4GlobalOffset));
 
+    // Set the encoder position to use radians instead of revolutions.
+    mRelEncoder1.SetPositionConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR);
+    mRelEncoder2.SetPositionConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR);
+    mRelEncoder3.SetPositionConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR);
+    mRelEncoder4.SetPositionConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR);
+
+    // Set the encoder velocity from RPM to rad/s.
+    mRelEncoder1.SetVelocityConversionFactor(/* 1 rpm * */ 2.0 * M_PI / STEER_MOTOR_FACTOR / 60.0);
+    mRelEncoder2.SetVelocityConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR / 60.0);
+    mRelEncoder3.SetVelocityConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR / 60.0);
+    mRelEncoder4.SetVelocityConversionFactor(2.0 * M_PI / STEER_MOTOR_FACTOR / 60.0);
+
+    // Initialize the current angle for relative encoders.
     Drivetrain::InitialOffsetAngle1 = DEG_TO_RAD(Drivetrain::mSteerEncoder1.GetPosition());
     Drivetrain::InitialOffsetAngle2 = DEG_TO_RAD(Drivetrain::mSteerEncoder2.GetPosition());
     Drivetrain::InitialOffsetAngle3 = DEG_TO_RAD(Drivetrain::mSteerEncoder3.GetPosition());
@@ -296,10 +306,10 @@ void Drivetrain::setWheelMotorAngles(std::vector<double> angles)
     std::cout << "Angle 3: " << MOTOR_TURN_CONVERSION_FACTOR(angles[2]) << std::endl;
     std::cout << "Angle 4: " << MOTOR_TURN_CONVERSION_FACTOR(angles[3]) << std::endl;
 
-    mPID_SteerMotor1.SetReference(MOTOR_TURN_CONVERSION_FACTOR(angles[1]), rev::CANSparkMax::ControlType::kPosition);//front left
-    mPID_SteerMotor2.SetReference(MOTOR_TURN_CONVERSION_FACTOR(angles[0]), rev::CANSparkMax::ControlType::kPosition);//front right
-    mPID_SteerMotor3.SetReference(MOTOR_TURN_CONVERSION_FACTOR(angles[3]), rev::CANSparkMax::ControlType::kPosition);//back right
-    mPID_SteerMotor4.SetReference(MOTOR_TURN_CONVERSION_FACTOR(angles[2]), rev::CANSparkMax::ControlType::kPosition);//back left
+    mPID_SteerMotor1.SetReference(angles[0], rev::CANSparkMax::ControlType::kPosition);//front left
+    mPID_SteerMotor2.SetReference(angles[1], rev::CANSparkMax::ControlType::kPosition);//front right
+    mPID_SteerMotor3.SetReference(angles[2], rev::CANSparkMax::ControlType::kPosition);//back right
+    mPID_SteerMotor4.SetReference(angles[3], rev::CANSparkMax::ControlType::kPosition);//back left
 
     // std::cout << mSteerMotor1.GetEncoder().GetPosition();
     // std::cout << mSteerMotor2.GetEncoder().GetPosition();
