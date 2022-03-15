@@ -57,10 +57,10 @@ Cycle::Cycle(ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, C
         frc2::InstantCommand {[&]() { outerReach->setUnderLoad(false); }},
         ExtendOuterArmsCommand {outerReach, config.releaseRearBar},
         RotateOuterArmsCommand {outerRotate, config.dropOffRearBar},
-        ExtendOuterArmsCommand {outerReach, config.liftExtension}, // pulls arms in so they don't hit bar on next step
+        RetractOuterArmsCommand {outerReach, config.liftExtension}, // pulls arms in so they don't hit bar on next step
         frc2::ParallelCommandGroup { // extend and rotate to vertical to grab traversal with both sets of arms
             //LockArmsCommand {innerReach}, // this command stops the arms from extending or retracting
-            RetractOuterArmsCommand {outerReach, config.extendToNextBarExtension},
+            ExtendOuterArmsCommand {outerReach, config.initalExtension},
             RotateOuterArmsCommand {outerRotate, config.armAngleVertical}
         },
         frc2::InstantCommand {[&]() { outerReach->setUnderLoad(true); }},
