@@ -31,7 +31,7 @@ SwerveWheel::SwerveWheel (constants::swerve::WheelConstants constants)
     encoder = new ctre::phoenix::sensors::CANCoder(wheelSettings.encoderID);
     encoder->ConfigAbsoluteSensorRange(ctre::phoenix::sensors::AbsoluteSensorRange::Signed_PlusMinus180);
 
-    constexpr double conversionFactor = 2 * M_PI * 0.01816051; // motor rotations to module rad
+    constexpr double conversionFactor = 2.0 * M_PI / 56.0; // motor rotations to module rad
     turnEncoder->SetPositionConversionFactor(conversionFactor);
     turnEncoder->SetVelocityConversionFactor(conversionFactor / 60.0); // RPM to rad/s
 
