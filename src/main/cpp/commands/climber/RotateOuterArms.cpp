@@ -1,6 +1,8 @@
 #include "commands/climber/RotateOuterArms.h"
 #include "climber/lerp.h"
 
+#include <cmath>
+
 const double kAcceptableAngleError = 0.0001;
 const double kMinSpeed = 0.2;
 const double kMaxSpeed = 0.2;
@@ -33,5 +35,5 @@ void RotateOuterArmsCommand::End(bool isInterrupted) {
 bool RotateOuterArmsCommand::IsFinished() {
     double armAngle = mOuterArms->getAngle();
     double err = mTargetAngle - armAngle;
-    return abs(err) < kAcceptableAngleError;
+    return std::abs(err) < kAcceptableAngleError;
 }
