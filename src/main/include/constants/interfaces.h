@@ -112,8 +112,8 @@ namespace interfaces
         // Solenoids
         const int kAIR0 = 0;
         const int kAIR1 = 1;
-        const int kAIR2 = 2;
-        const int kAIR3 = 3;
+        const int kAIR6 = 6;
+        const int kAIR7 = 7;
     }
 
     /*
@@ -152,8 +152,8 @@ Intake: |             |
     */
     const int kIntakeExtendLeft = kAIR0;
     const int kIntakeRetractLeft = kAIR1;
-    const int kIntakeExtendRight = kAIR2;
-    const int kIntakeRetractRight = kAIR3;
+    const int kIntakeExtendRight = kAIR6;
+    const int kIntakeRetractRight = kAIR7;
 
     //shooter CAN assignment (block 3)
     const int kShooterMotor = kCAN30;
