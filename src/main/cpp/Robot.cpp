@@ -38,6 +38,8 @@ void Robot::RobotInit()
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
     mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
+    mExtendIntakeCommand = new ExtendIntakeCommand(mIntake);
+    mRetractIntakeCommand = new RetractIntakeCommand(mIntake);
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
     mShootCommand = new ShootCommand(mShooter);
 
@@ -210,6 +212,14 @@ void Robot::TeleopPeriodic()
         mRunIntakeCommand->Cancel();
     }
 
+    if (operatorController->GetRightBumperPressed()) {
+        if (mIntake->isExtended()) {
+            mRetractIntakeCommand->Schedule();
+        } else {
+            mExtendIntakeCommand->Schedule();
+        }
+    }
+
     //Climber
     if (0 == operatorController->GetPOV()) { // Check up button
         mClimbMidbarOnly->mReachMidBar->Schedule();
@@ -237,15 +247,9 @@ void Robot::TeleopPeriodic()
     opY = fabs(opY) < 0.3 ? 0.0 : opY;
     if (opY < 0.0) {
         // mManualRetractOuterArms->Schedule();
-        mClimber->runOuter1(0.2);
-        mClimber->runOuter2(0.2);
     } else if (opY > 0.0) {
-        mClimber->runOuter1(-0.2);
-        mClimber->runOuter2(-0.2);
         // mManualExtendOuterArms->Schedule();
     } else {
-        mClimber->stopOuter1();
-        mClimber->stopOuter2();
         // if (mManualRetractOuterArms->IsScheduled()) {
         //     mManualRetractOuterArms->Cancel();
         // } else if (mManualExtendOuterArms->IsScheduled()) {

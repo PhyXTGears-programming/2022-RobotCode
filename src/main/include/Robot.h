@@ -32,6 +32,8 @@
 #include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 #include "commands/shooter/ShootCommand.h"
 #include "commands/intake/RunIntake.h"
+#include "commands/intake/ExtendIntake.h"
+#include "commands/intake/RetractIntake.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -70,7 +72,11 @@ private:
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
     ShootCommand *mShootCommand = nullptr;
+    
     RunIntakeCommand *mRunIntakeCommand = nullptr;
+    RetractIntakeCommand *mRetractIntakeCommand = nullptr;
+    ExtendIntakeCommand *mExtendIntakeCommand = nullptr;
+
 
     frc2::FunctionalCommand *mManualRetractOuterArms = nullptr;
     frc2::FunctionalCommand *mManualExtendOuterArms = nullptr;
@@ -81,3 +87,6 @@ private:
 
     frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
 };
+
+// there is a hidden forg somewhere in the robot's code.
+//Where does the Prog Frog's Virtual Identity Clone to Infiltrate Your Programs and Scripts Maliciously and With Evil Intent (PFVICIYPSMWEI) seem to be now?
