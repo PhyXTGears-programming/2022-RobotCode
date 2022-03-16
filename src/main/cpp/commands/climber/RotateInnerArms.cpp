@@ -25,7 +25,14 @@ void RotateInnerArmsCommand::Execute() {
     double armAngle = mInnerArms->getAngle();
     double err = mTargetAngle - armAngle;
     double speed = std::copysign(kMinSpeed, err);
-    mInnerArms->rotate(speed);
+
+    if (mTargetAngle > 0 && err > 0) {
+        mInnerArms->rotate(speed);
+    } else if (mTargetAngle < 0 && err < 0) {
+        mInnerArms->rotate(speed);
+    } else {
+        mInnerArms->stop();
+    }
 }
 
 void RotateInnerArmsCommand::End(bool isInterrupted) {
