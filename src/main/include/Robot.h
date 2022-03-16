@@ -14,10 +14,13 @@
 
 #include <frc/XboxController.h>
 
+#include "commands/climber/ReachOuterArms.h"
 #include "commands/climber/ExtendInnerArms.h"
 #include "commands/climber/RetractInnerArms.h"
 #include "commands/climber/ExtendOuterArms.h"
 #include "commands/climber/RetractOuterArms.h"
+#include "commands/climber/RotateInnerArms.h"
+#include "commands/climber/RotateOuterArms.h"
 
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
