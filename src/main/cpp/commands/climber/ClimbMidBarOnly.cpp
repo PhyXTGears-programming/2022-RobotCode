@@ -20,7 +20,7 @@ ClimbMidBarOnly::ClimbMidBarOnly(ClimberInnerReach * innerArms, ClimberInnerRota
     config.liftRetraction = toml->get_qualified_as<double>("liftRetraction").value_or(config.liftRetraction);
     config.verticalArmAngle = toml->get_qualified_as<double>("verticalArmAngle").value_or(config.verticalArmAngle);
 
-    mReachMidBar = new frc2::SequentialCommandGroup(
+    mReachMidBar = new frc2::SequentialCommandGroup {
         frc2::InstantCommand {
             [=]() {
                 //innerArms->unlockArms();
@@ -30,16 +30,15 @@ ClimbMidBarOnly::ClimbMidBarOnly(ClimberInnerReach * innerArms, ClimberInnerRota
         },
         RotateInnerArmsCommand { innerRotate, config.verticalArmAngle },
         ExtendInnerArmsCommand { innerArms, config.initialExtension }
-    );
+    };
 
-    // mClimbMidBarAndLock = new frc2::SequentialCommandGroup(
-    //     frc2::InstantCommand {
-    //         [=] () {
-    //             innerArms->setUnderLoad(true);
-    //         },
-    //         { innerArms }
-    //     },
-    //     RetractInnerArmsCommand { innerArms, config.liftRetraction },
-    //     LockArmsCommand { innerArms }
-    // );
+    mClimbMidBar = new frc2::SequentialCommandGroup {
+        frc2::InstantCommand {
+            [=] () {
+                innerArms->setUnderLoad(true);
+            },
+            { innerArms }
+        },
+        RetractInnerArmsCommand { innerArms, config.liftRetraction },
+    };
 }

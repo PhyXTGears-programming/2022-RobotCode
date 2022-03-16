@@ -43,7 +43,7 @@ void Robot::RobotInit()
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
     mShootCommand = new ShootCommand(mShooter);
 
-    mManualRetractOuterArms = new frc2::FunctionalCommand(
+    mManualRetractInnerArms = new frc2::FunctionalCommand(
         [&]() {},
         [&]() {
             bool isInner1NearTarget = mInnerReach->isMotor1NearTarget(0.0);
@@ -69,7 +69,7 @@ void Robot::RobotInit()
         { mInnerReach }
     );
 
-    mManualExtendOuterArms = new frc2::FunctionalCommand(
+    mManualExtendInnerArms = new frc2::FunctionalCommand(
         [&]() {},
         [&]() {
             bool isInner1NearTarget = mInnerReach->isMotor1NearTarget(20.0);
@@ -232,7 +232,7 @@ void Robot::TeleopPeriodic()
     }
 
     if (180 == operatorController->GetPOV()) { // Check down button
-      mClimbMidbarOnly->mClimbMidBarAndLock->Schedule();
+      mClimbMidbarOnly->mClimbMidBar->Schedule();
     }
 
     if (270 == operatorController->GetPOV()) { // Check left button
@@ -241,20 +241,18 @@ void Robot::TeleopPeriodic()
         
     }
 
-    // FIXME: Hack to allow operator to manually (and slowly) move inner climb
-    // arms if no other command is running.
-    double opY = operatorController->GetLeftY();
+    double opY = -operatorController->GetLeftY();
     opY = fabs(opY) < 0.3 ? 0.0 : opY;
     if (opY < 0.0) {
-        // mManualRetractOuterArms->Schedule();
+        mManualRetractInnerArms->Schedule();
     } else if (opY > 0.0) {
-        // mManualExtendOuterArms->Schedule();
+        mManualExtendInnerArms->Schedule();
     } else {
-        // if (mManualRetractOuterArms->IsScheduled()) {
-        //     mManualRetractOuterArms->Cancel();
-        // } else if (mManualExtendOuterArms->IsScheduled()) {
-        //     mManualExtendOuterArms->Cancel();
-        // }
+        if (mManualRetractInnerArms->IsScheduled()) {
+            mManualRetractInnerArms->Cancel();
+        } else if (mManualExtendInnerArms->IsScheduled()) {
+            mManualExtendInnerArms->Cancel();
+        }
     }
 }
 

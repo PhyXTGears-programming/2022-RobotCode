@@ -39,17 +39,32 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
         CycleState mGoal = HIGH;
         
         struct {
-            double initalExtension; // amount to raise arms to get on bar
-            double liftExtension; // the amount to retract arms to lift robot up
-            double armAngleForNextBar; // lifts arm above next rung
-            double extendToNextBarExtension; // Reaches beyond the next rung
-            double dropToNextBar; // drops arm onto next rung
-            double grabNextBarExtension; // retracts arm so hook is grabbing next rung
-            double releaseRearBar; // extends arm beyond rear bar
-            double dropOffRearBar;
-            double extendToRearBar; // extends the arms on the rear bar as the robot swings
-            double armAngleVertical; // brings the arms vertical
-            double restingExtension; // extension while driving/not reaching
+            // double initalExtension; // amount to raise arms to get on bar
+            // double liftExtension; // the amount to retract arms to lift robot up
+            // double armAngleForNextBar; // lifts arm above next rung
+            // double extendToNextBarExtension; // Reaches beyond the next rung
+            // double dropToNextBar; // drops arm onto next rung
+            // double grabNextBarExtension; // retracts arm so hook is grabbing next rung
+            // double releaseRearBar; // extends arm beyond rear bar
+            // double dropOffRearBar;
+            // double extendToRearBar; // extends the arms on the rear bar as the robot swings
+            // double armAngleVertical; // brings the arms vertical
+            // double restingExtension; // extension while driving/not reaching
+
+            struct {
+                double liftOffExtension;
+                double backOffAngle;
+                double nextBarAngle;
+                double nextBarExtension;
+                double dropToNextBarAngle;
+                double grabNextBarExtension;
+                double verticalArmAngle;
+                double liftExtension;
+                double toPreviousBarExtension;
+                double zeroExtension;
+                double releasePreviousBarExtension;
+                double dropOffPreviousBarAngle;
+            } cycle;
         } config;
 
         frc2::SequentialCommandGroup * mHighCycle = nullptr;
@@ -58,4 +73,6 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
 
         frc2::SequentialCommandGroup * mTraversalCycle = nullptr;
         // and now the inner hooks should be on the traversal rung.
+
+        frc2::SequentialCommandGroup * mCycle = nullptr;
 };
