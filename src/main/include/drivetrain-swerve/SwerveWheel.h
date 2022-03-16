@@ -13,6 +13,8 @@ class SwerveWheel : public swervedrive::swerve_module<double, double, double> {
     public:
         SwerveWheel(constants::swerve::WheelConstants constants);
 
+        void synchronizeTurnEncoder();
+
         void drive(double speed, double angle) override;
 
         double getAngle();

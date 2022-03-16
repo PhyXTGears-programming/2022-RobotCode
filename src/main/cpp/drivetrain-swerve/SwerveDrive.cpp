@@ -13,6 +13,13 @@ SwerveDrive::SwerveDrive (bool fieldOriented) : fieldOriented(fieldOriented) {
 
 void SwerveDrive::Periodic () {}
 
+void SwerveDrive::synchronizeTurnEncoders () {
+    flWheel.synchronizeTurnEncoder();
+    frWheel.synchronizeTurnEncoder();
+    blWheel.synchronizeTurnEncoder();
+    brWheel.synchronizeTurnEncoder();
+}
+
 void SwerveDrive::setMotion (double x, double y, double r) {
     double a = 0;
 

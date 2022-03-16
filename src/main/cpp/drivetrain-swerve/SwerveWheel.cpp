@@ -43,6 +43,11 @@ SwerveWheel::SwerveWheel (constants::swerve::WheelConstants constants)
     turnPid->SetD(wheelSettings.tuning.pid.D);
 }
 
+void SwerveWheel::synchronizeTurnEncoder () {
+    double currentAngle = encoder->GetAbsolutePosition() * (M_PI / 180.0); // [-180, 180) to [-pi, pi)
+    turnEncoder->SetPosition(currentAngle - wheelSettings.tuning.zeroVal);
+}
+
 void SwerveWheel::drive (double speed, double angle) {
     if (std::fabs(speed) > 0.05) {  // (jcc Mar02) Another attempt to prevent wild steering near deadzone.
         setAngle(angle);

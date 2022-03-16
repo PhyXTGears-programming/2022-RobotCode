@@ -147,6 +147,13 @@ void Robot::RobotInit()
  */
 void Robot::RobotPeriodic() {
     frc2::CommandScheduler::GetInstance().Run();
+
+    static int resyncCounter = 25;
+    if (0 == resyncCounter) {
+        resyncCounter = 25;
+        mSwerveDrive->synchronizeTurnEncoders();
+    }
+    resyncCounter--;
 }
 
 /**
