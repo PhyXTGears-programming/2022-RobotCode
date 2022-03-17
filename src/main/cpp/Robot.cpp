@@ -151,7 +151,7 @@ void Robot::RobotPeriodic() {
     static int resyncCounter = 25;
     if (0 == resyncCounter) {
         resyncCounter = 25;
-        mSwerveDrive->synchronizeTurnEncoders();
+        // mSwerveDrive->synchronizeTurnEncoders();
     }
     resyncCounter--;
 }
