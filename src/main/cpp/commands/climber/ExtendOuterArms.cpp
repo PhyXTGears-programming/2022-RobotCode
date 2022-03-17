@@ -1,7 +1,5 @@
 #include "commands/climber/ExtendOuterArms.h"
 
-const double kAcceptableExtensionError = 0.05;
-
 ExtendOuterArmsCommand::ExtendOuterArmsCommand(ClimberOuterReach * outerArms, double targetExtension) {
     AddRequirements(outerArms);
     mOuterArms = outerArms;
