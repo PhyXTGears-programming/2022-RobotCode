@@ -59,21 +59,19 @@ class HighBarClimb : public frc2::CommandHelper<frc2::CommandBase, HighBarClimb>
             // double restingExtension; // extension while driving/not reaching
 
             struct {
-                struct {
-                    double liftOffExtension;
-                    double backOffAngle;
-                    double nextBarAngle;
-                    double nextBarExtension;
-                    double dropToNextBarAngle;
-                    double grabNextBarExtension;
-                    double verticalArmAngle;
-                    double liftExtension;
-                    double toPreviousBarExtension;
-                    double zeroExtension;
-                    double releasePreviousBarExtension;
-                    double dropOffPreviousBarAngle;
-                } inner, outer;
-            } cycle;
+                double liftOffExtension;
+                double backOffAngle;
+                double nextBarAngle;
+                double nextBarExtension;
+                double dropToNextBarAngle;
+                double grabNextBarExtension;
+                double verticalArmAngle;
+                double liftExtension;
+                double toPreviousBarExtension;
+                double zeroExtension;
+                double releasePreviousBarExtension;
+                double dropOffPreviousBarAngle;
+            } inner, outer;
         } config;
 
         frc2::SequentialCommandGroup * mHighBarClimb = nullptr;
