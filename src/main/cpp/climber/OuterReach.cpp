@@ -49,6 +49,14 @@ void ClimberOuterReach::retract2() {
     mMotor2.Set(config.retractSpeed + bonus);
 }
 
+void ClimberOuterReach::run1(double speed) {
+    mMotor1.Set(speed);
+}
+
+void ClimberOuterReach::run2(double speed) {
+    mMotor2.Set(speed);
+}
+
 void ClimberOuterReach::stop1() {
     mMotor1.StopMotor();
 }
