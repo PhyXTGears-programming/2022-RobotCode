@@ -32,5 +32,6 @@ void RetractOuterArmsCommand::End(bool isInterrupted) {
 }
 
 bool RetractOuterArmsCommand::IsFinished() {
-    return mOuterArms->isMotor1NearTarget(mTargetExtension) && mOuterArms->isMotor2NearTarget(mTargetExtension);
+    return mOuterArms->getMotor1Position() < mTargetExtension
+        && mOuterArms->getMotor2Position() < mTargetExtension;
 }

@@ -30,5 +30,6 @@ void ExtendInnerArmsCommand::End(bool isInterrupted) {
 }
 
 bool ExtendInnerArmsCommand::IsFinished() {
-    return mInnerArms->isMotor1NearTarget(mTargetExtension) && mInnerArms->isMotor2NearTarget(mTargetExtension);
+    return mInnerArms->getMotor1Position() > mTargetExtension
+        && mInnerArms->getMotor2Position() > mTargetExtension;
 }
