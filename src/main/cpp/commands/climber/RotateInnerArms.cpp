@@ -29,13 +29,17 @@ void RotateInnerArmsCommand::Execute() {
     double err = mTargetAngle - armAngle;
     double speed = std::copysign(kMinSpeed, err);
 
-    if (mTargetAngle > 0 && err > 0) {
+    if (mTargetAngle > 0 && err > 0 && armAngle > -6.0) {
+        // If gravity won't pull arm toward angle (armAngle > 0) and movement toward
+        // target is against gravity (target > 0 and err > 0), then drive motor.
         if (IS_WITHIN_SLOWZONE(err)) {
             mInnerArms->rotate(kMinSpeed);
         } else {
             mInnerArms->rotate(kMaxSpeed);
         }
-    } else if (mTargetAngle < 0 && err < 0) {
+    } else if (mTargetAngle < 0 && err < 0 && armAngle < 6.0) {
+        // If gravity won't pull arm toward angle (armAngle < 0) and movement toward
+        // target is against gravity (target < 0 and err < 0), then drive motor.
         if (IS_WITHIN_SLOWZONE(err)) {
             mInnerArms->rotate(-kMinSpeed);
         } else {
