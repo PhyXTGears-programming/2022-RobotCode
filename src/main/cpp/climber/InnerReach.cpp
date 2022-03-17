@@ -56,11 +56,11 @@ void ClimberInnerReach::retract2() {
 }
 
 void ClimberInnerReach::stop1() {
-    mMotor1.Set(0.0);
+    mMotor1.StopMotor();
 }
 
 void ClimberInnerReach::stop2() {
-    mMotor2.Set(0.0);
+    mMotor2.StopMotor();
 }
 
 void ClimberInnerReach::run1(double speed) {

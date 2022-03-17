@@ -50,11 +50,11 @@ void ClimberOuterReach::retract2() {
 }
 
 void ClimberOuterReach::stop1() {
-    mMotor1.Set(0.0);
+    mMotor1.StopMotor();
 }
 
 void ClimberOuterReach::stop2() {
-    mMotor2.Set(0.0);
+    mMotor2.StopMotor();
 }
 
 double ClimberOuterReach::getMotor1Position() {
