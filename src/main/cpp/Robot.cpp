@@ -260,7 +260,9 @@ void Robot::TeleopPeriodic()
     }
     
     if (90 == operatorController->GetPOV()) { // Check right button
-
+        if (!mCycleClimb->IsScheduled()) {
+            mCycleClimb->Schedule();
+        }
     } else {
 
     }

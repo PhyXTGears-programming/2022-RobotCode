@@ -29,6 +29,7 @@
 #include "shooter/shooter.h"
 
 #include "commands/climber/ClimbMidBarOnly.h"
+#include "commands/climber/Cycle.h"
 #include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 #include "commands/shooter/ShootCommand.h"
 #include "commands/intake/RunIntake.h"
@@ -71,6 +72,7 @@ private:
     
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
+    Cycle * mCycleClimb = nullptr;
     ShootCommand *mShootCommand = nullptr;
     
     RunIntakeCommand *mRunIntakeCommand = nullptr;
