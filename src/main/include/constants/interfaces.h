@@ -150,10 +150,10 @@ Intake: |             |
        0,1           2,3
         V Back of Bot V
     */
-    const int kIntakeExtendLeft = kAIR0;
-    const int kIntakeRetractLeft = kAIR1;
-    const int kIntakeExtendRight = kAIR6;
-    const int kIntakeRetractRight = kAIR7;
+    const int kIntakeExtendLeft = kAIR1;
+    const int kIntakeRetractLeft = kAIR0;
+    const int kIntakeExtendRight = kAIR7;
+    const int kIntakeRetractRight = kAIR6;
 
     //shooter CAN assignment (block 3)
     const int kShooterMotor = kCAN30;
