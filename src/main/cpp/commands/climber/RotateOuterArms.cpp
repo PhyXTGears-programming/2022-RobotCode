@@ -3,6 +3,9 @@
 
 #include <cmath>
 
+#define SLOWZONE 0.5
+#define IS_WITHIN_SLOWZONE(input) ((fabs(input) < SLOWZONE))
+
 const double kAcceptableAngleError = 0.1;
 const double kMinSpeed = 0.2;
 const double kMaxSpeed = 0.2;
@@ -24,12 +27,19 @@ void RotateOuterArmsCommand::Execute() {
     // of rotation, (+) is lean forward, (-) is lean backward.
     double armAngle = mOuterArms->getAngle();
     double err = mTargetAngle - armAngle;
-    double speed = std::copysign(kMinSpeed, err);
     
     if (mTargetAngle > 0 && err > 0) {
-        mOuterArms->rotate(speed);
+        if (IS_WITHIN_SLOWZONE(err)) {
+            mOuterArms->rotate(kMinSpeed);
+        } else {
+            mOuterArms->rotate(kMaxSpeed);
+        }
     } else if (mTargetAngle < 0 && err < 0) {
-        mOuterArms->rotate(speed);
+        if (IS_WITHIN_SLOWZONE(err)) {
+            mOuterArms->rotate(-kMinSpeed);
+        } else {
+            mOuterArms->rotate(-kMaxSpeed);
+        }
     } else {
         mOuterArms->stop();
     }
