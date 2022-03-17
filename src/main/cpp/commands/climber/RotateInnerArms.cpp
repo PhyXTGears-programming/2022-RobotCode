@@ -55,7 +55,8 @@ void RotateInnerArmsCommand::End(bool isInterrupted) {
 }
 
 bool RotateInnerArmsCommand::IsFinished() {
-    double armAngle = mInnerArms->getAngle();
-    double err = mTargetAngle - armAngle;
-    return std::abs(err) < kAcceptableAngleError;
+    return false;
+    // double armAngle = mInnerArms->getAngle();
+    // double err = mTargetAngle - armAngle;
+    // return std::abs(err) < kAcceptableAngleError;
 }
