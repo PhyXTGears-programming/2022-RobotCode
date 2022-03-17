@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-const double kAcceptableAngleError = 0.0001;
+const double kAcceptableAngleError = 0.1;
 const double kMinSpeed = 0.2;
 const double kMaxSpeed = 0.2;
 

@@ -4,6 +4,8 @@
 
 ClimberInnerRotate::ClimberInnerRotate(std::shared_ptr<cpptoml::table> toml) {
     mEncoder.SetPositionOffset(toml->get_qualified_as<double>("innerRotationZeroOffset").value_or(0.962));
+
+    mMotorEncoder.SetPosition(mEncoder.GetAbsolutePosition());
 }
 
 void ClimberInnerRotate::Periodic() {
@@ -19,7 +21,7 @@ void ClimberInnerRotate::stop() {
 }
 
 double ClimberInnerRotate::getAngle() {
-    return mEncoder.GetAbsolutePosition();
+    return mMotorEncoder.GetPosition();
 }
 
 void ClimberInnerRotate::setMotorCoast() {

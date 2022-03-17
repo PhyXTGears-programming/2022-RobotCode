@@ -23,6 +23,7 @@ class ClimberInnerRotate : public frc2::SubsystemBase {
 
     private:
         rev::CANSparkMax mMotor {interfaces::kInnerArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+        rev::SparkMaxRelativeEncoder mMotorEncoder = mMotor.GetEncoder();
 
         frc::DutyCycleEncoder mEncoder {interfaces::kInnerRotationEncoder};
 };

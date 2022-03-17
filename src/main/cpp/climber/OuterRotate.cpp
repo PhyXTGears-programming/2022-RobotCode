@@ -4,6 +4,8 @@
 
 ClimberOuterRotate::ClimberOuterRotate(std::shared_ptr<cpptoml::table> toml) {
     mEncoder.SetPositionOffset(toml->get_qualified_as<double>("outerRotationZeroOffset").value_or(0.023));
+
+    mMotorEncoder.SetPosition(mEncoder.GetAbsolutePosition());
 }
 
 void ClimberOuterRotate::Periodic() {
@@ -19,7 +21,7 @@ void ClimberOuterRotate::stop() {
 }
 
 double ClimberOuterRotate::getAngle() {
-    return mEncoder.GetAbsolutePosition();
+    return mMotorEncoder.GetPosition();
 }
 
 void ClimberOuterRotate::setMotorCoast() {
