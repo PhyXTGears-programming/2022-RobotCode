@@ -32,7 +32,6 @@ void RotateInnerArmsCommand::Execute() {
     // of rotation, (+) is lean forward, (-) is lean backward.
     double armAngle = mInnerArms->getAngle();
     double err = mTargetAngle - armAngle;
-    double speed = std::copysign(kMinSpeed, err);
 
     if (mTargetAngle > 0 && err > 0 && armAngle > -6.0) {
         // If gravity won't pull arm toward angle (armAngle > 0) and movement toward

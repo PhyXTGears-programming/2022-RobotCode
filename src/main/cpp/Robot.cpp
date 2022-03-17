@@ -38,7 +38,7 @@ void Robot::RobotInit()
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
     mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
-    mCycleClimb = new Cycle(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
+    mHighClimb = new HighBarClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
     mExtendIntakeCommand = new ExtendIntakeCommand(mIntake);
     mRetractIntakeCommand = new RetractIntakeCommand(mIntake);
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
@@ -260,8 +260,8 @@ void Robot::TeleopPeriodic()
     }
     
     if (90 == operatorController->GetPOV()) { // Check right button
-        if (!mCycleClimb->IsScheduled()) {
-            mCycleClimb->Schedule();
+        if (!mHighClimb->IsScheduled()) {
+            mHighClimb->Schedule();
         }
     } else {
 

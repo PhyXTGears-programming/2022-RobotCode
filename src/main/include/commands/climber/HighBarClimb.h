@@ -24,9 +24,9 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/ParallelCommandGroup.h>
 
-class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
+class HighBarClimb : public frc2::CommandHelper<frc2::CommandBase, HighBarClimb> {
     public:
-        Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
+        HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
 
         void Initialize() override;
         void Execute() override;
@@ -76,12 +76,5 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
             } cycle;
         } config;
 
-        frc2::SequentialCommandGroup * mHighCycle = nullptr;
-
-        // at this point the outer hooks should be on the second bar and the inner hooks should be pointing towards the traversal rung.
-
-        frc2::SequentialCommandGroup * mTraversalCycle = nullptr;
-        // and now the inner hooks should be on the traversal rung.
-
-        frc2::SequentialCommandGroup * mCycle = nullptr;
+        frc2::SequentialCommandGroup * mHighBarClimb = nullptr;
 };

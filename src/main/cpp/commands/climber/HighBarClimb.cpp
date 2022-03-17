@@ -1,9 +1,9 @@
-#include "commands/climber/Cycle.h"
+#include "commands/climber/HighBarClimb.h"
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
 
-Cycle::Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml) {
+HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml) {
     AddRequirements(intake);
     AddRequirements(innerReach);
     AddRequirements(innerRotate);
@@ -36,7 +36,7 @@ Cycle::Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate
     config.cycle.outer.releasePreviousBarExtension = toml->get_qualified_as<double>("cycle.outer.releasePreviousBarExtension").value_or(0.0);
     config.cycle.outer.toPreviousBarExtension = toml->get_qualified_as<double>("cycle.outer.toPreviousBarExtension").value_or(0.0);
 
-    mCycle = new frc2::SequentialCommandGroup {
+    mHighBarClimb = new frc2::SequentialCommandGroup {
         ExtendIntakeCommand { intake },
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
@@ -85,31 +85,18 @@ Cycle::Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate
     };
 }
 
-void Cycle::Initialize() {
-    switch (mGoal) {
-        case HIGH:
-            mCycle->Schedule(false);
-            mGoal = TRAVERSE;
-            break;
-    
-        case TRAVERSE:
-            mCycle->Schedule(false);
-            mGoal = INOPERATIVE;
-            break;
-        
-        case INOPERATIVE:
-            break;
-    }
+void HighBarClimb::Initialize() {
+    mHighBarClimb->Schedule();
 }
 
-void Cycle::Execute() {}
+void HighBarClimb::Execute() {}
 
-void Cycle::End(bool interrupted) {
+void HighBarClimb::End(bool interrupted) {
     if (interrupted) {
         mGoal = INOPERATIVE;
     }
 }
 
-bool Cycle::IsFinished() {
+bool HighBarClimb::IsFinished() {
     return true;
 }
