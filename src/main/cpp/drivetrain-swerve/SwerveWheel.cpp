@@ -35,8 +35,10 @@ SwerveWheel::SwerveWheel (constants::swerve::WheelConstants constants)
     turnEncoder->SetPositionConversionFactor(conversionFactor);
     turnEncoder->SetVelocityConversionFactor(conversionFactor / 60.0); // RPM to rad/s
 
+    encoder->ConfigMagnetOffset(wheelSettings.tuning.zeroVal);
+
     double currentAngle = encoder->GetAbsolutePosition() * (M_PI / 180.0); // [-180, 180) to [-pi, pi)
-    turnEncoder->SetPosition(currentAngle - wheelSettings.tuning.zeroVal);
+    turnEncoder->SetPosition(currentAngle);
 
     turnPid->SetP(wheelSettings.tuning.pid.P);
     turnPid->SetI(wheelSettings.tuning.pid.I);
@@ -45,7 +47,7 @@ SwerveWheel::SwerveWheel (constants::swerve::WheelConstants constants)
 
 void SwerveWheel::synchronizeTurnEncoder () {
     double currentAngle = encoder->GetAbsolutePosition() * (M_PI / 180.0); // [-180, 180) to [-pi, pi)
-    turnEncoder->SetPosition(currentAngle - wheelSettings.tuning.zeroVal);
+    turnEncoder->SetPosition(currentAngle);
 }
 
 void SwerveWheel::drive (double speed, double angle) {
@@ -53,6 +55,10 @@ void SwerveWheel::drive (double speed, double angle) {
         setAngle(angle);
     }
     setSpeed(speed);
+}
+
+double SwerveWheel::getAbsAngle(){
+    return encoder->GetAbsolutePosition() * (M_PI / 180.0);
 }
 
 double SwerveWheel::getAngle () {
