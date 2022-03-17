@@ -1,7 +1,13 @@
 #include "climber/OuterRotate.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 ClimberOuterRotate::ClimberOuterRotate(std::shared_ptr<cpptoml::table> toml) {
     mEncoder.SetPositionOffset(toml->get_qualified_as<double>("outerRotationZeroOffset").value_or(0.023));
+}
+
+void ClimberOuterRotate::Periodic() {
+    frc::SmartDashboard::PutNumber("Clmb Out Angle", getAngle());
 }
 
 void ClimberOuterRotate::rotate(double speed) {

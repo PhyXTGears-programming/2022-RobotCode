@@ -11,6 +11,8 @@ class ClimberInnerRotate : public frc2::SubsystemBase {
     public:
         ClimberInnerRotate(std::shared_ptr<cpptoml::table> toml);
 
+        void Periodic();
+
         void rotate(double speed);
         void stop();
         

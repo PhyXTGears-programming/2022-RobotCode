@@ -1,5 +1,7 @@
 #include "climber/InnerReach.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include <cmath>
 
 ClimberInnerReach::ClimberInnerReach(std::shared_ptr<cpptoml::table> toml) {
@@ -23,6 +25,11 @@ ClimberInnerReach::ClimberInnerReach(std::shared_ptr<cpptoml::table> toml) {
 
     mEncoder1.SetPosition(0.0);
     mEncoder2.SetPosition(0.0);
+}
+
+void ClimberInnerReach::Periodic() {
+    frc::SmartDashboard::PutNumber("Clmb In R Pos", getMotor1Position());
+    frc::SmartDashboard::PutNumber("Clmb In L Pos", getMotor2Position());
 }
 
 void ClimberInnerReach::extend1() {
