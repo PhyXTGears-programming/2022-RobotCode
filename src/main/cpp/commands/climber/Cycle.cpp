@@ -36,53 +36,6 @@ Cycle::Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate
     config.cycle.outer.releasePreviousBarExtension = toml->get_qualified_as<double>("cycle.outer.releasePreviousBarExtension").value_or(0.0);
     config.cycle.outer.toPreviousBarExtension = toml->get_qualified_as<double>("cycle.outer.toPreviousBarExtension").value_or(0.0);
 
-    // mHighCycle = new frc2::SequentialCommandGroup(
-    //     frc2::InstantCommand {[&]() { innerReach->setUnderLoad(true); }},
-    //     frc2::ParallelCommandGroup {
-    //       RetractInnerArmsCommand {innerReach, config.liftExtension},
-    //       RotateOuterArmsCommand {outerRotate, config.armAngleForNextBar}
-    //     },
-    //     ExtendOuterArmsCommand {outerReach, config.extendToNextBarExtension},
-    //     RotateOuterArmsCommand {outerRotate, config.dropToNextBar},
-    //     RetractOuterArmsCommand {outerReach, config.grabNextBarExtension},
-    //     frc2::InstantCommand {[&]() { outerRotate->setMotorCoast(); }},
-    //     frc2::InstantCommand {[&]() { innerRotate->setMotorCoast(); }},
-    //     frc2::InstantCommand {[&]() { outerReach->setUnderLoad(true); }},
-    //     frc2::ParallelCommandGroup (
-    //         ExtendInnerArmsCommand {innerReach, config.extendToRearBar}, // the inner arms extend
-    //         RetractOuterArmsCommand {outerReach, config.liftExtension} // and the outer arms retract to bring it into position
-    //     ),
-    //     frc2::InstantCommand {[&]() { innerReach->setUnderLoad(false); }},
-    //     ExtendInnerArmsCommand {innerReach, config.releaseRearBar},
-    //     RotateInnerArmsCommand {innerRotate, config.dropOffRearBar},
-    //     RetractInnerArmsCommand {innerReach, config.restingExtension}
-    // );
-
-    // mTraversalCycle = new frc2::SequentialCommandGroup (
-    //     RotateInnerArmsCommand {innerRotate, config.armAngleForNextBar},
-    //     ExtendInnerArmsCommand {innerReach, config.extendToNextBarExtension},
-    //     RotateInnerArmsCommand {innerRotate, config.dropToNextBar},
-    //     RetractInnerArmsCommand {innerReach, config.grabNextBarExtension},
-    //     frc2::InstantCommand {[&]() { outerRotate->setMotorCoast(); }},
-    //     frc2::InstantCommand {[&]() { innerRotate->setMotorCoast(); }},
-    //     frc2::InstantCommand {[&]() { innerReach->setUnderLoad(true); }},
-    //     frc2::ParallelCommandGroup (
-    //         ExtendOuterArmsCommand {outerReach, config.extendToRearBar}, // the outer arms extend
-    //         RetractInnerArmsCommand {innerReach, config.liftExtension} // and the inner arms retract to bring it into position
-    //     ),
-    //     frc2::InstantCommand {[&]() { outerReach->setUnderLoad(false); }},
-    //     ExtendOuterArmsCommand {outerReach, config.releaseRearBar},
-    //     RotateOuterArmsCommand {outerRotate, config.dropOffRearBar},
-    //     RetractOuterArmsCommand {outerReach, config.liftExtension}, // pulls arms in so they don't hit bar on next step
-    //     frc2::ParallelCommandGroup { // extend and rotate to vertical to grab traversal with both sets of arms
-    //         //LockArmsCommand {innerReach}, // this command stops the arms from extending or retracting
-    //         ExtendOuterArmsCommand {outerReach, config.initalExtension},
-    //         RotateOuterArmsCommand {outerRotate, config.armAngleVertical}
-    //     },
-    //     frc2::InstantCommand {[&]() { outerReach->setUnderLoad(true); }},
-    //     RetractOuterArmsCommand {outerReach, config.liftExtension} // tighten grip
-    // );
-
     mCycle = new frc2::SequentialCommandGroup {
         ExtendIntakeCommand { intake },
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
