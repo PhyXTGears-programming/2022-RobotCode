@@ -8,8 +8,8 @@ SwerveDrive::SwerveDrive(bool fieldOriented) : fieldOriented(fieldOriented)
 {
     drive = new swervedrive::drive<double, double, double>({&flWheel, &frWheel, &blWheel, &brWheel});
 
-    // gyro.SetYawAxis(frc::ADIS16470_IMU::IMUAxis::kZ);
-    // gyro.Reset();
+    gyro = new AHRS(frc::SPI::kMXP);
+    // gyro->Reset();
 }
 
 void SwerveDrive::Periodic()
@@ -33,13 +33,24 @@ void SwerveDrive::synchronizeTurnEncoders()
     brWheel.synchronizeTurnEncoder();
 }
 
+void SwerveDrive::resetGyro(){
+    gyro->Reset();
+}
+
+void SwerveDrive::enableFieldCentric(){
+    fieldOriented = true;
+}
+
+void SwerveDrive::disableFieldCentric(){
+    fieldOriented = false;
+}
+
 void SwerveDrive::setMotion(double x, double y, double r)
 {
     double a = 0;
 
-    if (fieldOriented)
-    {
-        // a = gyro.GetAngle() * (PI/180.0);
+    if (fieldOriented) {
+        a = gyro->GetAngle() * (PI/180.0);
     }
 
     drive->set_motion({x, y}, r, a);
