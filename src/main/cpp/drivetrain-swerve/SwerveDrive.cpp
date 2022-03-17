@@ -4,7 +4,8 @@
 
 constexpr double PI = 3.1415926535897932;
 
-SwerveDrive::SwerveDrive (bool fieldOriented) : fieldOriented(fieldOriented) {
+SwerveDrive::SwerveDrive(bool fieldOriented) : fieldOriented(fieldOriented)
+{
     drive = new swervedrive::drive<double, double, double>({&flWheel, &frWheel, &blWheel, &brWheel});
 
     // gyro.SetYawAxis(frc::ADIS16470_IMU::IMUAxis::kZ);
@@ -24,17 +25,20 @@ void SwerveDrive::Periodic()
     frc::SmartDashboard::PutNumber("Steer BL Abs", blWheel.getAbsAngle() / M_PI * 180);
 }
 
-void SwerveDrive::synchronizeTurnEncoders () {
+void SwerveDrive::synchronizeTurnEncoders()
+{
     flWheel.synchronizeTurnEncoder();
     frWheel.synchronizeTurnEncoder();
     blWheel.synchronizeTurnEncoder();
     brWheel.synchronizeTurnEncoder();
 }
 
-void SwerveDrive::setMotion (double x, double y, double r) {
+void SwerveDrive::setMotion(double x, double y, double r)
+{
     double a = 0;
 
-    if (fieldOriented) {
+    if (fieldOriented)
+    {
         // a = gyro.GetAngle() * (PI/180.0);
     }
 
