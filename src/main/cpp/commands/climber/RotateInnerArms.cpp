@@ -7,14 +7,19 @@
 #define IS_WITHIN_SLOWZONE(input) ((fabs(input) < SLOWZONE))
 
 const double kAcceptableAngleError = 0.1;
-const double kMinSpeed = 0.2;
-const double kMaxSpeed = 0.2;
 
 
-RotateInnerArmsCommand::RotateInnerArmsCommand(ClimberInnerRotate * innerArms, double targetAngle) {
+RotateInnerArmsCommand::RotateInnerArmsCommand(
+    ClimberInnerRotate * innerArms,
+    double targetAngle,
+    double minSpeed,
+    double maxSpeed
+) {
     AddRequirements(innerArms);
     mInnerArms = innerArms;
     mTargetAngle = targetAngle;
+    mMinSpeed = minSpeed;
+    mMaxSpeed = maxSpeed;
 }
 
 void RotateInnerArmsCommand::Initialize() {
@@ -33,17 +38,17 @@ void RotateInnerArmsCommand::Execute() {
         // If gravity won't pull arm toward angle (armAngle > 0) and movement toward
         // target is against gravity (target > 0 and err > 0), then drive motor.
         if (IS_WITHIN_SLOWZONE(err)) {
-            mInnerArms->rotate(kMinSpeed);
+            mInnerArms->rotate(mMinSpeed);
         } else {
-            mInnerArms->rotate(kMaxSpeed);
+            mInnerArms->rotate(mMaxSpeed);
         }
     } else if (mTargetAngle < 0 && err < 0 && armAngle < 6.0) {
         // If gravity won't pull arm toward angle (armAngle < 0) and movement toward
         // target is against gravity (target < 0 and err < 0), then drive motor.
         if (IS_WITHIN_SLOWZONE(err)) {
-            mInnerArms->rotate(-kMinSpeed);
+            mInnerArms->rotate(-mMinSpeed);
         } else {
-            mInnerArms->rotate(-kMaxSpeed);
+            mInnerArms->rotate(-mMaxSpeed);
         }
     } else {
         mInnerArms->stop();
