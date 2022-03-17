@@ -108,6 +108,18 @@ void Robot::RobotInit()
         [&]() { mShooter->stopShooter(); },
         { mShooter }
     );
+    
+    mShootLowHub = new frc2::StartEndCommand(
+        [&]() { mShooter->shootLowHub(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
+
+    mShootReverse = new frc2::StartEndCommand(
+        [&]() { mShooter->shootReverse(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
 
     
     mShootAuto = new frc2::StartEndCommand(
@@ -212,10 +224,24 @@ void Robot::TeleopPeriodic()
         mShootFar->Cancel();
     }
 
-    //Intake
     if (operatorController->GetAButtonPressed()) {
-        mRunIntakeCommand->Schedule();
-    } else if(operatorController->GetAButtonReleased()) {
+        mShootLowHub->Schedule();
+    } else if (operatorController->GetAButtonReleased()){
+        mShootLowHub->Cancel();
+    }
+
+    if(operatorController->GetBButtonPressed()){
+        mShootReverse->Schedule();
+    } else if (operatorController->GetBButtonReleased()){
+        mShootReverse->Cancel();
+    }
+
+    //Intake
+    if (operatorController->GetRightTriggerAxis() > 0.5) {
+        if (!mRunIntakeCommand->IsScheduled()) {
+            mRunIntakeCommand->Schedule();
+        }
+    } else if (mRunIntakeCommand->IsScheduled()) {
         mRunIntakeCommand->Cancel();
     }
 

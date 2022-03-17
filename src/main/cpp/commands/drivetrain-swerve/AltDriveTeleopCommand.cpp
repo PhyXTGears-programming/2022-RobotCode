@@ -40,7 +40,7 @@ void AltDriveTeleopCommand::Execute()
     x = DEADZONE(x) * speed;
     y = DEADZONE(y) * speed;
     r = DEADZONE(r);
-    r = r*r*r * 0.5;
+    r = r*r*r * speed;
     swerveDrive->setMotion(x, y, r);
 }
 
