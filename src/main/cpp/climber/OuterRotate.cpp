@@ -31,3 +31,11 @@ void ClimberOuterRotate::setMotorCoast() {
 void ClimberOuterRotate::setMotorBrake() {
     mMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 }
+
+void ClimberOuterRotate::setCurrentlimit(unsigned int limit){
+    mMotor.SetSmartCurrentLimit(limit);
+}
+
+void ClimberOuterRotate::resetCurrentLimit(){
+    ClimberOuterRotate::setCurrentlimit(40);
+}
