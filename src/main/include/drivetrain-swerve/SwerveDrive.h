@@ -6,6 +6,8 @@
 #include "drivetrain-swerve/SwerveWheel.h"
 #include "./swerve/drive.h"
 
+#include <AHRS.h>
+
 class SwerveDrive : public frc2::SubsystemBase {
     public:
         SwerveDrive(bool fieldOriented = false);
@@ -13,6 +15,12 @@ class SwerveDrive : public frc2::SubsystemBase {
         void Periodic() override;
 
         void synchronizeTurnEncoders();
+        
+        void resetGyro();
+
+        void enableFieldCentric();
+        
+        void disableFieldCentric();
 
         void setMotion(double x, double y, double r);
 
@@ -23,6 +31,8 @@ class SwerveDrive : public frc2::SubsystemBase {
         SwerveWheel frWheel {constants::swerve::frontRight};
         SwerveWheel blWheel {constants::swerve::backLeft};
         SwerveWheel brWheel {constants::swerve::backRight};
+
+        AHRS * gyro = nullptr;
 
         bool fieldOriented;
 };
