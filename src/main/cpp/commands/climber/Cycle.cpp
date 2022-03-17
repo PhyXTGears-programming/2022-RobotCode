@@ -8,30 +8,31 @@ Cycle::Cycle(ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, C
     AddRequirements(outerReach);
     AddRequirements(outerRotate);
     
-    config.cycle.verticalArmAngle = toml->get_qualified_as<double>("cycle.verticalArmAngle").value_or(0.0);
-    config.cycle.zeroExtension = toml->get_qualified_as<double>("cycle.zeroExtension").value_or(0.0);
-    config.cycle.backOffAngle = toml->get_qualified_as<double>("cycle.backOffAngle").value_or(0.0);
-    config.cycle.dropOffPreviousBarAngle = toml->get_qualified_as<double>("cycle.dropOffPreviousBarAngle").value_or(0.0);
-    config.cycle.dropToNextBarAngle = toml->get_qualified_as<double>("cycle.dropToNextBarAngle").value_or(0.0);
-    config.cycle.grabNextBarExtension = toml->get_qualified_as<double>("cycle.grabNextBarExtension").value_or(0.0);
-    config.cycle.liftExtension = toml->get_qualified_as<double>("cycle.liftExtension").value_or(0.0);
-    config.cycle.liftOffExtension = toml->get_qualified_as<double>("cycle.liftOffExtension").value_or(0.0);
-    config.cycle.nextBarAngle = toml->get_qualified_as<double>("cycle.nextBarAngle").value_or(0.0);
-    config.cycle.nextBarExtension = toml->get_qualified_as<double>("cycle.nextBarExtension").value_or(0.0);
-    config.cycle.releasePreviousBarExtension = toml->get_qualified_as<double>("cycle.releasePreviousBarExtension").value_or(0.0);
-    config.cycle.toPreviousBarExtension = toml->get_qualified_as<double>("cycle.toPreviousBarExtension").value_or(0.0);
+    config.cycle.inner.verticalArmAngle = toml->get_qualified_as<double>("cycle.inner.verticalArmAngle").value_or(0.0);
+    config.cycle.inner.zeroExtension = toml->get_qualified_as<double>("cycle.inner.zeroExtension").value_or(0.0);
+    config.cycle.inner.backOffAngle = toml->get_qualified_as<double>("cycle.inner.backOffAngle").value_or(0.0);
+    config.cycle.inner.dropOffPreviousBarAngle = toml->get_qualified_as<double>("cycle.inner.dropOffPreviousBarAngle").value_or(0.0);
+    config.cycle.inner.dropToNextBarAngle = toml->get_qualified_as<double>("cycle.inner.dropToNextBarAngle").value_or(0.0);
+    config.cycle.inner.grabNextBarExtension = toml->get_qualified_as<double>("cycle.inner.grabNextBarExtension").value_or(0.0);
+    config.cycle.inner.liftExtension = toml->get_qualified_as<double>("cycle.inner.liftExtension").value_or(0.0);
+    config.cycle.inner.liftOffExtension = toml->get_qualified_as<double>("cycle.inner.liftOffExtension").value_or(0.0);
+    config.cycle.inner.nextBarAngle = toml->get_qualified_as<double>("cycle.inner.nextBarAngle").value_or(0.0);
+    config.cycle.inner.nextBarExtension = toml->get_qualified_as<double>("cycle.inner.nextBarExtension").value_or(0.0);
+    config.cycle.inner.releasePreviousBarExtension = toml->get_qualified_as<double>("cycle.inner.releasePreviousBarExtension").value_or(0.0);
+    config.cycle.inner.toPreviousBarExtension = toml->get_qualified_as<double>("cycle.inner.toPreviousBarExtension").value_or(0.0);
 
-    // config.armAngleForNextBar = toml->get_qualified_as<double>("armAngleForNextBar").value_or(0.0);
-    // config.armAngleVertical = toml->get_qualified_as<double>("armAngleVertical").value_or(0.5);
-    // config.dropToNextBar = toml->get_qualified_as<double>("dropToNextBar").value_or(0.0);
-    // config.extendToNextBarExtension = toml->get_qualified_as<double>("extendToNextBarExtension").value_or(0.0);
-    // config.extendToRearBar = toml->get_qualified_as<double>("extendToRearBar").value_or(0.0);
-    // config.grabNextBarExtension = toml->get_qualified_as<double>("grabNextBarExtension").value_or(0.0);
-    // config.initalExtension = toml->get_qualified_as<double>("initalExtension").value_or(0.0);
-    // config.liftExtension = toml->get_qualified_as<double>("liftExtension").value_or(2.42);
-    // config.dropOffRearBar = toml->get_qualified_as<double>("dropOffRearBar").value_or(0.0);
-    // config.releaseRearBar = toml->get_qualified_as<double>("releaseRearBar").value_or(0.0);
-    // config.restingExtension = toml->get_qualified_as<double>("restingExtension").value_or(0.0);
+    config.cycle.outer.verticalArmAngle = toml->get_qualified_as<double>("cycle.outer.verticalArmAngle").value_or(0.0);
+    config.cycle.outer.zeroExtension = toml->get_qualified_as<double>("cycle.outer.zeroExtension").value_or(0.0);
+    config.cycle.outer.backOffAngle = toml->get_qualified_as<double>("cycle.outer.backOffAngle").value_or(0.0);
+    config.cycle.outer.dropOffPreviousBarAngle = toml->get_qualified_as<double>("cycle.outer.dropOffPreviousBarAngle").value_or(0.0);
+    config.cycle.outer.dropToNextBarAngle = toml->get_qualified_as<double>("cycle.outer.dropToNextBarAngle").value_or(0.0);
+    config.cycle.outer.grabNextBarExtension = toml->get_qualified_as<double>("cycle.outer.grabNextBarExtension").value_or(0.0);
+    config.cycle.outer.liftExtension = toml->get_qualified_as<double>("cycle.outer.liftExtension").value_or(0.0);
+    config.cycle.outer.liftOffExtension = toml->get_qualified_as<double>("cycle.outer.liftOffExtension").value_or(0.0);
+    config.cycle.outer.nextBarAngle = toml->get_qualified_as<double>("cycle.outer.nextBarAngle").value_or(0.0);
+    config.cycle.outer.nextBarExtension = toml->get_qualified_as<double>("cycle.outer.nextBarExtension").value_or(0.0);
+    config.cycle.outer.releasePreviousBarExtension = toml->get_qualified_as<double>("cycle.outer.releasePreviousBarExtension").value_or(0.0);
+    config.cycle.outer.toPreviousBarExtension = toml->get_qualified_as<double>("cycle.outer.toPreviousBarExtension").value_or(0.0);
 
     // mHighCycle = new frc2::SequentialCommandGroup(
     //     frc2::InstantCommand {[&]() { innerReach->setUnderLoad(true); }},

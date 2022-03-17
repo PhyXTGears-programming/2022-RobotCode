@@ -52,18 +52,20 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
             // double restingExtension; // extension while driving/not reaching
 
             struct {
-                double liftOffExtension;
-                double backOffAngle;
-                double nextBarAngle;
-                double nextBarExtension;
-                double dropToNextBarAngle;
-                double grabNextBarExtension;
-                double verticalArmAngle;
-                double liftExtension;
-                double toPreviousBarExtension;
-                double zeroExtension;
-                double releasePreviousBarExtension;
-                double dropOffPreviousBarAngle;
+                struct {
+                    double liftOffExtension;
+                    double backOffAngle;
+                    double nextBarAngle;
+                    double nextBarExtension;
+                    double dropToNextBarAngle;
+                    double grabNextBarExtension;
+                    double verticalArmAngle;
+                    double liftExtension;
+                    double toPreviousBarExtension;
+                    double zeroExtension;
+                    double releasePreviousBarExtension;
+                    double dropOffPreviousBarAngle;
+                } inner, outer;
             } cycle;
         } config;
 
