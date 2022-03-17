@@ -1,6 +1,7 @@
 #include "commands/climber/Cycle.h"
-#include <frc2/command/WaitCommand.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/WaitCommand.h>
 
 Cycle::Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml) {
     AddRequirements(intake);
@@ -83,46 +84,51 @@ Cycle::Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate
     // );
 
     mCycle = new frc2::SequentialCommandGroup {
-        ExtendInnerArmsCommand {innerReach, config.cycle.liftOffExtension},
+        ExtendIntakeCommand { intake },
+        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
+        frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
+        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }}.WithTimeout(1_s),
         frc2::ParallelCommandGroup {
-            RotateInnerArmsCommand {innerRotate, config.cycle.backOffAngle},
+            RetractOuterArmsCommand {outerReach, config.cycle.outer.zeroExtension},
+            frc2::ParallelRaceGroup {
+                ExtendInnerArmsCommand {innerReach, config.cycle.inner.nextBarExtension},
+                RotateInnerArmsCommand {innerRotate, config.cycle.inner.nextBarAngle},
+            }
+        },
+        frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }},
+        RotateInnerArmsCommand {innerRotate, config.cycle.inner.dropToNextBarAngle}.WithTimeout(1_s),
+        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); }},
+        frc2::InstantCommand {[=]() { innerReach->setUnderLoad(true); }},
+        frc2::ParallelRaceGroup {
+            RotateInnerArmsCommand {innerRotate, config.cycle.inner.dropToNextBarAngle},
+            frc2::ParallelCommandGroup {
+                RetractInnerArmsCommand {innerReach, config.cycle.inner.liftExtension},
+                ExtendOuterArmsCommand {outerReach, config.cycle.outer.toPreviousBarExtension}
+            }
+        },
+        ExtendOuterArmsCommand {outerReach, config.cycle.outer.releasePreviousBarExtension},
+        RotateOuterArmsCommand {outerRotate, config.cycle.outer.dropOffPreviousBarAngle}.WithTimeout(2_s),
+        frc2::ParallelRaceGroup {
+            RotateOuterArmsCommand {outerRotate, config.cycle.outer.dropOffPreviousBarAngle},
+            RetractOuterArmsCommand {outerReach, config.cycle.outer.liftExtension},
+        },
+        frc2::ParallelCommandGroup {
+            RotateOuterArmsCommand {outerRotate, config.cycle.outer.verticalArmAngle, 0.05, 0.075}.WithTimeout(2_s),
             frc2::SequentialCommandGroup {
                 frc2::WaitCommand {1_s},
-                RetractInnerArmsCommand {innerReach, config.cycle.zeroExtension}
+                RetractInnerArmsCommand {innerReach, config.cycle.inner.zeroExtension},
             }
         },
-        RotateInnerArmsCommand {innerRotate, config.cycle.verticalArmAngle},
-        frc2::ParallelCommandGroup {
-            RotateInnerArmsCommand {innerRotate, config.cycle.nextBarAngle},
-            ExtendInnerArmsCommand {innerReach, config.cycle.nextBarExtension}
-        },
-        frc2::ParallelCommandGroup {
-            RotateInnerArmsCommand {innerRotate, config.cycle.dropToNextBarAngle},
-            frc2::SequentialCommandGroup {
-                frc2::WaitCommand {0.5_s},
-                RetractInnerArmsCommand {innerReach, config.cycle.grabNextBarExtension}
+        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(10); }},
+        RotateOuterArmsCommand {outerRotate, config.cycle.outer.verticalArmAngle}.WithTimeout(1_s),
+        frc2::ParallelRaceGroup {
+            RotateOuterArmsCommand {outerRotate, config.cycle.outer.verticalArmAngle},
+            frc2::ParallelCommandGroup {
+                RetractInnerArmsCommand {innerReach, config.cycle.inner.zeroExtension},
+                RetractOuterArmsCommand {outerReach, config.cycle.outer.zeroExtension},
             }
-        },
-        frc2::InstantCommand {[&]() { outerRotate->setMotorCoast(); innerRotate->setMotorCoast(); }},
-        frc2::ParallelCommandGroup {
-            ExtendOuterArmsCommand {outerReach, config.cycle.toPreviousBarExtension},
-            RetractInnerArmsCommand {innerReach, config.cycle.liftExtension}
-        },
-        frc2::InstantCommand {[&]() { outerRotate->setMotorBrake(); innerRotate->setMotorBrake(); }}, // just in case.
-        frc2::ParallelCommandGroup {
-            ExtendOuterArmsCommand {outerReach, config.cycle.releasePreviousBarExtension},
-            frc2::SequentialCommandGroup {
-                frc2::WaitCommand {0.5_s},
-                RotateOuterArmsCommand {outerRotate, config.cycle.dropOffPreviousBarAngle}
-            }
-        },
-        RetractOuterArmsCommand {outerReach, config.cycle.zeroExtension},
-        frc2::ParallelCommandGroup {
-            RotateOuterArmsCommand {outerRotate, config.cycle.backOffAngle},
-            ExtendOuterArmsCommand {outerReach, config.cycle.liftOffExtension}
-        },
-        RotateOuterArmsCommand {outerRotate, config.cycle.verticalArmAngle},
-        RetractOuterArmsCommand {outerReach, config.cycle.liftExtension}
+        }
+
     };
 }
 

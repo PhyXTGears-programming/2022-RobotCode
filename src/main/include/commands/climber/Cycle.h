@@ -17,6 +17,8 @@
 #include "commands/climber/RotateInnerArms.h"
 #include "commands/climber/LockArms.h"
 
+#include "commands/intake/ExtendIntake.h"
+
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/SequentialCommandGroup.h>
