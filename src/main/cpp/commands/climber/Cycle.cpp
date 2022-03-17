@@ -2,7 +2,8 @@
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/InstantCommand.h>
 
-Cycle::Cycle(ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml) {
+Cycle::Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml) {
+    AddRequirements(intake);
     AddRequirements(innerReach);
     AddRequirements(innerRotate);
     AddRequirements(outerReach);

@@ -7,6 +7,8 @@
 #include "climber/OuterReach.h"
 #include "climber/OuterRotate.h"
 
+#include "intake/intake.h"
+
 #include "commands/climber/ExtendInnerArms.h"
 #include "commands/climber/ExtendOuterArms.h"
 #include "commands/climber/RetractOuterArms.h"
@@ -22,7 +24,7 @@
 
 class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
     public:
-        Cycle(ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
+        Cycle(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
 
         void Initialize() override;
         void Execute() override;
@@ -30,6 +32,9 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
         bool IsFinished() override;
 
     private:
+
+        Intake * mIntake = nullptr;
+
         ClimberInnerReach * mInnerReach = nullptr;
         ClimberOuterReach * mOuterReach = nullptr;
         ClimberInnerRotate * mInnerRotate = nullptr;
