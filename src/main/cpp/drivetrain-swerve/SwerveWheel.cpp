@@ -55,6 +55,10 @@ void SwerveWheel::drive (double speed, double angle) {
     setSpeed(speed);
 }
 
+double SwerveWheel::getAbsAngle(){
+    return encoder->GetAbsolutePosition() * (M_PI / 180.0);
+}
+
 double SwerveWheel::getAngle () {
     return turnEncoder->GetPosition();
 }

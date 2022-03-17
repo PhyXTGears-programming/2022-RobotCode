@@ -11,7 +11,18 @@ SwerveDrive::SwerveDrive (bool fieldOriented) : fieldOriented(fieldOriented) {
     // gyro.Reset();
 }
 
-void SwerveDrive::Periodic () {}
+void SwerveDrive::Periodic()
+{
+    frc::SmartDashboard::PutNumber("Steer FR Rel", frWheel.getAngle() / M_PI * 180);
+    frc::SmartDashboard::PutNumber("Steer FL Rel", flWheel.getAngle() / M_PI * 180);
+    frc::SmartDashboard::PutNumber("Steer BR Rel", brWheel.getAngle() / M_PI * 180);
+    frc::SmartDashboard::PutNumber("Steer BL Rel", blWheel.getAngle() / M_PI * 180);
+
+    frc::SmartDashboard::PutNumber("Steer FR Abs", frWheel.getAbsAngle() / M_PI * 180);
+    frc::SmartDashboard::PutNumber("Steer FL Abs", flWheel.getAbsAngle() / M_PI * 180);
+    frc::SmartDashboard::PutNumber("Steer BR Abs", brWheel.getAbsAngle() / M_PI * 180);
+    frc::SmartDashboard::PutNumber("Steer BL Abs", blWheel.getAbsAngle() / M_PI * 180);
+}
 
 void SwerveDrive::synchronizeTurnEncoders () {
     flWheel.synchronizeTurnEncoder();

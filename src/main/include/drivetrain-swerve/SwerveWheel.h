@@ -19,6 +19,8 @@ class SwerveWheel : public swervedrive::swerve_module<double, double, double> {
 
         double getAngle();
 
+        double getAbsAngle();
+
     private:
         void setAngle(double angle);
         void setSpeed (double speed) {
