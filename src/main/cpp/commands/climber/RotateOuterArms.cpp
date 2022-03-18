@@ -32,18 +32,18 @@ void RotateOuterArmsCommand::Execute() {
     double armAngle = mOuterArms->getAngle();
     double err = mTargetAngle - armAngle;
     
-    if (mTargetAngle > 0 && err > 0 && armAngle > -6.0) {
+    if (mTargetAngle > 0 && err > 0) {
         // If gravity won't pull arm toward angle (armAngle > 0) and movement toward
         // target is against gravity (target > 0 and err > 0), then drive motor.
-        if (IS_WITHIN_SLOWZONE(err)) {
+        if (armAngle < 0.0) {
             mOuterArms->rotate(mMinSpeed);
         } else {
             mOuterArms->rotate(mMaxSpeed);
         }
-    } else if (mTargetAngle < 0 && err < 0 && armAngle < 6.0) {
+    } else if (mTargetAngle < 0 && err < 0) {
         // If gravity won't pull arm toward angle (armAngle < 0) and movement toward
         // target is against gravity (target < 0 and err < 0), then drive motor.
-        if (IS_WITHIN_SLOWZONE(err)) {
+        if (armAngle > 0.0) {
             mOuterArms->rotate(-mMinSpeed);
         } else {
             mOuterArms->rotate(-mMaxSpeed);
