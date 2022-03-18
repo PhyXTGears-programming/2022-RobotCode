@@ -31,7 +31,7 @@ namespace constants {
 
         const WheelConstants frontLeft  = {"Front Left",  4, 8, {-0.476,  0.476}, {{0.7, 0, 0},  ( -90.0   * M_PI / 180.0)}, 13};
         const WheelConstants frontRight = {"Front Right", 1, 5, { 0.476,  0.476}, {{0.7, 0, 0},  (-161.36 - 90)}, 10};
-        const WheelConstants backLeft   = {"Back Left",   3, 7, {-0.476, -0.476}, {{0.7, 0, 0},  (  63.90 + 90)}, 12};
+        const WheelConstants backLeft   = {"Back Left",   3, 7, {-0.476, -0.476}, {{0.7, 0, 0},  (  63.90 - 90)}, 12};
         const WheelConstants backRight  = {"Back Right",  2, 6, { 0.476, -0.476}, {{0.7, 0, 0},  ( -90.0   * M_PI / 180.0)}, 11};
     }
 }

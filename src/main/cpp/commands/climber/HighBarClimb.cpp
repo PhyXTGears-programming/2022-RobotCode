@@ -79,24 +79,24 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
             frc2::ParallelCommandGroup {
                 RetractInnerArmsCommand {innerReach, config.inner.zeroExtension},
                 RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
-                RetractIntakeCommand {intake}
             }
         },
+        RetractIntakeCommand {intake}
     };
 }
 
 void HighBarClimb::Initialize() {
-    mHighBarClimb->Schedule();
+    mHighBarClimb->Initialize();
 }
 
-void HighBarClimb::Execute() {}
+void HighBarClimb::Execute() {
+    mHighBarClimb->Execute();
+}
 
 void HighBarClimb::End(bool interrupted) {
-    if (interrupted) {
-        mGoal = INOPERATIVE;
-    }
+    mHighBarClimb->End(interrupted);
 }
 
 bool HighBarClimb::IsFinished() {
-    return true;
+    return mHighBarClimb->IsFinished();
 }
