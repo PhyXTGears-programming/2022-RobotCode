@@ -94,8 +94,7 @@ private:
     frc2::StartEndCommand *mShootAuto = nullptr;
 
     frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
-    frc2::SequentialCommandGroup * mDriveOnly = nullptr;
-    
+    frc2::SequentialCommandGroup * mTwoCargoAuto = nullptr;
 };
 
 // there is a hidden forg somewhere in the robot's code.

@@ -194,19 +194,7 @@ void Robot::RobotInit()
         frc2::StartEndCommand(*mShootNear).WithTimeout(3_s)
     };
 
-    mDriveOnly = new frc2::SequentialCommandGroup {
-        frc2::FunctionalCommand {
-            [](){},
-            [&](){
-                mSwerveDrive->setMotion(0, -0.5, 0.0);
-            },
-            [&](bool _interrupted){
-                mSwerveDrive->setMotion(0, 0, 0); // stop
-            },
-            [](){ return false; },
-            {mSwerveDrive}
-        }.WithTimeout(1.2_s)
-    };
+    mTwoCargoAuto = Auto::MakeTwoCargoAuto(mIntake, mShooter, mSwerveDrive);
 }
 
 /**
@@ -248,8 +236,6 @@ void Robot::AutonomousInit()
 
     if (m_autoSelected == kAutoDriveAndShoot) {
         mDriveAndShoot->Schedule();
-    } else  if (m_autoSelected == kAutoDriveOnly) {
-        mDriveOnly->Schedule();
     }
 }
 
