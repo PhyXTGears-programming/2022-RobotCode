@@ -72,16 +72,12 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle}.WithTimeout(2_s),
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle},
-            RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
-        },
-        // Outer: retract completely and rotate toward vertical.
-        // Prepare to pass under high bar.
-        frc2::ParallelRaceGroup {
-            RotateOuterArmsCommand {outerRotate, config.outer.backOffAngle},
-            RetractOuterArmsCommand {outerReach, config.outer.zeroExtension}
+            RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
         },
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
+        // Outer: rotate toward next bar. Pass under high bar.
+        RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle}.WithTimeout(2_s),
         // Outer: rotate to traverse bar and extend to traverse bar.
         // Inner: retract to raise robot and move outer closer to traverse bar.
         // Prepare to grab traverse bar.
