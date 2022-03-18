@@ -28,66 +28,73 @@ void Robot::RobotInit()
     driverController = new frc::XboxController(interfaces::kXBoxDriver);
     operatorController = new frc::XboxController(interfaces::kXBoxOperator);
   
-    mClimber = new Climber(toml->get_table("climber"));
+    mInnerReach = new ClimberInnerReach(toml->get_table("climber"));
+    mInnerRotate = new ClimberInnerRotate(toml->get_table("climber"));
+    mOuterReach = new ClimberOuterReach(toml->get_table("climber"));
+    mOuterRotate = new ClimberOuterRotate(toml->get_table("climber"));
     mIntake = new Intake(toml->get_table("intake"));
     mShooter = new Shooter(toml->get_table("shooter"));
     mSwerveDrive = new SwerveDrive(false);
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
-    mClimbMidbarOnly = new ClimbMidBarOnly(mClimber, toml->get_table_qualified("command.climb.midbar"));
+    mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
+    mHighClimb = new HighBarClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
+    mTraversalClimb = new TraversalClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
+    mExtendIntakeCommand = new ExtendIntakeCommand(mIntake);
+    mRetractIntakeCommand = new RetractIntakeCommand(mIntake);
     mRunIntakeCommand = new RunIntakeCommand(mIntake);
     mShootCommand = new ShootCommand(mShooter);
 
-    mManualRetractInnerArms = new frc2::FunctionalCommand(
+    mManualRetractOuterArms = new frc2::FunctionalCommand(
         [&]() {},
         [&]() {
-            bool isInner1NearTarget = mClimber->isInner1NearTarget(0.0);
-            bool isInner2NearTarget = mClimber->isInner2NearTarget(0.0);
+            bool isOuter1NearTarget = mOuterReach->isMotor1NearTarget(0.0);
+            bool isOuter2NearTarget = mOuterReach->isMotor2NearTarget(0.0);
 
-            if (isInner1NearTarget) {
-                mClimber->stopInner1();
+            if (isOuter1NearTarget) {
+                mOuterReach->stop1();
             } else {
-                mClimber->runInner1(0.2);
+                mOuterReach->run1(-0.4);
             }
 
-            if (isInner2NearTarget) {
-                mClimber->stopInner2();
+            if (isOuter2NearTarget) {
+                mOuterReach->stop2();
             } else {
-                mClimber->runInner2(0.2);
+                mOuterReach->run2(-0.4);
             }
         },
         [&](bool) {
-            mClimber->stopInner1();
-            mClimber->stopInner2();
+            mOuterReach->stop1();
+            mOuterReach->stop2();
         },
-        [&]() { return mClimber->isInner1NearTarget(0.0) || mClimber->isInner2NearTarget(0.0); },
-        { mClimber }
+        [&]() { return mOuterReach->getMotor1Position() < 1.0 && mOuterReach->getMotor2Position() < 1.0; },
+        { mOuterReach }
     );
 
-    mManualExtendInnerArms = new frc2::FunctionalCommand(
+    mManualExtendOuterArms = new frc2::FunctionalCommand(
         [&]() {},
         [&]() {
-            bool isInner1NearTarget = mClimber->isInner1NearTarget(20.0);
-            bool isInner2NearTarget = mClimber->isInner2NearTarget(20.0);
+            bool isOuter1NearTarget = mOuterReach->isMotor1NearTarget(20.0);
+            bool isOuter2NearTarget = mOuterReach->isMotor2NearTarget(20.0);
 
-            if (isInner1NearTarget) {
-                mClimber->stopInner1();
+            if (isOuter1NearTarget) {
+                mOuterReach->stop1();
             } else {
-                mClimber->runInner1(-0.2);
+                mOuterReach->run1(0.4);
             }
 
-            if (isInner2NearTarget) {
-                mClimber->stopInner2();
+            if (isOuter2NearTarget) {
+                mOuterReach->stop2();
             } else {
-                mClimber->runInner2(-0.2);
+                mOuterReach->run2(0.4);
             }
         },
         [&](bool) {
-            mClimber->stopInner1();
-            mClimber->stopInner2();
+            mOuterReach->stop1();
+            mOuterReach->stop2();
         },
-        [&]() { return mClimber->isInner1NearTarget(20.0) || mClimber->isInner2NearTarget(20.0); },
-        { mClimber }
+        [&]() { return mOuterReach->getMotor1Position() > 20.0 && mOuterReach->getMotor2Position() > 20.0; },
+        { mOuterReach }
     );
 
     // Shooter commands
@@ -103,6 +110,25 @@ void Robot::RobotInit()
         [&]() { mShooter->stopShooter(); },
         { mShooter }
     );
+    
+    mShootLowHub = new frc2::StartEndCommand(
+        [&]() { mShooter->shootLowHub(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
+
+    mShootReverse = new frc2::StartEndCommand(
+        [&]() { mShooter->shootReverse(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
+
+    
+    mShootAuto = new frc2::StartEndCommand(
+        [&]() { mShooter->shootAuto(); },
+        [&]() { mShooter->stopShooter(); },
+        { mShooter }
+    );
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
@@ -113,7 +139,7 @@ void Robot::RobotInit()
             [](){},
             [&](){
                 // Turn slightly right to compensate for drift/drag.
-                mSwerveDrive->setMotion(0, -0.5, -0.03);
+                mSwerveDrive->setMotion(0, -0.5, -0.035);
             },
             [&](bool _interrupted){ 
                 mSwerveDrive->setMotion(0, 0, 0); //stop swerve
@@ -135,6 +161,13 @@ void Robot::RobotInit()
  */
 void Robot::RobotPeriodic() {
     frc2::CommandScheduler::GetInstance().Run();
+
+    static int resyncCounter = 25;
+    if (0 == resyncCounter) {
+        resyncCounter = 25;
+        // mSwerveDrive->synchronizeTurnEncoders();
+    }
+    resyncCounter--;
 }
 
 /**
@@ -193,11 +226,33 @@ void Robot::TeleopPeriodic()
         mShootFar->Cancel();
     }
 
-    //Intake
     if (operatorController->GetAButtonPressed()) {
-        mRunIntakeCommand->Schedule();
-    } else if(operatorController->GetAButtonReleased()) {
+        mShootLowHub->Schedule();
+    } else if (operatorController->GetAButtonReleased()){
+        mShootLowHub->Cancel();
+    }
+
+    if(operatorController->GetBButtonPressed()){
+        mShootReverse->Schedule();
+    } else if (operatorController->GetBButtonReleased()){
+        mShootReverse->Cancel();
+    }
+
+    //Intake
+    if (operatorController->GetRightTriggerAxis() > 0.5) {
+        if (!mRunIntakeCommand->IsScheduled()) {
+            mRunIntakeCommand->Schedule();
+        }
+    } else if (mRunIntakeCommand->IsScheduled()) {
         mRunIntakeCommand->Cancel();
+    }
+
+    if (operatorController->GetRightBumperPressed()) {
+        if (mIntake->isExtended()) {
+            mRetractIntakeCommand->Schedule();
+        } else {
+            mExtendIntakeCommand->Schedule();
+        }
     }
 
     //Climber
@@ -205,35 +260,37 @@ void Robot::TeleopPeriodic()
         mClimbMidbarOnly->mReachMidBar->Schedule();
     }
     
-    if (90 == operatorController->GetPOV()) { // Check right button
-
+    if (270 == operatorController->GetPOV()) { // Check left button
+        if (!mHighClimb->IsScheduled()) {
+            mHighClimb->Schedule();
+        }
     } else {
 
     }
 
     if (180 == operatorController->GetPOV()) { // Check down button
-      mClimbMidbarOnly->mClimbMidBarAndLock->Schedule();
+      mClimbMidbarOnly->mClimbMidBar->Schedule();
     }
 
-    if (270 == operatorController->GetPOV()) { // Check left button
-
+    if (90 == operatorController->GetPOV()) { // Check right button
+        if (!mTraversalClimb->IsScheduled()) {
+            mTraversalClimb->Schedule();
+        }
     } else {
         
     }
 
-    // FIXME: Hack to allow operator to manually (and slowly) move inner climb
-    // arms if no other command is running.
-    double opY = operatorController->GetLeftY();
+    double opY = -operatorController->GetLeftY();
     opY = fabs(opY) < 0.3 ? 0.0 : opY;
     if (opY < 0.0) {
-        mManualRetractInnerArms->Schedule();
+        mManualRetractOuterArms->Schedule();
     } else if (opY > 0.0) {
-        mManualExtendInnerArms->Schedule();
+        mManualExtendOuterArms->Schedule();
     } else {
-        if (mManualRetractInnerArms->IsScheduled()) {
-            mManualRetractInnerArms->Cancel();
-        } else if (mManualExtendInnerArms->IsScheduled()) {
-            mManualExtendInnerArms->Cancel();
+        if (mManualRetractOuterArms->IsScheduled()) {
+            mManualRetractOuterArms->Cancel();
+        } else if (mManualExtendOuterArms->IsScheduled()) {
+            mManualExtendOuterArms->Cancel();
         }
     }
 }

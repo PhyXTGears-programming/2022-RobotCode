@@ -12,6 +12,8 @@ class SwerveDrive : public frc2::SubsystemBase {
 
         void Periodic() override;
 
+        void synchronizeTurnEncoders();
+
         void setMotion(double x, double y, double r);
 
     private:

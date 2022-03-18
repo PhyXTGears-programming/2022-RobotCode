@@ -15,8 +15,11 @@ public:
     void Periodic () override;
     
     void runShooter (double speed);
+    void shootLowHub ();
+    void shootReverse ();
     void shootFar ();
     void shootNear ();
+    void shootAuto ();
     void stopShooter ();
 
 private:
@@ -44,6 +47,9 @@ private:
         struct {
             double near;
             double far;
+            double lowHub;
+            double reverse;
+            double auton;
         } speed;
 
         struct {

@@ -5,6 +5,9 @@
 Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
     config.speed.near = toml->get_qualified_as<double>("speed.near").value_or(2700);
     config.speed.far = toml->get_qualified_as<double>("speed.far").value_or(3200);
+    config.speed.lowHub = toml->get_qualified_as<double>("speed.lowHub").value_or(2000);
+    config.speed.reverse = toml->get_qualified_as<double>("speed.lowHub").value_or(-1000);
+    config.speed.auton = toml->get_qualified_as<double>("speed.auto").value_or(2500);
     config.motor.p = toml->get_qualified_as<double>("motor.p").value_or(0.01);
     config.motor.i = toml->get_qualified_as<double>("motor.i").value_or(0.0);
     config.motor.d = toml->get_qualified_as<double>("motor.d").value_or(0.0);
@@ -33,12 +36,25 @@ void Shooter::runShooter (double speed) {
     mPID_ShooterMotor.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
 }
 
+void Shooter::shootLowHub() {
+    runShooter(config.speed.lowHub);
+}
+
+
+void Shooter::shootReverse() {
+    runShooter(config.speed.reverse);
+}
+
 void Shooter::shootFar() {
     runShooter(config.speed.far);
 }
 
 void Shooter::shootNear() {
     runShooter(config.speed.near);
+}
+
+void Shooter::shootAuto() {
+    runShooter(config.speed.auton);
 }
 
 void Shooter::stopShooter () {

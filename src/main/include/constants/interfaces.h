@@ -108,6 +108,12 @@ namespace interfaces
         const int kDIO7 = 7;
         const int kDIO8 = 8;
         const int kDIO9 = 9;
+
+        // Solenoids
+        const int kAIR0 = 0;
+        const int kAIR1 = 1;
+        const int kAIR6 = 6;
+        const int kAIR7 = 7;
     }
 
     /*
@@ -136,6 +142,18 @@ namespace interfaces
     const int kRollerMotor = kCAN20;
     const int kDeployServo1 = kPWM6;
     const int kDeployServo2 = kPWM7;
+
+
+    /*  
+        /OO(rollers)00\
+Intake: |             |
+       0,1           2,3
+        V Back of Bot V
+    */
+    const int kIntakeExtendLeft = kAIR1;
+    const int kIntakeRetractLeft = kAIR0;
+    const int kIntakeExtendRight = kAIR7;
+    const int kIntakeRetractRight = kAIR6;
 
     //shooter CAN assignment (block 3)
     const int kShooterMotor = kCAN30;

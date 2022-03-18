@@ -1,12 +1,12 @@
 #include "commands/climber/LockArms.h"
 
-LockArmsCommand::LockArmsCommand(Climber * climber) {
-    AddRequirements(climber);
-    mClimber = climber;
+LockArmsCommand::LockArmsCommand(ClimberInnerReach * innerArms) {
+    AddRequirements(innerArms);
+    mInnerArms = innerArms;
 }
 
 void LockArmsCommand::Initialize() {
-    mClimber->lockArms();
+    //mInnerArms->lockArms();
 }
 
 void LockArmsCommand::Execute() {}

@@ -1,37 +1,66 @@
 #include "commands/climber/RotateInnerArms.h"
 #include "climber/lerp.h"
 
-const double kAcceptableAngleError = 0.0001;
-const double kMinSpeed = 0.2;
-const double kMaxSpeed = 0.2;
+#include <cmath>
+
+#define SLOWZONE 0.5
+#define IS_WITHIN_SLOWZONE(input) ((fabs(input) < SLOWZONE))
+
+const double kAcceptableAngleError = 0.1;
 
 
-RotateInnerArmsCommand::RotateInnerArmsCommand(Climber * climber, double targetAngle) {
-    AddRequirements(climber);
-    mClimber = climber;
+RotateInnerArmsCommand::RotateInnerArmsCommand(
+    ClimberInnerRotate * innerArms,
+    double targetAngle,
+    double minSpeed,
+    double maxSpeed
+) {
+    AddRequirements(innerArms);
+    mInnerArms = innerArms;
     mTargetAngle = targetAngle;
+    mMinSpeed = minSpeed;
+    mMaxSpeed = maxSpeed;
 }
 
 void RotateInnerArmsCommand::Initialize() {
-    mClimber->setRotateMotorsBrake();
+    mInnerArms->setMotorBrake();
 }
 
 void RotateInnerArmsCommand::Execute() {
     // Angles are not radians or degrees.  They are duty cycle values...
     // somewhere between -1.0 and 1.0 it seems.  So use error to set direction
     // of rotation, (+) is lean forward, (-) is lean backward.
-    double armAngle = mClimber->getInnerAngle();
+    double armAngle = mInnerArms->getAngle();
     double err = mTargetAngle - armAngle;
-    double speed = std::copysign(kMinSpeed, err);
-    mClimber->rotateInner(speed);
+
+    if (mTargetAngle > 0 && err > 0) {
+        // If gravity won't pull arm toward angle (armAngle > 0) and movement toward
+        // target is against gravity (target > 0 and err > 0), then drive motor.
+        if (armAngle < 0.0) {
+            mInnerArms->rotate(mMinSpeed);
+        } else {
+            mInnerArms->rotate(mMaxSpeed);
+        }
+    } else if (mTargetAngle < 0 && err < 0) {
+        // If gravity won't pull arm toward angle (armAngle < 0) and movement toward
+        // target is against gravity (target < 0 and err < 0), then drive motor.
+        if (armAngle > 0.0) {
+            mInnerArms->rotate(-mMinSpeed);
+        } else {
+            mInnerArms->rotate(-mMaxSpeed);
+        }
+    } else {
+        mInnerArms->stop();
+    }
 }
 
 void RotateInnerArmsCommand::End(bool isInterrupted) {
-    mClimber->rotateInner(0.0);
+    mInnerArms->stop();
 }
 
 bool RotateInnerArmsCommand::IsFinished() {
-    double armAngle = mClimber->getInnerAngle();
-    double err = mTargetAngle - armAngle;
-    return abs(err) < kAcceptableAngleError;
+    return false;
+    // double armAngle = mInnerArms->getAngle();
+    // double err = mTargetAngle - armAngle;
+    // return std::abs(err) < kAcceptableAngleError;
 }

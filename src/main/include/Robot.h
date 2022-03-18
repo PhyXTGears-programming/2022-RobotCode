@@ -20,15 +20,22 @@
 
 #include "cpptoml.h"
 
-#include "climber/climber.h"
+#include "climber/InnerReach.h"
+#include "climber/InnerRotate.h"
+#include "climber/OuterReach.h"
+#include "climber/OuterRotate.h"
 #include "drivetrain-swerve/SwerveDrive.h"
 #include "intake/intake.h"
 #include "shooter/shooter.h"
 
 #include "commands/climber/ClimbMidBarOnly.h"
+#include "commands/climber/HighBarClimb.h"
+#include "commands/climber/TraversalClimb.h"
 #include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 #include "commands/shooter/ShootCommand.h"
 #include "commands/intake/RunIntake.h"
+#include "commands/intake/ExtendIntake.h"
+#include "commands/intake/RetractIntake.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -56,21 +63,36 @@ private:
     frc::XboxController * driverController = nullptr;
     frc::XboxController * operatorController = nullptr;
 
-    Climber *mClimber = nullptr;
+    ClimberInnerReach * mInnerReach = nullptr;
+    ClimberInnerRotate * mInnerRotate = nullptr;
+    ClimberOuterReach * mOuterReach = nullptr;
+    ClimberOuterRotate * mOuterRotate = nullptr;
     Intake *mIntake = nullptr;
     Shooter *mShooter = nullptr;
     SwerveDrive * mSwerveDrive = nullptr;
     
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
+    HighBarClimb * mHighClimb = nullptr;
+    TraversalClimb * mTraversalClimb = nullptr;
     ShootCommand *mShootCommand = nullptr;
+    
     RunIntakeCommand *mRunIntakeCommand = nullptr;
+    RetractIntakeCommand *mRetractIntakeCommand = nullptr;
+    ExtendIntakeCommand *mExtendIntakeCommand = nullptr;
 
-    frc2::FunctionalCommand *mManualRetractInnerArms = nullptr;
-    frc2::FunctionalCommand *mManualExtendInnerArms = nullptr;
+
+    frc2::FunctionalCommand *mManualRetractOuterArms = nullptr;
+    frc2::FunctionalCommand *mManualExtendOuterArms = nullptr;
 
     frc2::StartEndCommand *mShootNear = nullptr;
     frc2::StartEndCommand *mShootFar = nullptr;
+    frc2::StartEndCommand *mShootLowHub = nullptr;
+    frc2::StartEndCommand *mShootReverse = nullptr;
+    frc2::StartEndCommand *mShootAuto = nullptr;
 
     frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
 };
+
+// there is a hidden forg somewhere in the robot's code.
+//Where does the Prog Frog's Virtual Identity Clone to Infiltrate Your Programs and Scripts Maliciously and With Evil Intent (PFVICIYPSMWEI) seem to be now?

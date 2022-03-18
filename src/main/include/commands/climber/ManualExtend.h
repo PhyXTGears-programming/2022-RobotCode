@@ -1,6 +1,6 @@
 #pragma once
 
-#include "climber/climber.h"
+#include "climber/InnerReach.h"
 #include "RetractInnerArms.h"
 
 #include <frc2/command/CommandBase.h>
@@ -8,7 +8,7 @@
 
 class ManualExtendCommand : public frc2::CommandHelper<frc2::CommandBase, ManualExtendCommand> {
     public:
-        ManualExtendCommand(Climber* climber);
+        ManualExtendCommand(ClimberInnerReach * innerArms);
 
         void Initialize() override;
         void Execute() override;
@@ -16,7 +16,7 @@ class ManualExtendCommand : public frc2::CommandHelper<frc2::CommandBase, Manual
         bool IsFinished() override;
 
     private:
-        Climber * mClimber;
+        ClimberInnerReach * mInnerArms;
         const double kTargetExtension = 10.0;
         const double kRestingExtension = 0.0;
 
