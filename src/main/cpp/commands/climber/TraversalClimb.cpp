@@ -41,6 +41,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }}.WithTimeout(1_s),
+        // pull up and point inner at next bar
         frc2::ParallelCommandGroup {
             RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
             frc2::ParallelRaceGroup {
@@ -48,6 +49,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
                 RotateInnerArmsCommand {innerRotate, config.inner.nextBarAngle},
             }
         },
+        // grab next bar and swing
         frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }},
         RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle}.WithTimeout(1_s),
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); }},
@@ -59,29 +61,63 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
                 ExtendOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
             }
         },
+        // release rear bar and rotate towards vertical
         ExtendOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension},
         RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle}.WithTimeout(2_s),
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle},
             RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
         },
-        frc2::ParallelCommandGroup {
-            RotateOuterArmsCommand {outerRotate, config.outer.verticalArmAngle, 0.05, 0.075}.WithTimeout(2_s),
+        frc2::ParallelRaceGroup {
+            RotateOuterArmsCommand {outerRotate, config.outer.backOffAngle},
+            RetractOuterArmsCommand {outerReach, config.outer.zeroExtension}
+        },
+        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
+        frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
+        // outer point and extend to next bar
+        frc2::ParallelRaceGroup {
+            RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle},
             frc2::SequentialCommandGroup {
                 frc2::WaitCommand {1_s},
                 RetractInnerArmsCommand {innerReach, config.inner.zeroExtension},
+                ExtendOuterArmsCommand {outerReach, config.outer.nextBarExtension}
             }
         },
-        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(10); }},
-        RotateOuterArmsCommand {outerRotate, config.outer.verticalArmAngle}.WithTimeout(1_s),
+        // outer grab next bar and swing
+        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }},
+        RotateOuterArmsCommand {outerRotate, config.outer.dropToNextBarAngle}.WithTimeout(1_s),
+        frc2::InstantCommand {[=](){ outerReach->setUnderLoad(true); innerReach->setUnderLoad(false); }},
+        frc2::ParallelCommandGroup {
+            RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
+            ExtendInnerArmsCommand {innerReach, config.inner.toPreviousBarExtension}
+        },
+        // inner release
+        ExtendInnerArmsCommand {innerReach, config.inner.releasePreviousBarExtension},
         frc2::ParallelRaceGroup {
-            RotateOuterArmsCommand {outerRotate, config.outer.verticalArmAngle},
+            RotateInnerArmsCommand {innerRotate, config.inner.dropOffPreviousBarAngle},
+            frc2::SequentialCommandGroup {
+                frc2::WaitCommand {1_s},
+                RetractInnerArmsCommand {innerReach, config.inner.liftExtension}
+            }
+        },
+        // get inner hooks on traversal
+        frc2::ParallelCommandGroup {
+            RotateInnerArmsCommand {innerRotate, config.inner.verticalArmAngle, 0.05, 0.075}.WithTimeout(2_s),
+            frc2::SequentialCommandGroup {
+                frc2::WaitCommand {1_s},
+                RetractOuterArmsCommand {outerReach, config.outer.zeroExtension}
+            }
+        },
+        frc2::InstantCommand {[=](){ innerRotate->setCurrentlimit(10); }},
+        RotateInnerArmsCommand {innerRotate, config.inner.verticalArmAngle}.WithTimeout(1_s),
+        frc2::ParallelRaceGroup {
+            RotateInnerArmsCommand {innerRotate, config.inner.verticalArmAngle},
             frc2::ParallelCommandGroup {
                 RetractInnerArmsCommand {innerReach, config.inner.zeroExtension},
-                RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
+                RetractOuterArmsCommand {outerReach, config.outer.zeroExtension}.AndThen([=](){  }),
+                RetractIntakeCommand {intake}
             }
-        }
-
+        },
     };
 }
 
@@ -91,11 +127,7 @@ void TraversalClimb::Initialize() {
 
 void TraversalClimb::Execute() {}
 
-void TraversalClimb::End(bool interrupted) {
-    if (interrupted) {
-        mGoal = INOPERATIVE;
-    }
-}
+void TraversalClimb::End(bool interrupted) {}
 
 bool TraversalClimb::IsFinished() {
     return true;
