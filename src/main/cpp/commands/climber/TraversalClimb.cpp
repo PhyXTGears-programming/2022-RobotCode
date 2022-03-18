@@ -136,9 +136,9 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
             frc2::ParallelCommandGroup {
                 RetractInnerArmsCommand {innerReach, config.inner.zeroExtension},
                 RetractOuterArmsCommand {outerReach, config.outer.zeroExtension}.AndThen([=](){  }),
-                RetractIntakeCommand {intake}
             }
         },
+        RetractIntakeCommand {intake}
     };
 }
 
