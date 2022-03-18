@@ -122,13 +122,17 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
 }
 
 void TraversalClimb::Initialize() {
-    mTraversalClimb->Schedule();
+    mTraversalClimb->Initialize();
 }
 
-void TraversalClimb::Execute() {}
+void TraversalClimb::Execute() {
+    mTraversalClimb->Execute();
+}
 
-void TraversalClimb::End(bool interrupted) {}
+void TraversalClimb::End(bool interrupted) {
+    mTraversalClimb->End(interrupted);
+}
 
 bool TraversalClimb::IsFinished() {
-    return true;
+    return mTraversalClimb->IsFinished();
 }

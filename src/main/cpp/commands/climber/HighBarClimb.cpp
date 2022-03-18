@@ -86,17 +86,17 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
 }
 
 void HighBarClimb::Initialize() {
-    mHighBarClimb->Schedule();
+    mHighBarClimb->Initialize();
 }
 
-void HighBarClimb::Execute() {}
+void HighBarClimb::Execute() {
+    mHighBarClimb->Execute();
+}
 
 void HighBarClimb::End(bool interrupted) {
-    if (interrupted) {
-        mGoal = INOPERATIVE;
-    }
+    mHighBarClimb->End(interrupted);
 }
 
 bool HighBarClimb::IsFinished() {
-    return true;
+    return mHighBarClimb->IsFinished();
 }
