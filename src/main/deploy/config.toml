@@ -5,7 +5,7 @@ intakeRetractedPosition = 0.0
 intakeExtendedPosition = 1.0
 
 [shooter]
-speed.near = 1200 # RPM
+speed.near = 2400 # RPM
 speed.auto = 2200 # RPM
 speed.far = 2750
 speed.reverse = -1000
