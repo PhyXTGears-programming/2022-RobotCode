@@ -67,7 +67,7 @@ void Robot::RobotInit()
             mOuterReach->stop1();
             mOuterReach->stop2();
         },
-        [&]() { return mOuterReach->isMotor1NearTarget(0.0) || mOuterReach->isMotor2NearTarget(0.0); },
+        [&]() { return mOuterReach->getMotor1Position() < 1.0 && mOuterReach->getMotor2Position() < 1.0; },
         { mOuterReach }
     );
 
@@ -93,7 +93,7 @@ void Robot::RobotInit()
             mOuterReach->stop1();
             mOuterReach->stop2();
         },
-        [&]() { return mOuterReach->isMotor1NearTarget(20.0) || mOuterReach->isMotor2NearTarget(20.0); },
+        [&]() { return mOuterReach->getMotor1Position() > 20.0 && mOuterReach->getMotor2Position() > 20.0; },
         { mOuterReach }
     );
 
