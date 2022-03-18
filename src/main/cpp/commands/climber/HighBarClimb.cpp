@@ -79,9 +79,9 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
             frc2::ParallelCommandGroup {
                 RetractInnerArmsCommand {innerReach, config.inner.zeroExtension},
                 RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
+                RetractIntakeCommand {intake}
             }
-        }
-
+        },
     };
 }
 

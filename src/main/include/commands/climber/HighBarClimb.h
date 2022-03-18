@@ -18,6 +18,7 @@
 #include "commands/climber/LockArms.h"
 
 #include "commands/intake/ExtendIntake.h"
+#include "commands/intake/RetractIntake.h"
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
