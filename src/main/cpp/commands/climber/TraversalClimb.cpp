@@ -122,7 +122,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
             }
         },
         // Inner: rotate to vertical.  gently crash traverse bar.
-        frc2::InstantCommand {[=](){ innerRotate->setCurrentlimit(10); }},
+        frc2::InstantCommand {[=](){ innerRotate->setCurrentlimit(15); }},
         RotateInnerArmsCommand {innerRotate, config.inner.verticalArmAngle}.WithTimeout(1_s),
         // Inner: retract to grab traverse bar.
         // Outer: retract to keep robot against traverse bar.
