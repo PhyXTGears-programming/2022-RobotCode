@@ -327,7 +327,7 @@ void Robot::TeleopPeriodic()
             mTraversalClimb->Schedule();
         }
     } else {
-        
+
     }
 
     double opY = -operatorController->GetLeftY();
