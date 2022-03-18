@@ -34,7 +34,7 @@ void Robot::RobotInit()
     mOuterRotate = new ClimberOuterRotate(toml->get_table("climber"));
     mIntake = new Intake(toml->get_table("intake"));
     mShooter = new Shooter(toml->get_table("shooter"));
-    mSwerveDrive = new SwerveDrive(false);
+    mSwerveDrive = new SwerveDrive(true);
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
     mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
@@ -213,6 +213,16 @@ void Robot::TeleopPeriodic()
 #ifdef ROBOTCMH_PID_TUNING_MODE
     drivetrain.tunePIDNetworktables();
 #endif
+    if (driverController->GetRightBumperPressed()){
+        mSwerveDrive->enableFieldCentric();
+    } else if (driverController->GetRightBumperReleased()){
+        mSwerveDrive->disableFieldCentric();
+    }
+
+    if (driverController->GetAButtonPressed()){
+        mSwerveDrive->resetGyro();
+    }
+
     //Shooter
     if (operatorController->GetXButtonPressed()) {
         mShootNear->Schedule();
