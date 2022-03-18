@@ -29,6 +29,8 @@
 #include "shooter/shooter.h"
 
 #include "commands/climber/ClimbMidBarOnly.h"
+#include "commands/climber/HighBarClimb.h"
+#include "commands/climber/TraversalClimb.h"
 #include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 #include "commands/shooter/ShootCommand.h"
 #include "commands/intake/RunIntake.h"
@@ -71,6 +73,8 @@ private:
     
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
+    HighBarClimb * mHighClimb = nullptr;
+    TraversalClimb * mTraversalClimb = nullptr;
     ShootCommand *mShootCommand = nullptr;
     
     RunIntakeCommand *mRunIntakeCommand = nullptr;
@@ -78,8 +82,8 @@ private:
     ExtendIntakeCommand *mExtendIntakeCommand = nullptr;
 
 
-    frc2::FunctionalCommand *mManualRetractInnerArms = nullptr;
-    frc2::FunctionalCommand *mManualExtendInnerArms = nullptr;
+    frc2::FunctionalCommand *mManualRetractOuterArms = nullptr;
+    frc2::FunctionalCommand *mManualExtendOuterArms = nullptr;
 
     frc2::StartEndCommand *mShootNear = nullptr;
     frc2::StartEndCommand *mShootFar = nullptr;

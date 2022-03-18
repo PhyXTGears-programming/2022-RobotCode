@@ -7,6 +7,8 @@
 #include "climber/OuterReach.h"
 #include "climber/OuterRotate.h"
 
+#include "intake/intake.h"
+
 #include "commands/climber/ExtendInnerArms.h"
 #include "commands/climber/ExtendOuterArms.h"
 #include "commands/climber/RetractOuterArms.h"
@@ -15,14 +17,17 @@
 #include "commands/climber/RotateInnerArms.h"
 #include "commands/climber/LockArms.h"
 
+#include "commands/intake/ExtendIntake.h"
+#include "commands/intake/RetractIntake.h"
+
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/ParallelCommandGroup.h>
 
-class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
+class TraversalClimb : public frc2::CommandHelper<frc2::CommandBase, TraversalClimb> {
     public:
-        Cycle(ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
+        TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, ClimberInnerRotate * innerRotate, ClimberOuterReach * outerReach, ClimberOuterRotate * outerRotate, std::shared_ptr<cpptoml::table> toml);
 
         void Initialize() override;
         void Execute() override;
@@ -30,6 +35,9 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
         bool IsFinished() override;
 
     private:
+
+        Intake * mIntake = nullptr;
+
         ClimberInnerReach * mInnerReach = nullptr;
         ClimberOuterReach * mOuterReach = nullptr;
         ClimberInnerRotate * mInnerRotate = nullptr;
@@ -64,15 +72,8 @@ class Cycle : public frc2::CommandHelper<frc2::CommandBase, Cycle> {
                 double zeroExtension;
                 double releasePreviousBarExtension;
                 double dropOffPreviousBarAngle;
-            } cycle;
+            } inner, outer;
         } config;
 
-        frc2::SequentialCommandGroup * mHighCycle = nullptr;
-
-        // at this point the outer hooks should be on the second bar and the inner hooks should be pointing towards the traversal rung.
-
-        frc2::SequentialCommandGroup * mTraversalCycle = nullptr;
-        // and now the inner hooks should be on the traversal rung.
-
-        frc2::SequentialCommandGroup * mCycle = nullptr;
+        frc2::SequentialCommandGroup * mTraversalClimb = nullptr;
 };

@@ -11,6 +11,8 @@ class ClimberInnerRotate : public frc2::SubsystemBase {
     public:
         ClimberInnerRotate(std::shared_ptr<cpptoml::table> toml);
 
+        void Periodic();
+
         void rotate(double speed);
         void stop();
         
@@ -19,8 +21,12 @@ class ClimberInnerRotate : public frc2::SubsystemBase {
         void setMotorCoast();
         void setMotorBrake();
 
+        void setCurrentlimit(unsigned int limit);
+        void resetCurrentLimit();
+
     private:
         rev::CANSparkMax mMotor {interfaces::kInnerArmRotation, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+        rev::SparkMaxRelativeEncoder mMotorEncoder = mMotor.GetEncoder();
 
         frc::DutyCycleEncoder mEncoder {interfaces::kInnerRotationEncoder};
 };

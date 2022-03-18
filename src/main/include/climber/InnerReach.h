@@ -13,6 +13,8 @@ class ClimberInnerReach : public frc2::SubsystemBase {
     public:
         ClimberInnerReach(std::shared_ptr<cpptoml::table> toml);
 
+        void Periodic() override;
+
         void extend1();
         void extend2();
         void retract1();

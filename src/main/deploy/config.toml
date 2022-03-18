@@ -29,15 +29,15 @@ servo2.lockPosition = 1.0
 innerRotationZeroOffset = 0.962
 outerRotationZeroOffset = 0.023
 
-extendSpeed = 0.45
-retractSpeed = -0.45
+extendSpeed = 0.25
+retractSpeed = -0.25
 
 inchesPerRevolution = 0.128325 # equal to 2.5665 / 20, meaning 2.5665 inches per 20 revolutions
 
-innerStaticFriction = 0.05 # actual value unknown
-outerStaticFriction = 0.05 # actual value unknown
-innerStaticFrictionWithLoad = 0.25 # actual value unknown
-outerStaticFrictionWithLoad = 0.25 # actual value unknown
+innerStaticFriction = 0.15 # actual value unknown
+outerStaticFriction = 0.15 # actual value unknown
+innerStaticFrictionWithLoad = 0.35 # actual value unknown
+outerStaticFrictionWithLoad = 0.35 # actual value unknown
 
 [command.climb.midbar]
 initialExtension = 16.0
@@ -45,30 +45,31 @@ liftRetraction = 1.0
 verticalArmAngle = 0.0
 
 [cycleCommand]
-# initalExtension = 0.0
-# liftExtension = 2.42
-# armAngleForNextBar = 0.0
-# extendToNextBarExtension = 0.0
-# dropToNextBar = 0.0
-# grabNextBarExtension = 0.0
-# releaseRearBar = 0.0
-# dropOffRearBar = 0.0
-# extendToRearBar = 0.0
-# armAngleVertical = 0.5
-# restingExtension = 0.0
-    [cycleCommand.cycle]
-    liftOffExtension = 0.0
-    backOffAngle = 0.0
-    nextBarAngle = 0.0
-    nextBarExtension = 0.0
-    dropToNextBarAngle = 0.0
-    grabNextBarExtension = 0.0
-    verticalArmAngle = 0.5
-    liftExtension = 2.42
-    toPreviousBarExtension = 0.0
-    zeroExtension = 0.0
-    releasePreviousBarExtension = 0.0
-    dropOffPreviousBarAngle = 0.0
+    inner.liftOffExtension = 20.0
+    inner.backOffAngle = -4.0
+    inner.nextBarAngle = 5.5
+    inner.nextBarExtension = 28.0
+    inner.dropToNextBarAngle = 16.0
+    inner.grabNextBarExtension = 0.0
+    inner.verticalArmAngle = 0.0
+    inner.liftExtension = 15.0
+    inner.toPreviousBarExtension = 18.0       # test value: needs calibration
+    inner.zeroExtension = 1.0
+    inner.releasePreviousBarExtension = 24.0
+    inner.dropOffPreviousBarAngle = -15.7
+
+    outer.liftOffExtension = 20.0
+    outer.backOffAngle = -2.0
+    outer.nextBarAngle = 7.833
+    outer.nextBarExtension = 28.0
+    outer.dropToNextBarAngle = 9.0
+    outer.grabNextBarExtension = 0.0
+    outer.verticalArmAngle = 2.0
+    outer.liftExtension = 15.0
+    outer.toPreviousBarExtension = 18.0       # test value: needs calibration
+    outer.zeroExtension = 1.0
+    outer.releasePreviousBarExtension = 24.0
+    outer.dropOffPreviousBarAngle = -13.0
 
 [drivetrain]
     [drivetrain.PID]

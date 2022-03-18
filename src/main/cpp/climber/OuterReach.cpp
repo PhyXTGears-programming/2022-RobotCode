@@ -1,5 +1,7 @@
 #include "climber/OuterReach.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include <cmath>
 
 ClimberOuterReach::ClimberOuterReach(std::shared_ptr<cpptoml::table> toml) {
@@ -17,6 +19,11 @@ ClimberOuterReach::ClimberOuterReach(std::shared_ptr<cpptoml::table> toml) {
 
     mEncoder1.SetPosition(0.0);
     mEncoder2.SetPosition(0.0);
+}
+
+void ClimberOuterReach::Periodic() {
+    frc::SmartDashboard::PutNumber("Clmb Out R Pos", getMotor1Position());
+    frc::SmartDashboard::PutNumber("Clmb Out L Pos", getMotor2Position());
 }
 
 void ClimberOuterReach::extend1() {
@@ -49,12 +56,20 @@ void ClimberOuterReach::retract2() {
     mMotor2.Set(config.retractSpeed + bonus);
 }
 
+void ClimberOuterReach::run1(double speed) {
+    mMotor1.Set(speed);
+}
+
+void ClimberOuterReach::run2(double speed) {
+    mMotor2.Set(speed);
+}
+
 void ClimberOuterReach::stop1() {
-    mMotor1.Set(0.0);
+    mMotor1.StopMotor();
 }
 
 void ClimberOuterReach::stop2() {
-    mMotor2.Set(0.0);
+    mMotor2.StopMotor();
 }
 
 double ClimberOuterReach::getMotor1Position() {

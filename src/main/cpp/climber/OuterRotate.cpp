@@ -1,7 +1,15 @@
 #include "climber/OuterRotate.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 ClimberOuterRotate::ClimberOuterRotate(std::shared_ptr<cpptoml::table> toml) {
     mEncoder.SetPositionOffset(toml->get_qualified_as<double>("outerRotationZeroOffset").value_or(0.023));
+
+    mMotorEncoder.SetPosition(mEncoder.GetAbsolutePosition());
+}
+
+void ClimberOuterRotate::Periodic() {
+    frc::SmartDashboard::PutNumber("Clmb Out Angle", getAngle());
 }
 
 void ClimberOuterRotate::rotate(double speed) {
@@ -13,7 +21,7 @@ void ClimberOuterRotate::stop() {
 }
 
 double ClimberOuterRotate::getAngle() {
-    return mEncoder.GetAbsolutePosition();
+    return mMotorEncoder.GetPosition();
 }
 
 void ClimberOuterRotate::setMotorCoast() {
@@ -22,4 +30,12 @@ void ClimberOuterRotate::setMotorCoast() {
 
 void ClimberOuterRotate::setMotorBrake() {
     mMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+}
+
+void ClimberOuterRotate::setCurrentlimit(unsigned int limit){
+    mMotor.SetSmartCurrentLimit(limit);
+}
+
+void ClimberOuterRotate::resetCurrentLimit(){
+    ClimberOuterRotate::setCurrentlimit(40);
 }

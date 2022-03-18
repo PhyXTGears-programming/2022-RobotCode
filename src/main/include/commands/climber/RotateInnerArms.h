@@ -6,9 +6,17 @@
 #include <frc2/command/CommandHelper.h>
 #include <cmath>
 
+#define MIN_SPEED 0.15
+#define MAX_SPEED 0.2
+
 class RotateInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, RotateInnerArmsCommand> {
     public:
-        RotateInnerArmsCommand(ClimberInnerRotate * innerArms, double targetAngle);
+        RotateInnerArmsCommand(
+            ClimberInnerRotate * innerArms,
+            double targetAngle,
+            double minSpeed = MIN_SPEED,
+            double maxSpeed = MAX_SPEED
+        );
 
         void Initialize() override;
         void Execute() override;
@@ -18,4 +26,6 @@ class RotateInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Rot
     private:
         ClimberInnerRotate * mInnerArms;
         double mTargetAngle;
+        double mMinSpeed;
+        double mMaxSpeed;
 };
