@@ -260,7 +260,7 @@ void Robot::TeleopPeriodic()
         mClimbMidbarOnly->mReachMidBar->Schedule();
     }
     
-    if (90 == operatorController->GetPOV()) { // Check right button
+    if (270 == operatorController->GetPOV()) { // Check left button
         if (!mHighClimb->IsScheduled()) {
             mHighClimb->Schedule();
         }
@@ -272,7 +272,7 @@ void Robot::TeleopPeriodic()
       mClimbMidbarOnly->mClimbMidBar->Schedule();
     }
 
-    if (270 == operatorController->GetPOV()) { // Check left button
+    if (90 == operatorController->GetPOV()) { // Check right button
         if (!mTraversalClimb->IsScheduled()) {
             mTraversalClimb->Schedule();
         }
