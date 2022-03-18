@@ -30,6 +30,7 @@
 
 #include "commands/climber/ClimbMidBarOnly.h"
 #include "commands/climber/HighBarClimb.h"
+#include "commands/climber/TraversalClimb.h"
 #include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 #include "commands/shooter/ShootCommand.h"
 #include "commands/intake/RunIntake.h"
@@ -73,6 +74,7 @@ private:
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
     HighBarClimb * mHighClimb = nullptr;
+    TraversalClimb * mTraversalClimb = nullptr;
     ShootCommand *mShootCommand = nullptr;
     
     RunIntakeCommand *mRunIntakeCommand = nullptr;
