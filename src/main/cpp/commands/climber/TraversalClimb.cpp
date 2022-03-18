@@ -37,11 +37,14 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
     config.outer.toPreviousBarExtension = toml->get_qualified_as<double>("outer.toPreviousBarExtension").value_or(0.0);
 
     mTraversalClimb = new frc2::SequentialCommandGroup {
+        // Intake: move out of the way of the climb arms.
         ExtendIntakeCommand { intake },
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }}.WithTimeout(1_s),
-        // pull up and point inner at next bar
+        // Outer: lift robot to mid bar.
+        // Inner: point at high bar.
+        // Prepare to grab high bar and swing.
         frc2::ParallelCommandGroup {
             RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
             frc2::ParallelRaceGroup {
@@ -49,7 +52,9 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
                 RotateInnerArmsCommand {innerRotate, config.inner.nextBarAngle},
             }
         },
-        // grab next bar and swing
+        // Inner: grab high bar and swing.  Stop when robot under high bar.
+        // Inner: leave robot low enough to release mid bar.
+        // Prepare to release mid bar.
         frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }},
         RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle}.WithTimeout(1_s),
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); }},
@@ -61,29 +66,37 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
                 ExtendOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
             }
         },
-        // release rear bar and rotate towards vertical
+        // Outer: release mid bar and retract to clear mid bar.
+        // Prepare to rotate outer to vertical.
         ExtendOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension},
         RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle}.WithTimeout(2_s),
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle},
             RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
         },
+        // Outer: retract completely and rotate toward vertical.
+        // Prepare to pass under high bar.
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.backOffAngle},
             RetractOuterArmsCommand {outerReach, config.outer.zeroExtension}
         },
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
-        // outer point and extend to next bar
+        // Outer: rotate to traverse bar and extend to traverse bar.
+        // Inner: retract to raise robot and move outer closer to traverse bar.
+        // Prepare to grab traverse bar.
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle},
             frc2::SequentialCommandGroup {
+                // Delay swing and give rotation time to clear high bar.
                 frc2::WaitCommand {1_s},
                 RetractInnerArmsCommand {innerReach, config.inner.zeroExtension},
                 ExtendOuterArmsCommand {outerReach, config.outer.nextBarExtension}
             }
         },
-        // outer grab next bar and swing
+        // Outer: grab traverse bar and swing.  Stop when robot under traverse bar.
+        // Outer: leave robot low enough to release high bar.
+        // Prepare to release high bar with inner arm.
         frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }},
         RotateOuterArmsCommand {outerRotate, config.outer.dropToNextBarAngle}.WithTimeout(1_s),
         frc2::InstantCommand {[=](){ outerReach->setUnderLoad(true); innerReach->setUnderLoad(false); }},
@@ -91,7 +104,9 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
             RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
             ExtendInnerArmsCommand {innerReach, config.inner.toPreviousBarExtension}
         },
-        // inner release
+        // Inner: release high bar and rotate hook below high bar, then retract
+        // to clear high bar.
+        // Prepare to rotate inner to vertical.
         ExtendInnerArmsCommand {innerReach, config.inner.releasePreviousBarExtension},
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.dropOffPreviousBarAngle},
@@ -100,7 +115,9 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
                 RetractInnerArmsCommand {innerReach, config.inner.liftExtension}
             }
         },
-        // get inner hooks on traversal
+        // Inner: rotate near vertical.
+        // Outer: lift robot against traverse bar, so inner hooks clear traverse bar.
+        // Prepare to grab traverse bar with inner arm.
         frc2::ParallelCommandGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.verticalArmAngle, 0.05, 0.075}.WithTimeout(2_s),
             frc2::SequentialCommandGroup {
@@ -108,8 +125,12 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
                 RetractOuterArmsCommand {outerReach, config.outer.zeroExtension}
             }
         },
+        // Inner: rotate to vertical.  gently crash traverse bar.
         frc2::InstantCommand {[=](){ innerRotate->setCurrentlimit(10); }},
         RotateInnerArmsCommand {innerRotate, config.inner.verticalArmAngle}.WithTimeout(1_s),
+        // Inner: retract to grab traverse bar.
+        // Outer: retract to keep robot against traverse bar.
+        // Raise intake.
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.verticalArmAngle},
             frc2::ParallelCommandGroup {
