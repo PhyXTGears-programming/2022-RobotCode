@@ -34,8 +34,8 @@ retractSpeed = -0.25
 
 inchesPerRevolution = 0.128325 # equal to 2.5665 / 20, meaning 2.5665 inches per 20 revolutions
 
-innerStaticFriction = 0.15 # actual value unknown
-outerStaticFriction = 0.15 # actual value unknown
+innerStaticFriction = 0.20 # actual value unknown
+outerStaticFriction = 0.20 # actual value unknown
 innerStaticFrictionWithLoad = 0.35 # actual value unknown
 outerStaticFrictionWithLoad = 0.35 # actual value unknown
 
