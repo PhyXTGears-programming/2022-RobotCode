@@ -58,7 +58,7 @@ private:
     const std::string kAutoNameDefault = "Default";
     const std::string kAutoNameCustom = "My Auto";
     const std::string kAutoDriveAndShoot = "Drive and Shoot";
-    const std::string kAutoDriveOnly = "Drive backwards";
+    const std::string kAutoTwoCargoShoot = "2 Cargo Auto";
     std::string m_autoSelected;
 
     frc::XboxController * driverController = nullptr;

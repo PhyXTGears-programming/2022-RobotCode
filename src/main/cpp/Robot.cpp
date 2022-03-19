@@ -10,6 +10,8 @@
 
 #include "RobotCompileModes.h"
 
+#include "auto/auto.h"
+
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
@@ -236,6 +238,10 @@ void Robot::AutonomousInit()
 
     if (m_autoSelected == kAutoDriveAndShoot) {
         mDriveAndShoot->Schedule();
+    } else if (m_autoSelected == kAutoTwoCargoShoot) {
+        mTwoCargoAuto->Schedule();
+    } else {
+        // Default Auto goes here
     }
 }
 
