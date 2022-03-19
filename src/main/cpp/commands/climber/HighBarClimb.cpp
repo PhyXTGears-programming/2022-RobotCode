@@ -63,7 +63,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
             }
         },
         ExtendOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension},
-        RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle}.WithTimeout(2_s),
+        RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle}.WithTimeout(1.5_s),
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle},
             RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
