@@ -132,6 +132,7 @@ void Robot::RobotInit()
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
+    m_chooser.AddOption(kAutoDriveOnly, kAutoDriveOnly);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
     mDriveAndShoot = new frc2::SequentialCommandGroup {
@@ -148,6 +149,20 @@ void Robot::RobotInit()
             {mSwerveDrive}
         }.WithTimeout(1.2_s),
         frc2::StartEndCommand(*mShootNear).WithTimeout(3_s)
+    };
+
+    mDriveOnly = new frc2::SequentialCommandGroup {
+        frc2::FunctionalCommand {
+            [](){},
+            [&](){
+                mSwerveDrive->setMotion(0, -0.5, -0.035);
+            },
+            [&](bool _interrupted){
+                mSwerveDrive->setMotion(0, 0, 0); // stop
+            },
+            [](){ return false; },
+            {mSwerveDrive}
+        }.WithTimeout(1.2_s)
     };
 }
 
@@ -190,8 +205,8 @@ void Robot::AutonomousInit()
 
     if (m_autoSelected == kAutoDriveAndShoot) {
         mDriveAndShoot->Schedule();
-    } else {
-        // Default Auto goes here
+    } else  if (m_autoSelected == kAutoDriveOnly) {
+        mDriveOnly->Schedule();
     }
 }
 
