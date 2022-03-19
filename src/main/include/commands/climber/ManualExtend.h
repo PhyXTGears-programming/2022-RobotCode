@@ -1,7 +1,9 @@
 #pragma once
 
 #include "climber/InnerReach.h"
+#include "climber/OuterReach.h"
 #include "RetractInnerArms.h"
+#include "RetractOuterArms.h"
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
