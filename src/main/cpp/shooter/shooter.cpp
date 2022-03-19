@@ -29,7 +29,8 @@ Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
 }
 
 void Shooter::Periodic () {
-    frc::SmartDashboard::PutNumber("Shooter Speed (rpm)", mShooterEncoder.GetVelocity());
+    // frc::SmartDashboard::PutNumber("Shooter Speed (rpm)", mShooterEncoder.GetVelocity());
+    // frc::SmartDashboard::PutNumber("Shooter Speed (rpm) Graph", mShooterEncoder.GetVelocity());
 }
 
 void Shooter::runShooter (double speed) {
