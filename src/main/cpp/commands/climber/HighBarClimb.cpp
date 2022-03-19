@@ -1,4 +1,6 @@
 #include "commands/climber/HighBarClimb.h"
+#include "commands/intake/RunIntake.h"
+
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
@@ -37,6 +39,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
     config.outer.toPreviousBarExtension = toml->get_qualified_as<double>("outer.toPreviousBarExtension").value_or(0.0);
 
     mHighBarClimb = new frc2::SequentialCommandGroup {
+        RunIntakeCommand { intake }.WithTimeout(0.25_s),
         ExtendIntakeCommand { intake },
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},

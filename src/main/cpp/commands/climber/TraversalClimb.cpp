@@ -1,4 +1,6 @@
 #include "commands/climber/TraversalClimb.h"
+#include "commands/intake/RunIntake.h"
+
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
@@ -38,6 +40,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
 
     mTraversalClimb = new frc2::SequentialCommandGroup {
         // Intake: move out of the way of the climb arms.
+        RunIntakeCommand { intake }.WithTimeout(0.25_s),
         ExtendIntakeCommand { intake },
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
         frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
