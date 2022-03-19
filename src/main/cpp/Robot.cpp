@@ -140,7 +140,7 @@ void Robot::RobotInit()
             [](){},
             [&](){
                 // Turn slightly right to compensate for drift/drag.
-                mSwerveDrive->setMotion(0, -0.5, -0.035);
+                mSwerveDrive->setMotion(0, -0.5, 0.0);
             },
             [&](bool _interrupted){ 
                 mSwerveDrive->setMotion(0, 0, 0); //stop swerve
@@ -155,7 +155,7 @@ void Robot::RobotInit()
         frc2::FunctionalCommand {
             [](){},
             [&](){
-                mSwerveDrive->setMotion(0, -0.5, -0.035);
+                mSwerveDrive->setMotion(0, -0.5, 0.0);
             },
             [&](bool _interrupted){
                 mSwerveDrive->setMotion(0, 0, 0); // stop
