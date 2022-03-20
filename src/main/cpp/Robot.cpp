@@ -161,6 +161,11 @@ void Robot::RobotInit()
         { mShooter }
     );
 
+    mIntakeReverse = new frc2::StartEndCommand(
+        [&]() { mIntake->runRollersReverse(); },
+        [&]() { mIntake->stopRollers(); },
+        { mIntake }
+    );
     
     mShootAuto = new frc2::StartEndCommand(
         [&]() { mShooter->shootAuto(); },
@@ -306,6 +311,12 @@ void Robot::TeleopPeriodic()
         } else {
             mExtendIntakeCommand->Schedule();
         }
+    }
+
+    if(operatorController->GetLeftBumperPressed()){
+        mIntakeReverse->Schedule();
+    } else if(operatorController->GetLeftBumperReleased()){
+        mIntakeReverse->Cancel();
     }
 
     //Climber

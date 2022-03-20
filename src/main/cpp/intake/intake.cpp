@@ -10,6 +10,10 @@ void Intake::runRollers () {
     mRollerMotor.Set(config.rollerSpeed);
 }
 
+void Intake::runRollersReverse () {
+    mRollerMotor.Set(-config.rollerSpeed);
+}
+
 void Intake::stopRollers () {
     mRollerMotor.Set(0.0);
 }

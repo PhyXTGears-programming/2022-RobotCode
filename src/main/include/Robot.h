@@ -90,6 +90,7 @@ private:
     frc2::StartEndCommand *mShootFar = nullptr;
     frc2::StartEndCommand *mShootLowHub = nullptr;
     frc2::StartEndCommand *mShootReverse = nullptr;
+    frc2::StartEndCommand *mIntakeReverse = nullptr;
     frc2::StartEndCommand *mShootAuto = nullptr;
 
     frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
