@@ -50,6 +50,8 @@ void Robot::RobotInit()
         [&]() {
             bool isOuter1NearTarget = mOuterReach->isMotor1NearTarget(0.0);
             bool isOuter2NearTarget = mOuterReach->isMotor2NearTarget(0.0);
+            bool isInner1NearTarget = mInnerReach->isMotor1NearTarget(0.0);
+            bool isInner2NearTarget = mInnerReach->isMotor2NearTarget(0.0);
 
             if (isOuter1NearTarget) {
                 mOuterReach->stop1();
@@ -62,13 +64,30 @@ void Robot::RobotInit()
             } else {
                 mOuterReach->run2(-0.4);
             }
+
+            if (isInner1NearTarget) {
+                mInnerReach->stop1();
+            } else {
+                mInnerReach->run1(-0.4);
+            }
+
+            if (isInner2NearTarget) {
+                mInnerReach->stop2();
+            } else {
+                mInnerReach->run2(-0.4);
+            }
         },
         [&](bool) {
             mOuterReach->stop1();
             mOuterReach->stop2();
+            mInnerReach->stop1();
+            mInnerReach->stop2();
         },
-        [&]() { return mOuterReach->getMotor1Position() < 1.0 && mOuterReach->getMotor2Position() < 1.0; },
-        { mOuterReach }
+        [&]() { return mOuterReach->getMotor1Position() < 1.0
+            && mOuterReach->getMotor2Position() < 1.0
+            && mInnerReach->getMotor1Position() < 1.0
+            && mInnerReach->getMotor2Position() < 1.0; },
+        { mOuterReach, mInnerReach }
     );
 
     mManualExtendOuterArms = new frc2::FunctionalCommand(
@@ -76,6 +95,8 @@ void Robot::RobotInit()
         [&]() {
             bool isOuter1NearTarget = mOuterReach->isMotor1NearTarget(20.0);
             bool isOuter2NearTarget = mOuterReach->isMotor2NearTarget(20.0);
+            bool isInner1NearTarget = mInnerReach->isMotor1NearTarget(20.0);
+            bool isInner2NearTarget = mInnerReach->isMotor2NearTarget(20.0);
 
             if (isOuter1NearTarget) {
                 mOuterReach->stop1();
@@ -88,13 +109,30 @@ void Robot::RobotInit()
             } else {
                 mOuterReach->run2(0.4);
             }
+
+            if (isInner1NearTarget) {
+                mInnerReach->stop1();
+            } else {
+                mInnerReach->run1(0.4);
+            }
+
+            if (isInner2NearTarget) {
+                mInnerReach->stop2();
+            } else {
+                mInnerReach->run2(0.4);
+            }
         },
         [&](bool) {
             mOuterReach->stop1();
             mOuterReach->stop2();
+            mInnerReach->stop1();
+            mInnerReach->stop2();
         },
-        [&]() { return mOuterReach->getMotor1Position() > 20.0 && mOuterReach->getMotor2Position() > 20.0; },
-        { mOuterReach }
+        [&]() { return mOuterReach->getMotor1Position() > 20.0
+            && mOuterReach->getMotor2Position() > 20.0
+            && mInnerReach->getMotor1Position() > 20.0
+            && mInnerReach->getMotor2Position() > 20.0; },
+        { mOuterReach, mInnerReach }
     );
 
     // Shooter commands
@@ -123,6 +161,11 @@ void Robot::RobotInit()
         { mShooter }
     );
 
+    mIntakeReverse = new frc2::StartEndCommand(
+        [&]() { mIntake->runRollersReverse(); },
+        [&]() { mIntake->stopRollers(); },
+        { mIntake }
+    );
     
     mShootAuto = new frc2::StartEndCommand(
         [&]() { mShooter->shootAuto(); },
@@ -132,6 +175,7 @@ void Robot::RobotInit()
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
+    m_chooser.AddOption(kAutoDriveOnly, kAutoDriveOnly);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
     mDriveAndShoot = new frc2::SequentialCommandGroup {
@@ -139,7 +183,7 @@ void Robot::RobotInit()
             [](){},
             [&](){
                 // Turn slightly right to compensate for drift/drag.
-                mSwerveDrive->setMotion(0, -0.5, -0.035);
+                mSwerveDrive->setMotion(0, -0.5, 0.0);
             },
             [&](bool _interrupted){ 
                 mSwerveDrive->setMotion(0, 0, 0); //stop swerve
@@ -148,6 +192,20 @@ void Robot::RobotInit()
             {mSwerveDrive}
         }.WithTimeout(1.2_s),
         frc2::StartEndCommand(*mShootNear).WithTimeout(3_s)
+    };
+
+    mDriveOnly = new frc2::SequentialCommandGroup {
+        frc2::FunctionalCommand {
+            [](){},
+            [&](){
+                mSwerveDrive->setMotion(0, -0.5, 0.0);
+            },
+            [&](bool _interrupted){
+                mSwerveDrive->setMotion(0, 0, 0); // stop
+            },
+            [](){ return false; },
+            {mSwerveDrive}
+        }.WithTimeout(1.2_s)
     };
 }
 
@@ -190,8 +248,8 @@ void Robot::AutonomousInit()
 
     if (m_autoSelected == kAutoDriveAndShoot) {
         mDriveAndShoot->Schedule();
-    } else {
-        // Default Auto goes here
+    } else  if (m_autoSelected == kAutoDriveOnly) {
+        mDriveOnly->Schedule();
     }
 }
 
@@ -253,6 +311,12 @@ void Robot::TeleopPeriodic()
         } else {
             mExtendIntakeCommand->Schedule();
         }
+    }
+
+    if(operatorController->GetLeftBumperPressed()){
+        mIntakeReverse->Schedule();
+    } else if(operatorController->GetLeftBumperReleased()){
+        mIntakeReverse->Cancel();
     }
 
     //Climber

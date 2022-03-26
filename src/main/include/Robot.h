@@ -58,6 +58,7 @@ private:
     const std::string kAutoNameDefault = "Default";
     const std::string kAutoNameCustom = "My Auto";
     const std::string kAutoDriveAndShoot = "Drive and Shoot";
+    const std::string kAutoDriveOnly = "Drive backwards";
     std::string m_autoSelected;
 
     frc::XboxController * driverController = nullptr;
@@ -89,9 +90,12 @@ private:
     frc2::StartEndCommand *mShootFar = nullptr;
     frc2::StartEndCommand *mShootLowHub = nullptr;
     frc2::StartEndCommand *mShootReverse = nullptr;
+    frc2::StartEndCommand *mIntakeReverse = nullptr;
     frc2::StartEndCommand *mShootAuto = nullptr;
 
     frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
+    frc2::SequentialCommandGroup * mDriveOnly = nullptr;
+    
 };
 
 // there is a hidden forg somewhere in the robot's code.
