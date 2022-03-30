@@ -2,6 +2,8 @@
 
 #include "climber/OuterReach.h"
 
+#include <frc/controller/PIDController.h>
+
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
@@ -17,4 +19,10 @@ class ReachOuterArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Reac
     private:
         ClimberOuterReach * mOuterArms;
         double mTargetPosition;
+
+        frc2::PIDController mPid1 { 0.2, 0.000, 0.0 };
+        frc2::PIDController mPid2 { 0.2, 0.000, 0.0 };
+
+        double mReachFF = 0.03;
+        double mLiftFF = 0.03;
 };

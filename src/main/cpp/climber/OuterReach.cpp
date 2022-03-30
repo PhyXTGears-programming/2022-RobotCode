@@ -17,6 +17,9 @@ ClimberOuterReach::ClimberOuterReach(std::shared_ptr<cpptoml::table> toml) {
     mMotor1.SetInverted(true);
     mMotor2.SetInverted(false);
 
+    mMotor1.SetSmartCurrentLimit(15);
+    mMotor2.SetSmartCurrentLimit(15);
+
     mEncoder1.SetPosition(0.0);
     mEncoder2.SetPosition(0.0);
 }
@@ -24,6 +27,9 @@ ClimberOuterReach::ClimberOuterReach(std::shared_ptr<cpptoml::table> toml) {
 void ClimberOuterReach::Periodic() {
     frc::SmartDashboard::PutNumber("Clmb Out R Pos", getMotor1Position());
     frc::SmartDashboard::PutNumber("Clmb Out L Pos", getMotor2Position());
+
+    frc::SmartDashboard::PutNumber("Clmb Out R Vel", mEncoder1.GetVelocity());
+    frc::SmartDashboard::PutNumber("Clmb Out L Vel", mEncoder2.GetVelocity());
 }
 
 void ClimberOuterReach::extend1() {
