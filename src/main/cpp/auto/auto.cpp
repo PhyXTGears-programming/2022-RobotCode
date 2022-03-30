@@ -17,8 +17,10 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
 ) {
     double targetGyroPosition;
     const double kAcceptableError = 0.05;
+
     return new frc2::SequentialCommandGroup {
         ExtendIntakeCommand {intake},
+
         frc2::ParallelRaceGroup {
             RunIntakeCommand {intake},
             frc2::FunctionalCommand {
@@ -60,6 +62,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
                 { shooter }
             }.WithTimeout(8_s)
         },
+
         RetractIntakeCommand {intake}
     };
 }
