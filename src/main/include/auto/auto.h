@@ -1,5 +1,9 @@
 #pragma once
 
+#include "intake/intake.h"
+#include "shooter/shooter.h"
+#include "drivetrain-swerve/SwerveDrive.h"
+
 #include <frc2/command/SequentialCommandGroup.h>
 
 class Auto {
