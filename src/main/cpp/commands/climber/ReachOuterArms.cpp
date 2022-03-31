@@ -30,21 +30,15 @@ void ReachOuterArmsCommand::Execute() {
     double pos1 = mOuterArms->getMotor1Position();
     double pos2 = mOuterArms->getMotor2Position();
 
-    bool is1Extend = (mTargetPosition - pos1) > 0;
-    bool is2Extend = (mTargetPosition - pos2) > 0;
-
     double speed1 = std::clamp(mPid1.Calculate(pos1), -0.6, 0.6);
     double speed2 = std::clamp(mPid2.Calculate(pos2), -0.6, 0.6);
 
-    double ff1 = (is1Extend) ? mReachFF : mLiftFF;
-    double ff2 = (is2Extend) ? mReachFF : mLiftFF;
-
     // Add in feed forward if speed is above threshold.
     speed1 = (std::abs(speed1) >= 0.01)
-        ? std::copysign(ff1, speed1) + speed1
+        ? std::copysign(mFF, speed1) + speed1
         : 0.0;
     speed2 = (std::abs(speed2) >= 0.01)
-        ? std::copysign(ff2, speed2) + speed2
+        ? std::copysign(mFF, speed2) + speed2
         : 0.0;
 
     frc::SmartDashboard::PutNumber("Reach Out 1: Speed", speed1);

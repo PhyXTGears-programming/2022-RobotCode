@@ -23,6 +23,5 @@ class ReachOuterArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Reac
         frc2::PIDController mPid1 { 0.2, 0.000, 0.0 };
         frc2::PIDController mPid2 { 0.2, 0.000, 0.0 };
 
-        double mReachFF = 0.03;
-        double mLiftFF = 0.03;
+        double mFF = 0.03;
 };
