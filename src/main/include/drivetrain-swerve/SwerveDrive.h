@@ -24,6 +24,9 @@ class SwerveDrive : public frc2::SubsystemBase {
 
         void setMotion(double x, double y, double r);
 
+        double getHeading();
+
+
     private:
         swervedrive::drive<double, double, double>* drive;
 

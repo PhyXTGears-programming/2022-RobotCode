@@ -52,8 +52,12 @@ void SwerveDrive::setMotion(double x, double y, double r)
     double a = 0;
 
     if (fieldOriented) {
-        a = gyro->GetAngle() * (PI/180.0);
+        a = getHeading();
     }
 
     drive->set_motion({x, y}, r, a);
+}
+
+double SwerveDrive::getHeading(){
+    return gyro->GetAngle() * (PI/180.0);
 }
