@@ -16,6 +16,8 @@ constexpr std::string_view DASH_OUTER_REACH_TARGET = "Outer Reach Target Positio
 constexpr std::string_view DASH_OUTER_REACH_ACTIVATE = "Activate Outer Reach Command"sv;
 
 constexpr std::string_view DASH_USE_OUTER_ROTATION_TEST_COMMAND = "Enable Outer Rotation Test Command"sv;
+constexpr std::string_view DASH_OUTER_ROTATE_TARGET = "Outer Reach Target Rotation"sv;
+constexpr std::string_view DASH_OUTER_ROTATE_ACTIVATE = "Activate Outer Rotate Command"sv;
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
@@ -159,10 +161,59 @@ void Robot::RobotPeriodic() {
         });
     }
 
-    static bool useOuterRotationTestCommand = frc::SmartDashboard::GetBoolean(DASH_USE_OUTER_ROTATION_TEST_COMMAND, false);
-    updateDashboardBool(DASH_USE_OUTER_ROTATION_TEST_COMMAND, useOuterRotationTestCommand, [](bool value) {
-        std::cout << "use outer rotate command? " << (value ? "yes" : "no") << std::endl;
-    });
+    {
+        // Use dashboard to control outer arm rotation.
+
+        // We'll create a new command as the user changes parameters on the dashboard (e.g. target position).
+        static RotateOuterArmsCommand * outerRotateCommand = nullptr;
+
+        // Allow user to modify target position.
+        static double outerRotateTarget = frc::SmartDashboard::GetNumber(DASH_OUTER_ROTATE_TARGET, 0.0);
+        updateDashboardNumber(DASH_OUTER_ROTATE_TARGET, outerRotateTarget, [&](double target) {
+            // Unsure what values constitute a safe range.  BE CAREFUL.
+
+            if (nullptr != outerRotateCommand) {
+                // Found an existing rotate command.
+                if (outerRotateCommand->IsScheduled()) {
+                    // Stop active rotate command.
+                    outerRotateCommand->Cancel();
+                    std::cout << "Canceled current outer rotate command" << std::endl;
+                }
+                // Delete object to free allocated memory to the OS.
+                delete outerRotateCommand;
+            }
+
+            // Allocate a fresh command object.
+            outerRotateCommand = new RotateOuterArmsCommand(mOuterRotate, target);
+            std::cout << "Created new outer rotate command" << std::endl;
+
+            // Update dashboard with new value, if limited.  Not necessary,
+            // since target was clamped to a "safe" range.
+            frc::SmartDashboard::PutNumber(DASH_OUTER_ROTATE_TARGET, target);
+        });
+
+        // Allow user to start the command.
+        static bool activateCommand = frc::SmartDashboard::GetBoolean(DASH_OUTER_ROTATE_ACTIVATE, false);
+        updateDashboardBool(DASH_OUTER_REACH_ACTIVATE, activateCommand, [&](bool shallActivate) {
+            bool isEnabled = frc::SmartDashboard::GetBoolean(DASH_USE_OUTER_ROTATION_TEST_COMMAND, false);
+
+            // Do nothing when flag is not active OR command is disabled.
+            if (isEnabled && shallActivate) {
+                if (nullptr != outerRotateCommand) {
+                    // If a command is loaded...
+                    if (! outerRotateCommand->IsScheduled()) {
+                        // ...and not scheduled, then start the command.
+                        outerRotateCommand->Schedule();
+                        std::cout << "Scheduled outer rotate oommand" << std::endl;
+                    } else {
+                        std::cout << "Command for outer rotate already scheduled" << std::endl;
+                    }
+                } else {
+                    std::cout << "No command for outer rotate available.  Configure outer rotate settings first." << std::endl;
+                }
+            }
+        });
+    }
 }
 
 /**

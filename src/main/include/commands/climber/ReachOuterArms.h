@@ -16,6 +16,12 @@ class ReachOuterArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Reac
         void End(bool interrupted) override;
         bool IsFinished() override;
 
+        void SetPid(double p, double i, double d, double ff);
+        void SetP(double p);
+        void SetI(double i);
+        void SetD(double d);
+        void SetFF(double ff);
+
     private:
         ClimberOuterReach * mOuterArms;
         double mTargetPosition;

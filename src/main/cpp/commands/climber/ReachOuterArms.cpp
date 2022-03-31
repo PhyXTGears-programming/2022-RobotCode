@@ -13,6 +13,7 @@ void initPid(frc2::PIDController &pid, double targetPosition) {
 }
 
 ReachOuterArmsCommand::ReachOuterArmsCommand(ClimberOuterReach * outerArms, double targetPosition) {
+    SetName("Reach Outer Arms");
     AddRequirements(outerArms);
     mOuterArms = outerArms;
     mTargetPosition = targetPosition;
@@ -61,4 +62,30 @@ bool ReachOuterArmsCommand::IsFinished() {
     frc::SmartDashboard::PutBoolean("Reach Out 2: Near Target", isNear2);
 
     return isNear1 && isNear2;
+}
+
+void ReachOuterArmsCommand::SetPid(double p, double i, double d, double ff) {
+    SetP(p);
+    SetI(i);
+    SetD(d);
+    SetFF(ff);
+}
+
+void ReachOuterArmsCommand::SetP(double p) {
+    mPid1.SetP(p);
+    mPid2.SetP(p);
+}
+
+void ReachOuterArmsCommand::SetI(double i) {
+    mPid1.SetI(i);
+    mPid2.SetI(i);
+}
+
+void ReachOuterArmsCommand::SetD(double d) {
+    mPid1.SetD(d);
+    mPid2.SetD(d);
+}
+
+void ReachOuterArmsCommand::SetFF(double ff) {
+    mFF = ff;
 }
