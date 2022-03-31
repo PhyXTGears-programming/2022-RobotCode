@@ -135,11 +135,11 @@ void Robot::RobotPeriodic() {
 
         // Allow user to start the command.
         static bool activateCommand = frc::SmartDashboard::GetBoolean(DASH_OUTER_REACH_ACTIVATE, false);
-        updateDashboardBool(DASH_OUTER_REACH_ACTIVATE, activateCommand, [&](bool isActive) {
+        updateDashboardBool(DASH_OUTER_REACH_ACTIVATE, activateCommand, [&](bool shallActivate) {
             bool isEnabled = frc::SmartDashboard::GetBoolean(DASH_USE_OUTER_REACH_TEST_COMMAND, false);
 
             // Do nothing when flag when not active OR command is disabled.
-            if (isEnabled && isActive) {
+            if (isEnabled && shallActivate) {
                 if (nullptr != outerReachCommand) {
                     // If a command is loaded...
                     if (! outerReachCommand->IsScheduled()) {
