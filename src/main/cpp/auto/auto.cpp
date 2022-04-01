@@ -37,8 +37,8 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
         },
 
         frc2::FunctionalCommand {
-            [&](){
-                targetGyroPosition = drive->getGyroAngle() + M_PI;
+            [=](){
+                targetGyroPosition = drive->getHeading() + M_PI;
             },
             [=](){
                 drive->setMotion(0, 0, 0.25);
@@ -46,8 +46,8 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
             [=](bool _interrupted){
                 drive->setMotion(0, 0, 0); //STOP
             },
-            [&](){
-                double currentPosition = drive->getGyroAngle();
+            [=](){
+                double currentPosition = drive->getHeading();
                 return std::abs(targetGyroPosition - currentPosition) < kAcceptableError;
 
             },
