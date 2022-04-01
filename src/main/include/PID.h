@@ -27,12 +27,17 @@ class PID {
     private:
         double mProportional, mIntegral, mDeriviation;
         double mFeedForward;
+
         double mTarget;
+
         double mPreviousError = 0.0;
+
         double mAccumulator = 0.0;
         double mAcceptableError;
         double mIZone = INFINITY;
+
         double mMinOutput = -1.0;
         double mMaxOutput = 1.0;
+
         units::second_t mPeriod = 20_ms;
 };
