@@ -37,7 +37,7 @@ double PID::calculate (double current) {
 
     output += error * mProportional;
     output += mAccumulator * mIntegral;
-    output += (error - mPreviousError) * mDeriviation;
+    output += (error - mPreviousError) / mPeriod.value() * mDeriviation;
 
     if (std::abs(output) >= mAcceptableError) {
         output += std::copysign(mFeedForward, output);
