@@ -18,7 +18,7 @@ PID::PID (
     // These variables have values assigned in the header declaration of this function.
     mIZone = izone;
     mMinOutput = minOutput;
-    mMaxOutput = mMaxOutput;
+    mMaxOutput = maxOutput;
 
     if (0_s <= period) {
         std::cerr << "PID period must be above zero" << std::endl;
