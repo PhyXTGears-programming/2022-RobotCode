@@ -16,8 +16,16 @@ constexpr std::string_view DASH_OUTER_REACH_TARGET = "Outer Reach Target Positio
 constexpr std::string_view DASH_OUTER_REACH_ACTIVATE = "Activate Outer Reach Command"sv;
 
 constexpr std::string_view DASH_USE_OUTER_ROTATION_TEST_COMMAND = "Enable Outer Rotation Test Command"sv;
-constexpr std::string_view DASH_OUTER_ROTATE_TARGET = "Outer Reach Target Rotation"sv;
+constexpr std::string_view DASH_OUTER_ROTATE_TARGET = "Outer Rotate Target Rotation"sv;
 constexpr std::string_view DASH_OUTER_ROTATE_ACTIVATE = "Activate Outer Rotate Command"sv;
+
+constexpr std::string_view DASH_USE_INNER_REACH_TEST_COMMAND = "Enable Inner Reach Test Command"sv;
+constexpr std::string_view DASH_INNER_REACH_TARGET = "Inner Reach Target Position"sv;
+constexpr std::string_view DASH_INNER_REACH_ACTIVATE = "Activate Inner Reach Command"sv;
+
+constexpr std::string_view DASH_USE_INNER_ROTATION_TEST_COMMAND = "Enable Inner Rotation Test Command"sv;
+constexpr std::string_view DASH_INNER_ROTATE_TARGET = "Inner Rotate Target Rotation"sv;
+constexpr std::string_view DASH_INNER_ROTATE_ACTIVATE = "Activate Inner Rotate Command"sv;
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
@@ -75,6 +83,16 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutBoolean(DASH_OUTER_REACH_ACTIVATE, false);
 
     frc::SmartDashboard::PutBoolean(DASH_USE_OUTER_ROTATION_TEST_COMMAND, false);
+    frc::SmartDashboard::PutNumber(DASH_OUTER_ROTATE_TARGET, 0.0);
+    frc::SmartDashboard::PutBoolean(DASH_OUTER_ROTATE_ACTIVATE, false);
+
+    frc::SmartDashboard::PutBoolean(DASH_USE_INNER_REACH_TEST_COMMAND, false);
+    frc::SmartDashboard::PutNumber(DASH_INNER_REACH_TARGET, 0.0);
+    frc::SmartDashboard::PutBoolean(DASH_INNER_REACH_ACTIVATE, false);
+
+    frc::SmartDashboard::PutBoolean(DASH_USE_INNER_ROTATION_TEST_COMMAND, false);
+    frc::SmartDashboard::PutNumber(DASH_INNER_ROTATE_TARGET, 0.0);
+    frc::SmartDashboard::PutBoolean(DASH_INNER_ROTATE_ACTIVATE, false);
 }
 
 template <class T>
@@ -154,10 +172,10 @@ void Robot::RobotPeriodic() {
                 } else {
                     std::cout << "No command for outer reach available.  Configure outer reach settings first." << std::endl;
                 }
-
-                // Reset dashboard checkbox back to empty, so use knows they can click to activate again.
-                frc::SmartDashboard::PutBoolean(DASH_OUTER_REACH_ACTIVATE, false);
             }
+
+            // Reset dashboard checkbox back to empty, so use knows they can click to activate again.
+            frc::SmartDashboard::PutBoolean(DASH_OUTER_REACH_ACTIVATE, false);
         });
     }
 
@@ -194,7 +212,7 @@ void Robot::RobotPeriodic() {
 
         // Allow user to start the command.
         static bool activateCommand = frc::SmartDashboard::GetBoolean(DASH_OUTER_ROTATE_ACTIVATE, false);
-        updateDashboardBool(DASH_OUTER_REACH_ACTIVATE, activateCommand, [&](bool shallActivate) {
+        updateDashboardBool(DASH_OUTER_ROTATE_ACTIVATE, activateCommand, [&](bool shallActivate) {
             bool isEnabled = frc::SmartDashboard::GetBoolean(DASH_USE_OUTER_ROTATION_TEST_COMMAND, false);
 
             // Do nothing when flag is not active OR command is disabled.
@@ -211,7 +229,126 @@ void Robot::RobotPeriodic() {
                 } else {
                     std::cout << "No command for outer rotate available.  Configure outer rotate settings first." << std::endl;
                 }
+            } else if (shallActivate) {
+                std::cout << "Command not enabled for outer rotate." << std::endl;
             }
+
+            // Reset dashboard checkbox back to empty, so use knows they can click to activate again.
+            frc::SmartDashboard::PutBoolean(DASH_OUTER_ROTATE_ACTIVATE, false);
+        });
+    }
+
+
+
+    {
+        // Use dashboard to control inner arm reach.
+
+        // We'll create a new command as the user changes parameters on the dashboard (e.g. target position).
+        static ReachInnerArmsCommand * innerReachCommand = nullptr;
+
+        // Allow user to modify target position.
+        static double innerReachTarget = frc::SmartDashboard::GetNumber(DASH_INNER_REACH_TARGET, 0.0);
+        updateDashboardNumber(DASH_INNER_REACH_TARGET, innerReachTarget, [&](double value) {
+            // Ensure value has a safe range.
+            value = std::clamp(value, 1.0, 27.0);   // These limits try to protect from overshooting.  Max range [0, 28].
+
+            if (nullptr != innerReachCommand) {
+                if (innerReachCommand->IsScheduled()) {
+                    innerReachCommand->Cancel();
+                    std::cout << "Canceled current inner reach command" << std::endl;
+                }
+                delete innerReachCommand;
+            }
+
+            innerReachCommand = new ReachInnerArmsCommand(mInnerReach, value);
+            std::cout << "Created new inner reach command" << std::endl;
+
+            // Update dashboard with new value, if limited.
+            frc::SmartDashboard::PutNumber(DASH_INNER_REACH_TARGET, value);
+        });
+
+        // Allow user to start the command.
+        static bool activateCommand = frc::SmartDashboard::GetBoolean(DASH_INNER_REACH_ACTIVATE, false);
+        updateDashboardBool(DASH_INNER_REACH_ACTIVATE, activateCommand, [&](bool shallActivate) {
+            bool isEnabled = frc::SmartDashboard::GetBoolean(DASH_USE_INNER_REACH_TEST_COMMAND, false);
+
+            // Do nothing when flag when not active OR command is disabled.
+            if (isEnabled && shallActivate) {
+                if (nullptr != innerReachCommand) {
+                    // If a command is loaded...
+                    if (! innerReachCommand->IsScheduled()) {
+                        // ...and not scheduled, then start the command.
+                        innerReachCommand->Schedule();
+                        std::cout << "Scheduled inner reach command" << std::endl;
+                    } else {
+                        std::cout << "Command for inner reach already scheduled" << std::endl;
+                    }
+                } else {
+                    std::cout << "No command for inner reach available.  Configure inner reach settings first." << std::endl;
+                }
+            }
+
+            // Reset dashboard checkbox back to empty, so use knows they can click to activate again.
+            frc::SmartDashboard::PutBoolean(DASH_INNER_REACH_ACTIVATE, false);
+        });
+    }
+
+    {
+        // Use dashboard to control inner arm rotation.
+
+        // We'll create a new command as the user changes parameters on the dashboard (e.g. target position).
+        static RotateInnerArmsCommand * innerRotateCommand = nullptr;
+
+        // Allow user to modify target position.
+        static double innerRotateTarget = frc::SmartDashboard::GetNumber(DASH_INNER_ROTATE_TARGET, 0.0);
+        updateDashboardNumber(DASH_INNER_ROTATE_TARGET, innerRotateTarget, [&](double target) {
+            // Unsure what values constitute a safe range.  BE CAREFUL.
+
+            if (nullptr != innerRotateCommand) {
+                // Found an existing rotate command.
+                if (innerRotateCommand->IsScheduled()) {
+                    // Stop active rotate command.
+                    innerRotateCommand->Cancel();
+                    std::cout << "Canceled current inner rotate command" << std::endl;
+                }
+                // Delete object to free allocated memory to the OS.
+                delete innerRotateCommand;
+            }
+
+            // Allocate a fresh command object.
+            innerRotateCommand = new RotateInnerArmsCommand(mInnerRotate, target);
+            std::cout << "Created new inner rotate command" << std::endl;
+
+            // Update dashboard with new value, if limited.  Not necessary,
+            // since target was clamped to a "safe" range.
+            frc::SmartDashboard::PutNumber(DASH_INNER_ROTATE_TARGET, target);
+        });
+
+        // Allow user to start the command.
+        static bool activateCommand = frc::SmartDashboard::GetBoolean(DASH_INNER_ROTATE_ACTIVATE, false);
+        updateDashboardBool(DASH_INNER_ROTATE_ACTIVATE, activateCommand, [&](bool shallActivate) {
+            bool isEnabled = frc::SmartDashboard::GetBoolean(DASH_USE_INNER_ROTATION_TEST_COMMAND, false);
+
+            // Do nothing when flag is not active OR command is disabled.
+            if (isEnabled && shallActivate) {
+                if (nullptr != innerRotateCommand) {
+                    // If a command is loaded...
+                    if (! innerRotateCommand->IsScheduled()) {
+                        // ...and not scheduled, then start the command.
+                        innerRotateCommand->Schedule();
+                        std::cout << "Scheduled inner rotate command" << std::endl;
+                    } else {
+                        std::cout << "Command for inner rotate already scheduled" << std::endl;
+                    }
+                } else {
+                    std::cout << "No command for inner rotate available.  Configure inner rotate settings first." << std::endl;
+                }
+            } else if (shallActivate) {
+                std::cout << "Command not enabled for inner rotate." << std::endl;
+            }
+
+            // Reset dashboard checkbox back to empty, so use knows they can click to activate again.
+            frc::SmartDashboard::PutBoolean(DASH_INNER_ROTATE_ACTIVATE, false);
         });
     }
 }
