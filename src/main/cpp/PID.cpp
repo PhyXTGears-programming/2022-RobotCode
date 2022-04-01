@@ -41,6 +41,8 @@ double PID::calculate (double current) {
 
     if (std::abs(output) >= mAcceptableError) {
         output += std::copysign(mFeedForward, output);
+    } else {
+        output = 0.0;
     }
 
     mPreviousError = error;
