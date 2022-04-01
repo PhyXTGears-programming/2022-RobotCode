@@ -38,6 +38,26 @@ double PID::calculate (double current) {
     return std::clamp(output, mMinOutput, mMaxOutput);
 }
 
+void PID::setTarget (double target) {
+    mTarget = target;
+}
+
+void PID::setP (double p) {
+    mProportional = p;
+}
+
+void PID::setI (double i) {
+    mIntegral = i;
+}
+
+void PID::setD (double d) {
+    mDeriviation = d;
+}
+
+void PID::setFeedForward (double ff) {
+    mFeedForward = ff;
+}
+
 void PID::reset () {
     mPreviousError = 0.0;
     mAccumulator = 0.0;

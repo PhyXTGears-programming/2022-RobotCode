@@ -12,6 +12,11 @@ class PID {
         double calculate(double current);
 
         void setTarget(double target);
+        void setP (double p);
+        void setI (double i);
+        void setD (double d);
+        void setFeedForward (double ff);
+        //void update(double p, double i, double d, double ff, double minOutput = -1.0, double maxOutput = 1.0, double izone = INFINITY);
 
         void reset();
 
