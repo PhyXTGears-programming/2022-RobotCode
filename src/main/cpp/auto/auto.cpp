@@ -26,7 +26,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
             frc2::FunctionalCommand {
                 [](){},
                 [=](){
-                    drive->setMotion(0, 0.5, 0);
+                    drive->setMotion(0, 0.1, 0);
                 },
                 [=](bool _interrupted){
                     drive->setMotion(0, 0, 0);
