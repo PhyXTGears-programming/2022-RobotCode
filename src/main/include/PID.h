@@ -20,6 +20,8 @@ class PID {
 
         void reset();
 
+        double getError();
+
     private:
         double mProportional, mIntegral, mDeriviation;
         double mFeedForward;

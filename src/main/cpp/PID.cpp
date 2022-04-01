@@ -63,6 +63,6 @@ void PID::reset () {
     mAccumulator = 0.0;
 }
 
-void PID::setTarget (double target) {
-    mTarget = target;
+double PID::getError () {
+    return mPreviousError;
 }
