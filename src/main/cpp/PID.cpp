@@ -1,11 +1,13 @@
 #include "PID.h"
 
 #include <algorithm>
+#include <iostream>
 
 PID::PID (
     double p, double i, double d,
     double ff, double acceptableError,
-    double minOutput, double maxOutput, double izone
+    double minOutput, double maxOutput, double izone,
+    units::second_t period
 ) {
     mProportional = p;
     mIntegral = i;
@@ -17,13 +19,20 @@ PID::PID (
     mIZone = izone;
     mMinOutput = minOutput;
     mMaxOutput = mMaxOutput;
+
+    if (0_s <= period) {
+        std::cerr << "PID period must be above zero" << std::endl;
+        mPeriod = 20_ms;
+    } else {
+        mPeriod = period;
+    }
 }
 
 double PID::calculate (double current) {
     double output = 0.0;
     double error = mTarget - current;
     if (std::abs(error) <= mIZone) {
-        mAccumulator += error;
+        mAccumulator += error * mPeriod.value();
     }
 
     output += error * mProportional;

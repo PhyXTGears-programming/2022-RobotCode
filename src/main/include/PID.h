@@ -1,13 +1,15 @@
 #pragma once
 
 #include <cmath>
+#include <units/time.h>
 
 class PID {
     public:
         PID (
             double p, double i, double d,
             double ff, double acceptableError,
-            double minOutput = -1.0, double maxOutput = 1.0, double izone = INFINITY
+            double minOutput = -1.0, double maxOutput = 1.0, double izone = INFINITY,
+            units::second_t period = 20_ms
         );
         double calculate(double current);
 
@@ -32,4 +34,5 @@ class PID {
         double mIZone = INFINITY;
         double mMinOutput = -1.0;
         double mMaxOutput = 1.0;
+        units::second_t mPeriod = 20_ms;
 };
