@@ -15,7 +15,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
     Shooter * shooter,
     SwerveDrive * drive
 ) {
-    double targetGyroPosition;
+    double * targetGyroPosition = new double(0.0);
     const double kAcceptableError = 0.05;
 
     return new frc2::SequentialCommandGroup {
@@ -38,7 +38,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
 
         frc2::FunctionalCommand {
             [=](){
-                targetGyroPosition = drive->getHeading() + M_PI;
+                *targetGyroPosition = drive->getHeading() + M_PI;
             },
             [=](){
                 drive->setMotion(0, 0, 0.25);
@@ -48,7 +48,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
             },
             [=](){
                 double currentPosition = drive->getHeading();
-                return std::abs(targetGyroPosition - currentPosition) < kAcceptableError;
+                return std::abs(*targetGyroPosition - currentPosition) < kAcceptableError;
 
             },
             { drive }
