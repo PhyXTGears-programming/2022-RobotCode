@@ -20,11 +20,15 @@ ReachOuterArmsCommand::ReachOuterArmsCommand(ClimberOuterReach * outerArms, doub
 
     initPid(mPid1, targetPosition);
     initPid(mPid2, targetPosition);
+    mCustomPID1.setTarget(targetPosition);
+    mCustomPID2.setTarget(targetPosition);
 }
 
 void ReachOuterArmsCommand::Initialize() {
     mPid1.Reset();
     mPid2.Reset();
+    mCustomPID1.reset();
+    mCustomPID2.reset();
 }
 
 void ReachOuterArmsCommand::Execute() {
@@ -33,6 +37,8 @@ void ReachOuterArmsCommand::Execute() {
 
     double speed1 = std::clamp(mPid1.Calculate(pos1), -0.6, 0.6);
     double speed2 = std::clamp(mPid2.Calculate(pos2), -0.6, 0.6);
+    double testSpeed1 = mCustomPID1.calculate(pos1);
+    double testSpeed2 = mCustomPID2.calculate(pos2);
 
     // Add in feed forward if speed is above threshold.
     speed1 = (std::abs(speed1) >= 0.01)
@@ -45,6 +51,12 @@ void ReachOuterArmsCommand::Execute() {
     frc::SmartDashboard::PutNumber("Reach Out 1: Speed", speed1);
     frc::SmartDashboard::PutNumber("Reach Out 2: Speed", speed2);
 
+    frc::SmartDashboard::PutNumber("Test Reach Out 1: Speed", testSpeed1);
+    frc::SmartDashboard::PutNumber("Test Reach Out 2: Speed", testSpeed2);
+
+    frc::SmartDashboard::PutNumber("Test Reach Error 1: Speed", speed1 - testSpeed1);
+    frc::SmartDashboard::PutNumber("Test Reach Error 2: Speed", speed2 - testSpeed2);
+
     mOuterArms->run1(speed1);
     mOuterArms->run2(speed2);
 }
@@ -52,14 +64,21 @@ void ReachOuterArmsCommand::Execute() {
 void ReachOuterArmsCommand::End(bool isInterrupted) {
     mOuterArms->stop1();
     mOuterArms->stop2();
+
+    frc::SmartDashboard::PutNumber("Test Reach Error 1: Speed", 0.0);
+    frc::SmartDashboard::PutNumber("Test Reach Error 2: Speed", 0.0);
 }
 
 bool ReachOuterArmsCommand::IsFinished() {
     bool isNear1 = mOuterArms->isMotor1NearTarget(mTargetPosition) && std::abs(mPid1.GetVelocityError()) < 0.25;
     bool isNear2 = mOuterArms->isMotor2NearTarget(mTargetPosition) && std::abs(mPid2.GetVelocityError()) < 0.25;
+    bool isTestNear1 = mOuterArms->isMotor2NearTarget(mTargetPosition);
+    bool isTestNear2 = mOuterArms->isMotor2NearTarget(mTargetPosition);
 
     frc::SmartDashboard::PutBoolean("Reach Out 1: Near Target", isNear1);
     frc::SmartDashboard::PutBoolean("Reach Out 2: Near Target", isNear2);
+    frc::SmartDashboard::PutBoolean("Reach Out Test 1: Near Target", isTestNear1);
+    frc::SmartDashboard::PutBoolean("Reach Out Test 2: Near Target", isTestNear2);
 
     return isNear1 && isNear2;
 }
