@@ -29,6 +29,11 @@ constexpr std::string_view DASH_USE_INNER_ROTATION_TEST_COMMAND = "Enable Inner 
 constexpr std::string_view DASH_INNER_ROTATE_TARGET = "Inner Rotate Target Rotation"sv;
 constexpr std::string_view DASH_INNER_ROTATE_ACTIVATE = "Activate Inner Rotate Command"sv;
 
+constexpr std::string_view DASH_SWING_USE_COMMAND = "Enable Swing Command"sv;
+constexpr std::string_view DASH_SWING_INNER_REACH_TARGET = "Swing Reach In Target"sv;
+constexpr std::string_view DASH_SWING_OUTER_REACH_TARGET = "Swing Reach Out Target"sv;
+constexpr std::string_view DASH_SWING_ACTIVATE = "Activate Swing Command"sv;
+
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
 static Drivetrain drivetrain;
@@ -355,6 +360,107 @@ void Robot::RobotPeriodic() {
 
             // Reset dashboard checkbox back to empty, so use knows they can click to activate again.
             frc::SmartDashboard::PutBoolean(DASH_INNER_ROTATE_ACTIVATE, false);
+        });
+    }
+
+    {
+        // Use dashboard to control swing.
+
+        // We'll create a new command as the user changes parameters on the
+        // dashboard (e.g. outerTargetPosition, innerTargetPosition, etc).
+        static frc2::SequentialCommandGroup * swingCommand = nullptr;
+
+        // Allow user to modify inner target position.
+        static double innerReachTarget = frc::SmartDashboard::GetNumber(DASH_SWING_INNER_REACH_TARGET, 0.0);
+        updateDashboardNumber(DASH_SWING_INNER_REACH_TARGET, innerReachTarget, [&](double target) {
+            // Ensure value has a safe range.
+            target = std::clamp(target, 0.5, 27.5);  // These limits try to protect from overshooting.  Max range [0, 28].
+
+            if (nullptr != swingCommand) {
+                if (swingCommand->IsScheduled()) {
+                    swingCommand->Cancel();
+                    std::cout << "Canceled current swing command" << std::endl;
+                }
+                delete swingCommand;
+                swingCommand = nullptr;
+            }
+
+            // Many fields update this command.  To avoid duplicating code to
+            // construct the command, Write the code after updating all field
+            // variables.
+
+            // Update dashboard with new value, if limited.
+            frc::SmartDashboard::PutNumber(DASH_SWING_INNER_REACH_TARGET, target);
+        });
+
+        // Allow user to modify outer target position.
+        static double outerReachTarget = frc::SmartDashboard::GetNumber(DASH_SWING_OUTER_REACH_TARGET, 0.0);
+        updateDashboardNumber(DASH_SWING_OUTER_REACH_TARGET, outerReachTarget, [&](double target) {
+            // Ensure value has a safe range.
+            target = std::clamp(target, 0.5, 27.5);  // These limits try to protect from overshooting.  Max range [0, 28].
+
+            if (nullptr != swingCommand) {
+                if (swingCommand->IsScheduled()) {
+                    swingCommand->Cancel();
+                    std::cout << "Canceled current swing command" << std::endl;
+                }
+                delete swingCommand;
+                swingCommand = nullptr;
+            }
+
+            // Many fields update this command.  To avoid duplicating code to
+            // construct the command, Write the code after updating all field
+            // variables.
+
+            // Update dashboard with new value, if limited.
+            frc::SmartDashboard::PutNumber(DASH_SWING_OUTER_REACH_TARGET, target);
+        });
+
+        // Create new command, if deleted.  But only once for this periodic invocation.
+        if (nullptr == swingCommand) {
+            swingCommand = new frc2::SequentialCommandGroup(
+                frc2::InstantCommand { [=]() {
+                    auto activeCmd = frc2::CommandScheduler::GetInstance().Requiring(mInnerReach);
+                    if (nullptr != activeCmd) {
+                        activeCmd->Cancel();
+                    }
+                }},
+                frc2::InstantCommand { [=]() {
+                    auto activeCmd = frc2::CommandScheduler::GetInstance().Requiring(mOuterReach);
+                    if (nullptr != activeCmd) {
+                        activeCmd->Cancel();
+                    }
+                }},
+                frc2::ParallelCommandGroup {
+                    ReachInnerArmsCommand { mInnerReach, innerReachTarget },
+                    ReachOuterArmsCommand { mOuterReach, outerReachTarget }
+                }
+            );
+        }
+
+        // Allow user to start the command.
+        static bool activateCommand = frc::SmartDashboard::GetBoolean(DASH_SWING_ACTIVATE, false);
+        updateDashboardBool(DASH_SWING_ACTIVATE, activateCommand, [&](bool shallActivate) {
+            bool isEnabled = frc::SmartDashboard::GetBoolean(DASH_SWING_USE_COMMAND, false);
+
+            // Do nothing when flag is not active OR command is disabled.
+            if (isEnabled && shallActivate) {
+                if (nullptr != swingCommand) {
+                    // If a command is loaded...
+                    if (! swingCommand->IsScheduled()) {
+                        // ...and not scheduled, then start the command.
+                        swingCommand->Schedule();
+                        std::cout << "Scheduled swing command" << std::endl;
+                    } else {
+                        std::cout << "Command for swing already scheduled" << std::endl;
+                    }
+                } else {
+                    std::cout << "No command for swing available.  Configure swing settings first" << std::endl;
+                }
+            }
+
+            // Reset dashboard checkbox back to empty, so user knows they can click to activate again.
+            frc::SmartDashboard::PutBoolean(DASH_SWING_ACTIVATE, false);
         });
     }
 }
