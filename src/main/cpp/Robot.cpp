@@ -35,6 +35,8 @@ void Robot::RobotInit()
     mIntake = new Intake(toml->get_table("intake"));
     mShooter = new Shooter(toml->get_table("shooter"));
     mSwerveDrive = new SwerveDrive(false);
+
+    mLimelight = new limelight();
    
     mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
     mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
@@ -219,6 +221,8 @@ void Robot::RobotInit()
  */
 void Robot::RobotPeriodic() {
     frc2::CommandScheduler::GetInstance().Run();
+
+    mLimelight->Periodic();
 
     static int resyncCounter = 25;
     if (0 == resyncCounter) {
