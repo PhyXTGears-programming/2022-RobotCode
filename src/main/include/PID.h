@@ -23,6 +23,7 @@ class PID {
         void reset();
 
         double getError();
+        double getVelocityError();
 
     private:
         double mProportional, mIntegral, mDeriviation;
@@ -31,6 +32,7 @@ class PID {
         double mTarget;
 
         double mPreviousError = 0.0;
+        double mVelocityError = 0.0;
 
         double mAccumulator = 0.0;
         double mAcceptableError;

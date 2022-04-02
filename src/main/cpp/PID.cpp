@@ -31,13 +31,16 @@ PID::PID (
 double PID::calculate (double current) {
     double output = 0.0;
     double error = mTarget - current;
+
+    mVelocityError = (error - mPreviousError) / mPeriod.value();
+
     if (std::abs(error) <= mIZone) {
         mAccumulator += error * mPeriod.value();
     }
 
     output += error * mProportional;
     output += mAccumulator * mIntegral;
-    output += (error - mPreviousError) / mPeriod.value() * mDeriviation;
+    output += mVelocityError * mDeriviation;
 
     if (std::abs(output) >= mAcceptableError) {
         output += std::copysign(mFeedForward, output);
@@ -76,4 +79,8 @@ void PID::reset () {
 
 double PID::getError () {
     return mPreviousError;
+}
+
+double PID::getVelocityError () {
+    return mVelocityError;
 }
