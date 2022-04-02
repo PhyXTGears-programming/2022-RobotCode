@@ -6,8 +6,8 @@
 class PID {
     public:
         PID (
-            double p, double i, double d,
-            double ff, double acceptableError,
+            double p = 0.0, double i = 0.0, double d = 0.0,
+            double ff = 0.0, double acceptableError = 0.1,
             double minOutput = -1.0, double maxOutput = 1.0, double izone = INFINITY,
             units::second_t period = 20_ms
         );
