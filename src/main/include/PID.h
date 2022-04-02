@@ -11,6 +11,9 @@ class PID {
             double minOutput = -1.0, double maxOutput = 1.0, double izone = INFINITY,
             units::second_t period = 20_ms
         );
+
+        PID (PID const &) = default;
+
         double calculate(double current);
 
         void setTarget(double target);
