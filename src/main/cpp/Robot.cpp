@@ -4,6 +4,8 @@
 
 #include "Robot.h"
 
+#include "PID.h"
+
 #include <iostream>
 #include <frc2/command/CommandScheduler.h>
 
@@ -185,6 +187,8 @@ void Robot::RobotPeriodic() {
         // We'll create a new command as the user changes parameters on the dashboard (e.g. target position).
         static RotateOuterArmsCommand * outerRotateCommand = nullptr;
 
+        static PID rotatePid { 0.0, 0.0, 0.0, 0.1, 0.5, -0.3, 0.3 };
+
         // Allow user to modify target position.
         static double outerRotateTarget = frc::SmartDashboard::GetNumber(DASH_OUTER_ROTATE_TARGET, 0.0);
         updateDashboardNumber(DASH_OUTER_ROTATE_TARGET, outerRotateTarget, [&](double target) {
@@ -202,7 +206,7 @@ void Robot::RobotPeriodic() {
             }
 
             // Allocate a fresh command object.
-            outerRotateCommand = new RotateOuterArmsCommand(mOuterRotate, target);
+            outerRotateCommand = new RotateOuterArmsCommand(mOuterRotate, target, rotatePid);
             std::cout << "Created new outer rotate command" << std::endl;
 
             // Update dashboard with new value, if limited.  Not necessary,
@@ -299,6 +303,8 @@ void Robot::RobotPeriodic() {
         // We'll create a new command as the user changes parameters on the dashboard (e.g. target position).
         static RotateInnerArmsCommand * innerRotateCommand = nullptr;
 
+        static PID rotatePid { 0.0, 0.0, 0.0, 0.1, 0.5, -0.3, 0.3 };
+
         // Allow user to modify target position.
         static double innerRotateTarget = frc::SmartDashboard::GetNumber(DASH_INNER_ROTATE_TARGET, 0.0);
         updateDashboardNumber(DASH_INNER_ROTATE_TARGET, innerRotateTarget, [&](double target) {
@@ -316,7 +322,7 @@ void Robot::RobotPeriodic() {
             }
 
             // Allocate a fresh command object.
-            innerRotateCommand = new RotateInnerArmsCommand(mInnerRotate, target);
+            innerRotateCommand = new RotateInnerArmsCommand(mInnerRotate, target, rotatePid);
             std::cout << "Created new inner rotate command" << std::endl;
 
             // Update dashboard with new value, if limited.  Not necessary,
