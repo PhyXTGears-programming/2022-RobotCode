@@ -14,6 +14,7 @@ public:
     limelight();
     double getAngle();
     bool targetFound();
+    double PIDCalculate();
     void Periodic();
 private:
     /**

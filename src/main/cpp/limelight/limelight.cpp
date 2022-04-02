@@ -10,6 +10,10 @@ limelight::limelight()
       oldestIndex = 0;
 }
 
+void limelight::Periodic(){
+      pullValuesFromNT();
+}
+
 void limelight::pullValuesFromNT()
 {
       if (mTargetFound.GetBoolean(false))
