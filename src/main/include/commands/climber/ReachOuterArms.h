@@ -3,14 +3,13 @@
 #include "climber/OuterReach.h"
 #include "PID.h"
 
-#include <frc/controller/PIDController.h>
-
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
 class ReachOuterArmsCommand : public frc2::CommandHelper<frc2::CommandBase, ReachOuterArmsCommand> {
     public:
         ReachOuterArmsCommand(ClimberOuterReach * outerArms, double targetPosition);
+        ReachOuterArmsCommand(ClimberOuterReach * outerArms, double targetPosition, PID const & pid1, PID const & pid2);
 
         void Initialize() override;
         void Execute() override;
@@ -27,15 +26,10 @@ class ReachOuterArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Reac
         ClimberOuterReach * mOuterArms;
         double mTargetPosition;
 
-        frc2::PIDController mPid1 { 0.2, 0.000, 0.0 };
-        frc2::PIDController mPid2 { 0.2, 0.000, 0.0 };
-
         /*
         p, i, d, feed-forward, acceptableError,
         minOutput = -1.0, maxOutput = 1.0, izone = INFINITY
         */
-        PID mCustomPID1 { 0.2, 0.0, 0.0, 0.03, 0.1, -0.6, 0.6,  };
-        PID mCustomPID2 { 0.2, 0.0, 0.0, 0.03, 0.1, -0.6, 0.6 };
-
-        double mFF = 0.03;
+        PID mPid1 { 0.2, 0.0, 0.0, 0.03, 0.1, -0.6, 0.6 };
+        PID mPid2 { 0.2, 0.0, 0.0, 0.03, 0.1, -0.6, 0.6 };
 };
