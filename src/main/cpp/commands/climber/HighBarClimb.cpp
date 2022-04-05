@@ -54,9 +54,8 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::PrintCommand { "Begin high bar climb: drop intake" },
         RunIntakeCommand { intake }.WithTimeout(0.25_s),
         ExtendIntakeCommand { intake },
-        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
-        frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
-        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }},
+        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); outerRotate->resetCurrentLimit(); }, {innerRotate, outerRotate}},
+        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }, {outerReach}},
         frc2::PrintCommand { "Lift robot onto mid bar.  Reach for high bar." },
         frc2::ParallelCommandGroup {
             ReachOuterArmsCommand {outerReach, config.outer.zeroExtension, climbOuterPid, climbOuterPid},
@@ -65,11 +64,10 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
                 RotateInnerArmsCommand {innerRotate, config.inner.nextBarAngle, innerRotatePid}.Perpetually(),
             }
         },
-        frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }},
+        frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }, {innerRotate}},
         frc2::PrintCommand { "Overdrive into high bar" },
         RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, innerRotatePid},
-        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); }},
-        frc2::InstantCommand {[=]() { innerReach->setUnderLoad(true); }},
+        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); innerReach->setUnderLoad(true); }, {innerReach, outerReach}},
         frc2::PrintCommand { "Swing under high bar" },
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, innerRotatePid}.Perpetually(),
@@ -96,7 +94,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
             }
         },
         frc2::PrintCommand { "Rotate outer to vertical... overdrive" },
-        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }},
+        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }, {outerRotate}},
         RotateOuterArmsCommand {outerRotate, config.outer.verticalArmAngle, outerRotatePid},
         frc2::PrintCommand { "Grab high bar and lift robot" },
         frc2::ParallelRaceGroup {

@@ -47,9 +47,8 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         // Intake: move out of the way of the climb arms.
         RunIntakeCommand { intake }.WithTimeout(0.25_s),
         ExtendIntakeCommand { intake },
-        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
-        frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
-        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }}.WithTimeout(1_s),
+        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); outerRotate->resetCurrentLimit(); }, {innerRotate, outerRotate}},
+        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }, {outerReach}}.WithTimeout(1_s),
         // Outer: lift robot to mid bar.
         // Inner: point at high bar.
         // Prepare to grab high bar and swing.
@@ -65,8 +64,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         // Prepare to release mid bar.
         frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }},
         RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, rotatePid},
-        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); }},
-        frc2::InstantCommand {[=]() { innerReach->setUnderLoad(true); }},
+        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); innerReach->setUnderLoad(true); }, {outerReach, innerReach}},
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, rotatePid}.Perpetually(),
             frc2::ParallelCommandGroup {
@@ -82,8 +80,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
             RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, rotatePid}.Perpetually(),
             RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
         },
-        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); }},
-        frc2::InstantCommand {[=]() { outerRotate->resetCurrentLimit(); }},
+        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); outerRotate->resetCurrentLimit(); }, {innerRotate, outerRotate}},
         // Outer: rotate toward next bar. Pass under high bar.
         RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle, rotatePid},
         // Outer: rotate to traverse bar and extend to traverse bar.
@@ -103,7 +100,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         // Prepare to release high bar with inner arm.
         frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }},
         RotateOuterArmsCommand {outerRotate, config.outer.dropToNextBarAngle, rotatePid},
-        frc2::InstantCommand {[=](){ outerReach->setUnderLoad(true); innerReach->setUnderLoad(false); }},
+        frc2::InstantCommand {[=](){ outerReach->setUnderLoad(true); innerReach->setUnderLoad(false); }, {outerReach, innerReach}},
         frc2::ParallelCommandGroup {
             RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
             ExtendInnerArmsCommand {innerReach, config.inner.toPreviousBarExtension}
@@ -130,7 +127,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
             }
         },
         // Inner: rotate to vertical.  gently crash traverse bar.
-        frc2::InstantCommand {[=](){ innerRotate->setCurrentlimit(15); }},
+        frc2::InstantCommand {[=](){ innerRotate->setCurrentlimit(15); }, {innerRotate}},
         RotateInnerArmsCommand {innerRotate, config.inner.verticalArmAngle, rotatePid},
         // Inner: retract to grab traverse bar.
         // Outer: retract to keep robot against traverse bar.
