@@ -24,7 +24,7 @@ void SwerveDrive::Periodic()
     frc::SmartDashboard::PutNumber("Steer BR Abs", brWheel.getAbsAngle() / M_PI * 180);
     frc::SmartDashboard::PutNumber("Steer BL Abs", blWheel.getAbsAngle() / M_PI * 180);
 
-    frc::SmartDashboard::PutNumber("Gyro Angle", gyro->GetAngle());
+    frc::SmartDashboard::PutNumber("Gyro Angle", getHeading());
 }
 
 void SwerveDrive::synchronizeTurnEncoders()
