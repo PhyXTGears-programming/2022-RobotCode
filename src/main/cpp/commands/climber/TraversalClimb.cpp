@@ -65,6 +65,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }},
         RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, rotatePid},
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); innerReach->setUnderLoad(true); }, {outerReach, innerReach}},
+        frc2::InstantCommand {[=]() { innerRotate->setMotorCoast(); outerRotate->setMotorCoast(); }, {innerRotate, outerRotate}},
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, rotatePid}.Perpetually(),
             frc2::ParallelCommandGroup {
@@ -74,6 +75,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
         // Outer: release mid bar and retract to clear mid bar.
         // Prepare to rotate outer to vertical.
+        frc2::InstantCommand {[=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); }, {innerRotate, outerRotate}},
         ExtendOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension},
         RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, rotatePid},
         frc2::ParallelRaceGroup {
@@ -101,6 +103,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }},
         RotateOuterArmsCommand {outerRotate, config.outer.dropToNextBarAngle, rotatePid},
         frc2::InstantCommand {[=](){ outerReach->setUnderLoad(true); innerReach->setUnderLoad(false); }, {outerReach, innerReach}},
+        frc2::InstantCommand {[=]() { innerRotate->setMotorCoast(); outerRotate->setMotorCoast(); }, {innerRotate, outerRotate}},
         frc2::ParallelCommandGroup {
             RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
             ExtendInnerArmsCommand {innerReach, config.inner.toPreviousBarExtension}
@@ -108,6 +111,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         // Inner: release high bar and rotate hook below high bar, then retract
         // to clear high bar.
         // Prepare to rotate inner to vertical.
+        frc2::InstantCommand {[=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); }, {innerRotate, outerRotate}},
         ExtendInnerArmsCommand {innerReach, config.inner.releasePreviousBarExtension},
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.dropOffPreviousBarAngle, rotatePid}.Perpetually(),
