@@ -10,7 +10,7 @@ class Auto {
     public:
         Auto(); // constructor
 
-        frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
+        static frc2::SequentialCommandGroup * MakeTwoCargoAuto (
             Intake * intake,
             Shooter * shooter,
             SwerveDrive * drive
