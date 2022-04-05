@@ -35,7 +35,7 @@ double limelight::getAngle()
     return currentAverage;
 }
 
-double getAverageValue()
+double limelight::getAverageValue()
 {
     double* originalAngleArray = angleArray;
     double* originalWidthArray = widthArray;
