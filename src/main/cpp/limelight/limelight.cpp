@@ -8,6 +8,8 @@ limelight::limelight()
     mYAngle = table->GetEntry("ty");
     mTargetFound = table->GetEntry("tv");
     oldestIndex = 0;
+    pidController = new PID(PIDValues.P, PIDValues.I, PIDValues.D, PIDValues.FF, PIDValues.AcceptableError, PIDValues.Min, PIDValues.Max, PIDValues.IZone, PIDValues.timePeriod);
+    pidController->setTarget(0.0);
 }
 
 void limelight::Periodic()
@@ -103,4 +105,8 @@ double limelight::getAverageValue()
     }
     return runTot / NUMBERS_FINAL_AVERAGE_COUNT;
 
+}
+
+double limelight::PIDCalculate(){
+    pidController->calculate(currentAverage);
 }

@@ -3,6 +3,8 @@
 #include <networktables/NetworkTableEntry.h>
 #include "networktables/NetworkTableInstance.h"
 
+#include "PID.h"
+
 //the number of numbers that  you want to collect from the limelight before it starts removing old numbers
 #define NUMBERS_COLLECTED_COUNT 10
 //the number of numbers you want to reject (currently the biggest width boxes are rejected only) before taking the average
@@ -34,6 +36,8 @@ private:
      */
     int maxArrayValueIndex(int array[NUMBERS_COLLECTED_COUNT]);
 
+    PID * pidController = nullptr;
+
     nt::NetworkTableEntry mXAngle;
     nt::NetworkTableEntry mYAngle;
     nt::NetworkTableEntry mTargetFound;
@@ -43,4 +47,16 @@ private:
     int oldestIndex = 0;
     int numCollected = 0;
     double currentAverage;
+
+    struct {
+        double P = 0.0;
+        double I = 0.0;
+        double D = 0.0;
+        double FF = 0.0;
+        double IZone = 0.0;
+        double AcceptableError = 0.0;
+        units::second_t timePeriod = 20_ms;
+        double Min = -1;
+        double Max = 1;
+    } PIDValues;
 };
