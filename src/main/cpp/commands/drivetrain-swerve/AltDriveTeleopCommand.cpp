@@ -9,6 +9,8 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include "limelight/limelight.h"
+
 #define JOYSTICK_DEADZONE 0.2       // (jcc) Tested Mar 3.  0.2 prevents wheels from steering wildly near deadzone.
 #define MAKE_VALUE_FULL_RANGE(deadzonedInput) (1 / (1 - JOYSTICK_DEADZONE) * (deadzonedInput - std::copysign(JOYSTICK_DEADZONE, deadzonedInput)))
 #define DEADZONE(input) ((std::abs(input) < JOYSTICK_DEADZONE) ? 0.0 : input)
@@ -17,9 +19,10 @@
 #define TRIG_DEADZONE 0.1
 #define TRIGGER_DEADZONE(input) ((std::abs(input) < TRIG_DEADZONE) ? 0.0 : input)
 
-AltDriveTeleopCommand::AltDriveTeleopCommand(frc::XboxController *driverController, SwerveDrive * _swerveDrive)
+AltDriveTeleopCommand::AltDriveTeleopCommand(frc::XboxController *driverController, SwerveDrive * _swerveDrive, limelight * limelight)
 {
     AddRequirements(_swerveDrive);
+    mLimelight = limelight;
     swerveDrive = _swerveDrive;
     mJoystick = driverController;
 }
@@ -36,7 +39,12 @@ void AltDriveTeleopCommand::Execute()
 
     double x = mJoystick->GetLeftX();
     double y = -1 * mJoystick->GetLeftY();
-    double r = -mJoystick->GetRightX();     // Invert RightX so left turns go left and not right.
+    double r;
+    if(mJoystick->GetAButton()){
+        r = mLimelight->PIDCalculate();
+    } else {
+        r = -mJoystick->GetRightX();     // Invert RightX so left turns go left and not right.
+    }
     x = DEADZONE(x) * speed;
     y = DEADZONE(y) * speed;
     r = DEADZONE(r);
