@@ -177,7 +177,7 @@ void Robot::RobotInit()
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
-    m_chooser.AddOption(kAutoDriveOnly, kAutoDriveOnly);
+    m_chooser.AddOption(kAutoTwoCargoShoot, kAutoTwoCargoShoot);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
     mDriveAndShoot = new frc2::SequentialCommandGroup {
