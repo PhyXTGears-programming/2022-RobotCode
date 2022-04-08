@@ -1,4 +1,5 @@
 #include "auto/auto.h"
+#include "PID.h"
 
 #include "commands/intake/ExtendIntake.h"
 #include "commands/intake/RetractIntake.h"
@@ -15,8 +16,8 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
     Shooter * shooter,
     SwerveDrive * drive
 ) {
-    double * targetGyroPosition = new double(0.0);
     const double kAcceptableError = 0.05;
+    PID * turnPid = new PID(0.005, 0.0, 0.0, 0.1, 0.001);
 
     return new frc2::SequentialCommandGroup {
         ExtendIntakeCommand {intake},
@@ -38,17 +39,16 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
 
         frc2::FunctionalCommand {
             [=](){
-                *targetGyroPosition = drive->getHeading() + M_PI;
+                turnPid->setTarget(drive->getHeading() + M_PI);
             },
             [=](){
-                drive->setMotion(0, 0, 0.25);
+                drive->setMotion(0, 0, turnPid->calculate(drive->getHeading()));
             },
             [=](bool _interrupted){
                 drive->setMotion(0, 0, 0); //STOP
             },
-            [=](){
-                double currentPosition = drive->getHeading();
-                return std::abs(*targetGyroPosition - currentPosition) < kAcceptableError;
+            [=]() {
+                return std::abs(turnPid->getError()) < kAcceptableError;
 
             },
             { drive }
