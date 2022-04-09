@@ -91,8 +91,8 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAutoNearWall (
         frc2::ParallelRaceGroup {
             RunIntakeCommand {intake},
             frc2::StartEndCommand {
-                [&]() { shooter->shootAuto(); },
-                [&]() { shooter->stopShooter(); },
+                [=]() { shooter->shootAuto(); },
+                [=]() { shooter->stopShooter(); },
                 { shooter }
             }.WithTimeout(8_s)
         }
@@ -146,8 +146,8 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (Intake * intake, Shooter 
         frc2::ParallelRaceGroup {
             RunIntakeCommand {intake},
             frc2::StartEndCommand {
-                [&]() { shooter->shootAuto(); },
-                [&]() { shooter->stopShooter(); },
+                [=]() { shooter->shootAuto(); },
+                [=]() { shooter->stopShooter(); },
                 { shooter }
             }.WithTimeout(8.0_s)
         }
