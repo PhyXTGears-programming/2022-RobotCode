@@ -12,14 +12,14 @@
 
 #include <cmath>
 
-const double kAcceptableError = 0.05;
-PID * turnPid = new PID(0.1, 0.0, 0.0, 0.1, 0.001);
+static const double kAcceptableError = 0.05;
 
 frc2::SequentialCommandGroup * Auto::MakeTwoCargoAutoNearWall (
     Intake * intake,
     Shooter * shooter,
     SwerveDrive * drive
 ) {
+    PID * turnPid = new PID(0.1, 0.0, 0.0, 0.1, 0.001);
 
     return new frc2::SequentialCommandGroup {
         ExtendIntakeCommand {intake},
@@ -100,9 +100,13 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAutoNearWall (
 }
 
 frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (Intake * intake, Shooter * shooter, SwerveDrive * drive) {
+    PID * turnPid = new PID(0.1, 0.0, 0.0, 0.1, 0.001);
+    
     return new frc2::SequentialCommandGroup {
         ExtendIntakeCommand {intake},
+
         frc2::WaitCommand {0.5_s},
+
         frc2::ParallelRaceGroup {
             RunIntakeCommand {intake},
             frc2::FunctionalCommand {
