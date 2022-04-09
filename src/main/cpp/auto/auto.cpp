@@ -137,7 +137,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (Intake * intake, Shooter 
                     drive->setMotion(0.0, 0.0, 0.0); // STOP
                 },
                 [=]() {
-                    return std::abs(turnPid->getError() < kAcceptableError);
+                    return std::abs(turnPid->getError()) < kAcceptableError;
                 },
                 { drive }
             }
