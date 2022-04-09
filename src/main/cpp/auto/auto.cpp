@@ -128,7 +128,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (Intake * intake, Shooter 
             RunIntakeCommand {intake},
             frc2::FunctionalCommand {
                 [=]() {
-                    turnPid->setTarget(drive->getHeading() - (140.0 * M_PI / 180.0));
+                    turnPid->setTarget(drive->getHeading() + (165.0 * M_PI / 180.0));
                 },
                 [=]() {
                     drive->setMotion(0.0, 0.0, -turnPid->calculate(drive->getHeading()));
