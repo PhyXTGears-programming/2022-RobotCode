@@ -12,13 +12,14 @@
 
 #include <cmath>
 
-frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
+const double kAcceptableError = 0.05;
+PID * turnPid = new PID(0.1, 0.0, 0.0, 0.1, 0.001);
+
+frc2::SequentialCommandGroup * Auto::MakeTwoCargoAutoNearWall (
     Intake * intake,
     Shooter * shooter,
     SwerveDrive * drive
 ) {
-    const double kAcceptableError = 0.05;
-    PID * turnPid = new PID(0.1, 0.0, 0.0, 0.1, 0.001);
 
     return new frc2::SequentialCommandGroup {
         ExtendIntakeCommand {intake},
@@ -52,7 +53,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
                     drive->setMotion(0, 0, 0);
                 },
                 []() { return false; }
-            }.WithTimeout(0.60_s),
+            }.WithTimeout(0.6_s),
         },
 
         frc2::FunctionalCommand {
@@ -67,7 +68,6 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
             },
             [=]() {
                 return std::abs(turnPid->getError()) < kAcceptableError;
-
             },
             { drive }
         },
@@ -95,6 +95,57 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
                 [&]() { shooter->stopShooter(); },
                 { shooter }
             }.WithTimeout(8_s)
+        }
+    };
+}
+
+frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (Intake * intake, Shooter * shooter, SwerveDrive * drive) {
+    return new frc2::SequentialCommandGroup {
+        ExtendIntakeCommand {intake},
+        frc2::WaitCommand {0.5_s},
+        frc2::ParallelRaceGroup {
+            RunIntakeCommand {intake},
+            frc2::FunctionalCommand {
+                []() {},
+                [=]() {
+                    drive->setMotion(0.0, 0.2, 0.0);
+                },
+                [=](bool _interrupted) {
+                    drive->setMotion(0.0, 0.0, 0.0); // STOP
+                },
+                []() {
+                    return false;
+                },
+                { drive }
+            }.WithTimeout(1.35_s)
+        },
+
+        frc2::ParallelRaceGroup {
+            RunIntakeCommand {intake},
+            frc2::FunctionalCommand {
+                [=]() {
+                    turnPid->setTarget(drive->getHeading() - (140 * M_PI / 180));
+                },
+                [=]() {
+                    drive->setMotion(0.0, 0.0, -turnPid->calculate(drive->getHeading()));
+                },
+                [=](bool _interrupted) {
+                    drive->setMotion(0.0, 0.0, 0.0); // STOP
+                },
+                [=]() {
+                    return std::abs(turnPid->getError() < kAcceptableError);
+                },
+                { drive }
+            }
+        },
+
+        frc2::ParallelRaceGroup {
+            RunIntakeCommand {intake},
+            frc2::StartEndCommand {
+                [&]() { shooter->shootAuto(); },
+                [&]() { shooter->stopShooter(); },
+                { shooter }
+            }.WithTimeout(8.0_s)
         }
     };
 }

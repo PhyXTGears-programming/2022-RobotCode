@@ -178,6 +178,7 @@ void Robot::RobotInit()
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
     m_chooser.AddOption(kAutoTwoCargoShoot, kAutoTwoCargoShoot);
+    m_chooser.AddOption(kAutoTwoCargoNearWall, kAutoTwoCargoNearWall);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
     mDriveAndShoot = new frc2::SequentialCommandGroup {
@@ -197,6 +198,7 @@ void Robot::RobotInit()
     };
 
     mTwoCargoAuto = Auto::MakeTwoCargoAuto(mIntake, mShooter, mSwerveDrive);
+    mTwoCargoAutoNearWall = Auto::MakeTwoCargoAutoNearWall(mIntake, mShooter, mSwerveDrive);
 }
 
 /**
@@ -240,6 +242,8 @@ void Robot::AutonomousInit()
         mDriveAndShoot->Schedule();
     } else if (m_autoSelected == kAutoTwoCargoShoot) {
         mTwoCargoAuto->Schedule();
+    } else if (m_autoSelected == kAutoTwoCargoNearWall) {
+        mTwoCargoAutoNearWall->Schedule();
     } else {
         // Default Auto goes here
     }
