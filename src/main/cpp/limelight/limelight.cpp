@@ -3,10 +3,7 @@
 limelight::limelight()
 {
     auto inst = nt::NetworkTableInstance::GetDefault();
-    auto table = inst.GetTable("limelight");
-    mXAngle = table->GetEntry("tx");
-    mYAngle = table->GetEntry("ty");
-    mTargetFound = table->GetEntry("tv");
+    mTable = inst.GetTable("limelight");
     oldestIndex = 0;
     pidController = new PID(PIDValues.P, PIDValues.I, PIDValues.D, PIDValues.FF, PIDValues.AcceptableError, PIDValues.Min, PIDValues.Max, PIDValues.IZone, PIDValues.timePeriod);
     pidController->setTarget(0.0);
@@ -19,10 +16,10 @@ void limelight::Periodic()
 
 void limelight::pullValuesFromNT()
 {
-    if (mTargetFound.GetBoolean(false))
+    if (mTable->GetNumber("tv", 0.0) == 1.0)
     {
-        angleArray[oldestIndex] = mXAngle.GetDouble(0);
-        widthArray[oldestIndex] = mTargetWidth.GetDouble(0);
+        angleArray[oldestIndex] = mTable->GetNumber("tx", 0.0);
+        widthArray[oldestIndex] = mTable->GetNumber("tw", 0.0);
         oldestIndex = (oldestIndex + 1) % NUMBERS_COLLECTED_COUNT;
         numCollected += 1;
         if (numCollected >= NUMBERS_COLLECTED_COUNT)
@@ -108,5 +105,5 @@ double limelight::getAverageValue()
 }
 
 double limelight::PIDCalculate(){
-    pidController->calculate(currentAverage);
+    return pidController->calculate(currentAverage);
 }

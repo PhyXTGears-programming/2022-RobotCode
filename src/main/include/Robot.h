@@ -28,6 +28,7 @@
 #include "intake/intake.h"
 #include "shooter/shooter.h"
 #include "limelight/limelight.h"
+#include "limelight/LimelightSubsystem.h"
 
 #include "commands/climber/ClimbMidBarOnly.h"
 #include "commands/climber/HighBarClimb.h"
@@ -37,6 +38,7 @@
 #include "commands/intake/RunIntake.h"
 #include "commands/intake/ExtendIntake.h"
 #include "commands/intake/RetractIntake.h"
+#include "commands/limelight/AimingVisionCommand.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -74,6 +76,8 @@ private:
     SwerveDrive * mSwerveDrive = nullptr;
 
     limelight * mLimelight = nullptr;
+    LimelightSubsystem * mLimelightSubsystem = nullptr;
+    AimingVisionCommand * mAimingVisionCommand = nullptr;
     
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;

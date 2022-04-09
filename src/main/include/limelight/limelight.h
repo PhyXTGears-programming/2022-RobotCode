@@ -38,10 +38,7 @@ private:
 
     PID * pidController = nullptr;
 
-    nt::NetworkTableEntry mXAngle;
-    nt::NetworkTableEntry mYAngle;
-    nt::NetworkTableEntry mTargetFound;
-    nt::NetworkTableEntry mTargetWidth;
+    std::shared_ptr<nt::NetworkTable> mTable = nullptr;
     double angleArray[NUMBERS_COLLECTED_COUNT];
     double widthArray[NUMBERS_COLLECTED_COUNT];
     int oldestIndex = 0;
