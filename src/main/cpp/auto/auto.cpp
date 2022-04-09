@@ -32,10 +32,10 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAutoNearWall (
             frc2::FunctionalCommand {
                 [](){},
                 [=](){
-                    drive->setMotion(0, 0.2, 0.0);
+                    drive->setMotion(0.0, 0.2, 0.0);
                 },
                 [=](bool _interrupted){
-                    drive->setMotion(0, 0, 0);
+                    drive->setMotion(0.0, 0.0, 0.0);
                 },
                 [](){ return false; },
                 { drive }
@@ -47,10 +47,10 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAutoNearWall (
             frc2::FunctionalCommand {
                 []() {},
                 [=]() {
-                    drive->setMotion(0, -0.2, 0.0);
+                    drive->setMotion(0.0, -0.2, 0.0);
                 },
                 [=](bool _interrupted) {
-                    drive->setMotion(0, 0, 0);
+                    drive->setMotion(0.0, 0.0, 0.0);
                 },
                 []() { return false; }
             }.WithTimeout(0.6_s),
@@ -61,10 +61,10 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAutoNearWall (
                 turnPid->setTarget(drive->getHeading() - (160.0 * M_PI / 180.0));
             },
             [=](){
-                drive->setMotion(0, 0, -turnPid->calculate(drive->getHeading()));
+                drive->setMotion(0.0, 0.0, -turnPid->calculate(drive->getHeading()));
             },
             [=](bool _interrupted){
-                drive->setMotion(0, 0, 0); //STOP
+                drive->setMotion(0.0, 0.0, 0.0); //STOP
             },
             [=]() {
                 return std::abs(turnPid->getError()) < kAcceptableError;
@@ -77,10 +77,10 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAutoNearWall (
             frc2::FunctionalCommand {
                 []() {},
                 [=]() {
-                    drive->setMotion(0, -0.2, 0.0);
+                    drive->setMotion(0.0, -0.2, 0.0);
                 },
                 [=](bool _interrupted) {
-                    drive->setMotion(0, 0, 0);
+                    drive->setMotion(0.0, 0.0, 0.0);
                 },
                 []() { return false; }
             }.WithTimeout(1.0_s),
@@ -128,7 +128,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (Intake * intake, Shooter 
             RunIntakeCommand {intake},
             frc2::FunctionalCommand {
                 [=]() {
-                    turnPid->setTarget(drive->getHeading() - (140 * M_PI / 180));
+                    turnPid->setTarget(drive->getHeading() - (140.0 * M_PI / 180.0));
                 },
                 [=]() {
                     drive->setMotion(0.0, 0.0, -turnPid->calculate(drive->getHeading()));
