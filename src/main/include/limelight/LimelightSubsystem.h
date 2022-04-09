@@ -14,4 +14,4 @@ public:
     void changePipeToAim();
 private:
     nt::NetworkTableEntry PipelineTable;
-}
+};

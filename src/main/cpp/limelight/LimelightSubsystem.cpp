@@ -7,9 +7,9 @@ LimelightSubsystem::LimelightSubsystem(){
 }
 
 void LimelightSubsystem::changePipeToAim(){
-    PipelineTable->putNumber(0);
+    PipelineTable.SetDouble(0);
 }
 
 void LimelightSubsystem::changePipeToDrive(){
-    PipelineTable->putNumber(1);
+    PipelineTable.SetDouble(1);
 }
