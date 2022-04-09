@@ -50,6 +50,11 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
     PID climbOuterPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.8, 0.05, 1.0 };
     PID climbInnerPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.8, 0.05, 1.0 };
 
+    PID slowInnerPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.5, 0.05, 1.0 };
+    PID slowOuterPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.5, 0.05, 1.0 };
+
+    PID fastInnerReach { 0.6, 0.004, 0.0, 0.4, 0.05, -0.5, 0.5, 1.0 };
+
     mHighBarClimb = new frc2::SequentialCommandGroup {
         frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }, {innerRotate}},
         frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }, {outerRotate}},
@@ -59,7 +64,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         ExtendIntakeCommand { intake },
 
         frc2::PrintCommand { "Rotate inner arms toward high bar." },
-        ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, climbInnerPid, climbInnerPid},
+        ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, fastInnerReach, fastInnerReach},
         RotateInnerArmsCommand {innerRotate, config.inner.nextBarAngle, innerRotatePid},
 
         frc2::PrintCommand { "Lift robot onto mid bar.  Reach for high bar." },
@@ -72,20 +77,19 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         },
 
         frc2::PrintCommand { "Overdrive into high bar" },
-        frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }, {innerRotate}},
         RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, innerRotatePid}.WithTimeout(1.0_s),
 
         frc2::PrintCommand { "Swing under high bar" },
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); innerReach->setUnderLoad(true); }, {innerReach, outerReach}},
         frc2::InstantCommand {[=]() { innerRotate->setMotorCoast(); outerRotate->setMotorCoast(); }, {innerRotate, outerRotate}},
         frc2::ParallelCommandGroup {
-            ReachInnerArmsCommand {innerReach, config.inner.liftExtension, climbInnerPid, climbInnerPid},
+            ReachInnerArmsCommand {innerReach, config.inner.liftExtension, slowInnerPid, slowInnerPid},
             ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
         },
 
         frc2::PrintCommand { "Release mid bar" },
         frc2::InstantCommand {[=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); }, {innerRotate, outerRotate}},
-        ReachOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension},
+        ReachOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension, slowOuterPid, slowOuterPid},
 
         frc2::PrintCommand { "Rotate hook below mid bar" },
         RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, outerRotatePid},
