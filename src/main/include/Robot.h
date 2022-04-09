@@ -38,7 +38,7 @@
 #include "commands/intake/RunIntake.h"
 #include "commands/intake/ExtendIntake.h"
 #include "commands/intake/RetractIntake.h"
-#include "commands/limelight/AimingVisionCommand.h"
+#include "commands/limelight/VisionPipelineCommand.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -77,7 +77,7 @@ private:
 
     limelight * mLimelight = nullptr;
     LimelightSubsystem * mLimelightSubsystem = nullptr;
-    AimingVisionCommand * mAimingVisionCommand = nullptr;
+    VisionPipelineCommand * mVisionPipelineCommand = nullptr;
     
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;

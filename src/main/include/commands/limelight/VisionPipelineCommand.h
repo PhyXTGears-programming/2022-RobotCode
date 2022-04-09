@@ -5,10 +5,10 @@
 
 #include "limelight/LimelightSubsystem.h"
 
-class AimingVisionCommand : public frc2::CommandHelper<frc2::CommandBase, AimingVisionCommand>
+class VisionPipelineCommand : public frc2::CommandHelper<frc2::CommandBase, VisionPipelineCommand>
 {
 public:
-    AimingVisionCommand(LimelightSubsystem * limelightSubsystem);
+    VisionPipelineCommand(LimelightSubsystem * limelightSubsystem);
 
     void Initialize() override;
     void End(bool interrupted) override;
