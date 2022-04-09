@@ -18,6 +18,7 @@ public:
     bool targetFound();
     double PIDCalculate();
     void Periodic();
+    void finishAim();
 private:
     /**
      * @brief puls values from the network tables and sets the value to 0 on width if the target is not found, otherwise it will get the angle on the X-Axis.

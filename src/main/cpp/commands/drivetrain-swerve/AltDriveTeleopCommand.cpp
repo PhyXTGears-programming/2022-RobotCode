@@ -49,6 +49,7 @@ void AltDriveTeleopCommand::Execute()
         r = mLimelight->PIDCalculate();
     } else {
         if(mAimingVisionCommand->IsScheduled()){
+            mLimelight->finishAim();
             mAimingVisionCommand->Cancel();
         }
         r = -mJoystick->GetRightX();     // Invert RightX so left turns go left and not right.

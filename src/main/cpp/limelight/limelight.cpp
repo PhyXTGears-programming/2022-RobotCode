@@ -107,3 +107,7 @@ double limelight::getAverageValue()
 double limelight::PIDCalculate(){
     return pidController->calculate(currentAverage);
 }
+
+void limelight::finishAim(){
+    pidController->reset();
+}
