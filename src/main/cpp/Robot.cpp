@@ -60,6 +60,24 @@ void Robot::RobotInit() {
     mExtendOuterArms = new ExtendOuterArmsCommand {mOuterReach, 10.0};
 }
 
+template <class T>
+void notifyOnChange(T value, T & prevValue, std::function<void(T)> onChange) {
+    if (value != prevValue) {
+        prevValue = value;
+        onChange(value);
+    }
+}
+
+void updateDashboardBool(std::string_view name, bool & prevValue, std::function<void(bool)> onChange) {
+    bool value = frc::SmartDashboard::GetBoolean(name, false);
+    notifyOnChange(value, prevValue, onChange);
+}
+
+void updateDashboardNumber(std::string_view name, double & prevValue, std::function<void(double)> onChange) {
+    double value = frc::SmartDashboard::GetNumber(name, 0.0);
+    notifyOnChange(value, prevValue, onChange);
+}
+
 /**
  * This function is called every robot packet, no matter the mode. Use
  * this for items like diagnostics that you want ran during disabled,
