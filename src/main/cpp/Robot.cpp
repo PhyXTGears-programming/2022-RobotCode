@@ -9,6 +9,12 @@
 
 #include "RobotCompileModes.h"
 
+using namespace std::literals::string_view_literals;
+
+constexpr std::string_view DASH_USE_OUTER_REACH_TEST_COMMAND = "Enable Outer Reach Test Command"sv;
+constexpr std::string_view DASH_OUTER_REACH_TARGET = "Outer Reach Target Position"sv;
+constexpr std::string_view DASH_OUTER_REACH_ACTIVATE = "Activate Outer Reach Command"sv;
+
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
 static Drivetrain drivetrain;
@@ -58,6 +64,11 @@ void Robot::RobotInit() {
     mExtendInnerArms = new ExtendInnerArmsCommand {mInnerReach, 10.0};
     mRetractOuterArms = new RetractOuterArmsCommand {mOuterReach, 1.0};
     mExtendOuterArms = new ExtendOuterArmsCommand {mOuterReach, 10.0};
+
+    // Need to Put a value, first, in order to create an editable field on the dashboard.
+    frc::SmartDashboard::PutBoolean(DASH_USE_OUTER_REACH_TEST_COMMAND, false);
+    frc::SmartDashboard::PutNumber(DASH_OUTER_REACH_TARGET, 0.0);
+    frc::SmartDashboard::PutBoolean(DASH_OUTER_REACH_ACTIVATE, false);
 }
 
 template <class T>
@@ -89,6 +100,64 @@ void updateDashboardNumber(std::string_view name, double & prevValue, std::funct
 void Robot::RobotPeriodic() {
     frc2::CommandScheduler::GetInstance().Run();
 
+    frc::SmartDashboard::PutData(&frc2::CommandScheduler::GetInstance());
+
+    {
+        // Use dashboard to control outer arm reach.
+
+        // We'll create a new command as the user changes parameters on the dashboard (e.g. target position).
+        static ReachOuterArmsCommand * outerReachCommand = nullptr;
+
+        // Allow user to disable the command.  Can be used to prevent accidental activation.  Currently not used in code, yet.
+        static bool useOuterReachTestCommand = frc::SmartDashboard::GetBoolean(DASH_USE_OUTER_REACH_TEST_COMMAND, false);
+        updateDashboardBool(DASH_USE_OUTER_REACH_TEST_COMMAND, useOuterReachTestCommand, [](bool value) {
+            std::cout << "use outer reach command? " << (value ? "yes" : "no") << std::endl;
+        });
+
+        // Allow user to modify target position.
+        static double outerReachTarget = frc::SmartDashboard::GetNumber(DASH_OUTER_REACH_TARGET, 0.0);
+        updateDashboardNumber(DASH_OUTER_REACH_TARGET, outerReachTarget, [&](double value) {
+            // Ensure value has a safe range.
+            value = std::clamp(value, 2.0, 26.0);   // These limits try to protect from overshooting.  Max range [0, 28].
+
+            if (nullptr != outerReachCommand) {
+                if (outerReachCommand->IsScheduled()) {
+                    outerReachCommand->Cancel();
+                    std::cout << "Canceled current outer reach command" << std::endl;
+                }
+                delete outerReachCommand;
+            }
+
+            outerReachCommand = new ReachOuterArmsCommand(mOuterReach, value);
+            std::cout << "Created new outer reach command" << std::endl;
+
+            // Update dashboard with new value, if limited.
+            frc::SmartDashboard::PutNumber(DASH_OUTER_REACH_TARGET, value);
+        });
+
+        // Allow user to start the command.
+        static bool activateCommand = frc::SmartDashboard::GetBoolean(DASH_OUTER_REACH_ACTIVATE, false);
+        updateDashboardBool(DASH_OUTER_REACH_ACTIVATE, activateCommand, [&](bool isActive) {
+            // Do nothing when flag when false.
+            if (isActive) {
+                if (nullptr != outerReachCommand) {
+                    // If a command is loaded...
+                    if (! outerReachCommand->IsScheduled()) {
+                        // ...and not scheduled, then start the command.
+                        outerReachCommand->Schedule();
+                        std::cout << "Scheduled outer reach command" << std::endl;
+                    } else {
+                        std::cout << "Command for outer reach already scheduled" << std::endl;
+                    }
+                } else {
+                    std::cout << "No command for outer reach available.  Configure outer reach settings first." << std::endl;
+                }
+
+                // Reset dashboard checkbox back to empty, so use knows they can click to activate again.
+                frc::SmartDashboard::PutBoolean(DASH_OUTER_REACH_ACTIVATE, false);
+            }
+        });
+    }
 }
 
 /**

@@ -14,6 +14,7 @@
 
 #include <frc/XboxController.h>
 
+#include "commands/climber/ReachOuterArms.h"
 #include "commands/climber/ExtendInnerArms.h"
 #include "commands/climber/RetractInnerArms.h"
 #include "commands/climber/ExtendOuterArms.h"
