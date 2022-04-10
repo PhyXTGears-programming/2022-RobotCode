@@ -17,6 +17,12 @@ class PID {
         double calculate(double current);
 
         void setTarget(double target);
+
+        double getP ();
+        double getI ();
+        double getD ();
+        double getFeedForward ();
+
         void setP (double p);
         void setI (double i);
         void setD (double d);
