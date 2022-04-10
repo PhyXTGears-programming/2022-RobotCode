@@ -47,11 +47,12 @@ void Robot::RobotInit() {
     mHighClimb = new HighBarClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
     mTraversalClimb = new TraversalClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
 
-    mManualRetractInnerArms = makeInnerReachCommand(1.0, -0.2, mInnerReach, [](double limit, double pos) { return pos <= limit; });
-    mManualExtendInnerArms = makeInnerReachCommand(20.0, 0.2, mInnerReach, [](double limit, double pos) { return pos >= limit; });
+    mManualRetractInnerArms = makeInnerReachCommand(1.0, -0.6, mInnerReach, [](double limit, double pos) { return pos <= limit; });
+    mManualExtendInnerArms = makeInnerReachCommand(20.0, 0.4, mInnerReach, [](double limit, double pos) { return pos >= limit; });
 
-    mManualRetractOuterArms = makeOuterReachCommand(1.0, -0.2, mOuterReach, [](double limit, double pos) { return pos <= limit; });
-    mManualExtendOuterArms = makeOuterReachCommand(20.0, 0.2, mOuterReach, [](double limit, double pos) { return pos >= limit; });
+    mManualRetractOuterArms = makeOuterReachCommand(1.0, -0.6, mOuterReach, [](double limit, double pos) { return pos <= limit; });
+    mManualExtendOuterArms = makeOuterReachCommand(20.0, 0.4, mOuterReach, [](double limit, double pos) { return pos >= limit; });
+
 
     mRetractInnerArms = new RetractInnerArmsCommand {mInnerReach, 1.0};
     mExtendInnerArms = new ExtendInnerArmsCommand {mInnerReach, 10.0};
