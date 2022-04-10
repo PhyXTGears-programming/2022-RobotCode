@@ -15,6 +15,8 @@ constexpr std::string_view DASH_USE_OUTER_REACH_TEST_COMMAND = "Enable Outer Rea
 constexpr std::string_view DASH_OUTER_REACH_TARGET = "Outer Reach Target Position"sv;
 constexpr std::string_view DASH_OUTER_REACH_ACTIVATE = "Activate Outer Reach Command"sv;
 
+constexpr std::string_view DASH_USE_OUTER_ROTATION_TEST_COMMAND = "Enable Outer Rotation Test Command"sv;
+
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
 static Drivetrain drivetrain;
@@ -69,6 +71,8 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutBoolean(DASH_USE_OUTER_REACH_TEST_COMMAND, false);
     frc::SmartDashboard::PutNumber(DASH_OUTER_REACH_TARGET, 0.0);
     frc::SmartDashboard::PutBoolean(DASH_OUTER_REACH_ACTIVATE, false);
+
+    frc::SmartDashboard::PutBoolean(DASH_USE_OUTER_ROTATION_TEST_COMMAND, false);
 }
 
 template <class T>
@@ -158,6 +162,11 @@ void Robot::RobotPeriodic() {
             }
         });
     }
+
+    static bool useOuterRotationTestCommand = frc::SmartDashboard::GetBoolean(DASH_USE_OUTER_ROTATION_TEST_COMMAND, false);
+    updateDashboardBool(DASH_USE_OUTER_ROTATION_TEST_COMMAND, useOuterRotationTestCommand, [](bool value) {
+        std::cout << "use outer rotate command? " << (value ? "yes" : "no") << std::endl;
+    });
 }
 
 /**
