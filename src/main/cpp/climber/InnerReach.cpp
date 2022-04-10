@@ -23,6 +23,9 @@ ClimberInnerReach::ClimberInnerReach(std::shared_ptr<cpptoml::table> toml) {
     mMotor1.SetInverted(true);
     mMotor2.SetInverted(false);
 
+    mMotor1.SetSmartCurrentLimit(40);
+    mMotor2.SetSmartCurrentLimit(40);
+
     mEncoder1.SetPosition(0.0);
     mEncoder2.SetPosition(0.0);
 }
