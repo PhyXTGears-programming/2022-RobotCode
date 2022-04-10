@@ -56,6 +56,22 @@ void PID::setTarget (double target) {
     mTarget = target;
 }
 
+double PID::getP () {
+    return mProportional;
+}
+
+double PID::getI () {
+    return mIntegral;
+}
+
+double PID::getD () {
+    return mDeriviation;
+}
+
+double PID::getFeedForward () {
+    return mFeedForward;
+}
+
 void PID::setP (double p) {
     mProportional = p;
 }
