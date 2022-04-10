@@ -20,7 +20,7 @@ PID::PID (
     mMinOutput = minOutput;
     mMaxOutput = maxOutput;
 
-    if (0_s <= period) {
+    if (0_s >= period) {
         std::cerr << "PID period must be above zero" << std::endl;
         mPeriod = 20_ms;
     } else {
