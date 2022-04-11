@@ -10,6 +10,8 @@ ClimberOuterRotate::ClimberOuterRotate(std::shared_ptr<cpptoml::table> toml) {
 
 void ClimberOuterRotate::Periodic() {
     frc::SmartDashboard::PutNumber("Clmb Out Angle", getAngle());
+
+    frc::SmartDashboard::PutNumber("Clmb Out Rot Amps", mMotor.GetOutputCurrent());
 }
 
 void ClimberOuterRotate::rotate(double speed) {

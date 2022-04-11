@@ -10,6 +10,8 @@ ClimberInnerRotate::ClimberInnerRotate(std::shared_ptr<cpptoml::table> toml) {
 
 void ClimberInnerRotate::Periodic() {
     frc::SmartDashboard::PutNumber("Clmb In Angle", getAngle());
+
+    frc::SmartDashboard::PutNumber("Clmb In Rot Amps", mMotor.GetOutputCurrent());
 }
 
 void ClimberInnerRotate::rotate(double speed) {
