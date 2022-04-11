@@ -90,6 +90,7 @@ void PID::setFeedForward (double ff) {
 
 void PID::reset () {
     mPreviousError = 0.0;
+    mVelocityError = 0.0;
     mAccumulator = 0.0;
 }
 

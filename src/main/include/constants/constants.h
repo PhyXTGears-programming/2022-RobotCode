@@ -22,6 +22,6 @@ namespace constants
     namespace climb {
         const double kAcceptableAngleError = 0.5;
         const double kAcceptablePositionError = 0.5;
-        const double kAcceptableVelocityError = 0.5;
+        const double kAcceptableVelocityError = 0.75;
     }
 }
