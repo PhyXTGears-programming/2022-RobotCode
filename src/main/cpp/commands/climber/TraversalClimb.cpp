@@ -110,7 +110,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
             ReachOuterArmsCommand {outerReach, config.outer.zeroExtension},
         },
 
-        frc2::PrintCommand { "Rotate outer arms towards traversal and extend." },
+        frc2::PrintCommand { "Rotate outer arms towards traversal." },
         RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle, outerRotatePid},
 
         frc2::PrintCommand { "Lift robot onto high bar.  Reach for traversal bar." },
