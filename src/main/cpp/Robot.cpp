@@ -195,7 +195,7 @@ void Robot::RobotPeriodic() {
         // We'll create a new command as the user changes parameters on the dashboard (e.g. target position).
         static RotateOuterArmsCommand * outerRotateCommand = nullptr;
 
-        static PID rotatePid { 0.0, 0.0, 0.0, 0.1, 0.5, -0.3, 0.3 };
+        static PID rotatePid { 0.02, 0.0, 0.0, 0.12, 0.01, -0.2, 0.2 };
 
         // Allow user to modify target position.
         static double outerRotateTarget = frc::SmartDashboard::GetNumber(DASH_OUTER_ROTATE_TARGET, 0.0);
@@ -311,7 +311,7 @@ void Robot::RobotPeriodic() {
         // We'll create a new command as the user changes parameters on the dashboard (e.g. target position).
         static RotateInnerArmsCommand * innerRotateCommand = nullptr;
 
-        static PID rotatePid { 0.0, 0.0, 0.0, 0.1, 0.5, -0.3, 0.3 };
+        static PID rotatePid { 0.02, 0.0, 0.0, 0.07, 0.01, -0.15, 0.15 };
 
         // Allow user to modify target position.
         static double innerRotateTarget = frc::SmartDashboard::GetNumber(DASH_INNER_ROTATE_TARGET, 0.0);
