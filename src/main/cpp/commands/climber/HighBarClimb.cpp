@@ -57,6 +57,10 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); outerRotate->resetCurrentLimit(); }, {innerRotate, outerRotate}},
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }, {outerReach}},
 
+        frc2::PrintCommand { "Rotate inner arms toward high bar." },
+        ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, climbInnerPid, climbInnerPid},
+        RotateInnerArmsCommand {innerRotate, config.inner.nextBarAngle, innerRotatePid},
+
         frc2::PrintCommand { "Lift robot onto mid bar.  Reach for high bar." },
         frc2::ParallelCommandGroup {
             ReachOuterArmsCommand {outerReach, config.outer.zeroExtension, climbOuterPid, climbOuterPid},
