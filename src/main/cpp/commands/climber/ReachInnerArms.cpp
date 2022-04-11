@@ -56,8 +56,10 @@ void ReachInnerArmsCommand::End(bool isInterrupted) {
 }
 
 bool ReachInnerArmsCommand::IsFinished() {
-    bool isNear1 = mInnerArms->isMotor1NearTarget(mTargetPosition) && std::abs(mPid1.getVelocityError()) < 0.25;
-    bool isNear2 = mInnerArms->isMotor2NearTarget(mTargetPosition) && std::abs(mPid2.getVelocityError()) < 0.25;
+    bool isNear1 = std::abs(mPid1.getError()) < constants::climb::kAcceptablePositionError
+        && std::abs(mPid1.getVelocityError()) < constants::climb::kAcceptableVelocityError;
+    bool isNear2 = std::abs(mPid2.getError()) < constants::climb::kAcceptablePositionError
+        && std::abs(mPid2.getVelocityError()) < constants::climb::kAcceptableVelocityError;
 
     frc::SmartDashboard::PutBoolean("Reach In 1: Near Target", isNear1);
     frc::SmartDashboard::PutBoolean("Reach In 2: Near Target", isNear2);
