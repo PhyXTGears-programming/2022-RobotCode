@@ -67,6 +67,7 @@ class TraversalClimb : public frc2::CommandHelper<frc2::CommandBase, TraversalCl
                 double grabNextBarExtension;
                 double verticalArmAngle;
                 double liftExtension;
+                double insidePreviousBarExtension;
                 double toPreviousBarExtension;
                 double zeroExtension;
                 double releasePreviousBarExtension;

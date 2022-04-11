@@ -23,6 +23,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
     config.inner.grabNextBarExtension        = toml->get_qualified_as<double>("inner.grabNextBarExtension").value_or(0.0);
     config.inner.liftExtension               = toml->get_qualified_as<double>("inner.liftExtension").value_or(0.0);
     config.inner.liftOffExtension            = toml->get_qualified_as<double>("inner.liftOffExtension").value_or(0.0);
+    config.inner.insidePreviousBarExtension  = toml->get_qualified_as<double>("inner.insidePreviousBarExtension").value_or(0.0);
     config.inner.nextBarAngle                = toml->get_qualified_as<double>("inner.nextBarAngle").value_or(0.0);
     config.inner.nextBarExtension            = toml->get_qualified_as<double>("inner.nextBarExtension").value_or(0.0);
     config.inner.releasePreviousBarExtension = toml->get_qualified_as<double>("inner.releasePreviousBarExtension").value_or(0.0);
@@ -36,6 +37,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
     config.outer.grabNextBarExtension        = toml->get_qualified_as<double>("outer.grabNextBarExtension").value_or(0.0);
     config.outer.liftExtension               = toml->get_qualified_as<double>("outer.liftExtension").value_or(0.0);
     config.outer.liftOffExtension            = toml->get_qualified_as<double>("outer.liftOffExtension").value_or(0.0);
+    config.outer.insidePreviousBarExtension  = toml->get_qualified_as<double>("outer.insidePreviousBarExtension").value_or(0.0);
     config.outer.nextBarAngle                = toml->get_qualified_as<double>("outer.nextBarAngle").value_or(0.0);
     config.outer.nextBarExtension            = toml->get_qualified_as<double>("outer.nextBarExtension").value_or(0.0);
     config.outer.releasePreviousBarExtension = toml->get_qualified_as<double>("outer.releasePreviousBarExtension").value_or(0.0);
@@ -142,7 +144,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         frc2::PrintCommand { "Retract inner arm." },
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.dropOffPreviousBarAngle, innerRotatePid}.Perpetually(),
-            ReachInnerArmsCommand {innerReach, config.inner.liftExtension}
+            ReachInnerArmsCommand {innerReach, config.inner.insidePreviousBarExtension}
         },
 
         frc2::PrintCommand { "Lift robot. Rotate inner to vertical." },

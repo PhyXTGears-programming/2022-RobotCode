@@ -26,6 +26,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
     config.inner.grabNextBarExtension = toml->get_qualified_as<double>("inner.grabNextBarExtension").value_or(0.0);
     config.inner.liftExtension = toml->get_qualified_as<double>("inner.liftExtension").value_or(0.0);
     config.inner.liftOffExtension = toml->get_qualified_as<double>("inner.liftOffExtension").value_or(0.0);
+    config.inner.insidePreviousBarExtension = toml->get_qualified_as<double>("inner.insidePreviousBarExtension").value_or(0.0);
     config.inner.nextBarAngle = toml->get_qualified_as<double>("inner.nextBarAngle").value_or(0.0);
     config.inner.nextBarExtension = toml->get_qualified_as<double>("inner.nextBarExtension").value_or(0.0);
     config.inner.releasePreviousBarExtension = toml->get_qualified_as<double>("inner.releasePreviousBarExtension").value_or(0.0);
@@ -39,6 +40,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
     config.outer.grabNextBarExtension = toml->get_qualified_as<double>("outer.grabNextBarExtension").value_or(0.0);
     config.outer.liftExtension = toml->get_qualified_as<double>("outer.liftExtension").value_or(0.0);
     config.outer.liftOffExtension = toml->get_qualified_as<double>("outer.liftOffExtension").value_or(0.0);
+    config.outer.insidePreviousBarExtension = toml->get_qualified_as<double>("outer.insidePreviousBarExtension").value_or(0.0);
     config.outer.nextBarAngle = toml->get_qualified_as<double>("outer.nextBarAngle").value_or(0.0);
     config.outer.nextBarExtension = toml->get_qualified_as<double>("outer.nextBarExtension").value_or(0.0);
     config.outer.releasePreviousBarExtension = toml->get_qualified_as<double>("outer.releasePreviousBarExtension").value_or(0.0);
@@ -97,7 +99,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::PrintCommand { "Retract outer arm" },
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, outerRotatePid}.Perpetually(),
-            ReachOuterArmsCommand {outerReach, config.outer.liftExtension},
+            ReachOuterArmsCommand {outerReach, config.outer.insidePreviousBarExtension},
         },
 
         frc2::PrintCommand { "Lift robot.  Rotate outer to vertical" },
