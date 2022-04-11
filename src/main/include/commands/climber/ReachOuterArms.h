@@ -30,6 +30,6 @@ class ReachOuterArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Reac
         p, i, d, feed-forward, acceptableError,
         minOutput = -1.0, maxOutput = 1.0, izone = INFINITY
         */
-        PID mPid1 { 0.2, 0.0, 0.0, 0.03, 0.1, -0.6, 0.6 };
-        PID mPid2 { 0.2, 0.0, 0.0, 0.03, 0.1, -0.6, 0.6 };
+        PID mPid1 { 0.2, 0.0, 0.0, 0.04, 0.05, -0.6, 0.6 };
+        PID mPid2 { 0.2, 0.0, 0.0, 0.04, 0.05, -0.6, 0.6 };
 };
