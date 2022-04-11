@@ -84,6 +84,9 @@ void Robot::RobotInit() {
     mRetractOuterArms = new RetractOuterArmsCommand {mOuterReach, 1.0};
     mExtendOuterArms = new ExtendOuterArmsCommand {mOuterReach, 10.0};
 
+    mInnerRotate->resetCurrentLimit();
+    mOuterRotate->resetCurrentLimit();
+
     // Need to Put a value, first, in order to create an editable field on the dashboard.
     frc::SmartDashboard::PutBoolean(DASH_USE_OUTER_REACH_TEST_COMMAND, false);
     frc::SmartDashboard::PutNumber(DASH_OUTER_REACH_TARGET, 0.0);
