@@ -65,15 +65,14 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
                 RotateInnerArmsCommand {innerRotate, config.inner.nextBarAngle, innerRotatePid}.Perpetually(),
             }
         },
-        frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }, {innerRotate}},
 
         frc2::PrintCommand { "Overdrive into high bar" },
+        frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }, {innerRotate}},
         RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, innerRotatePid},
 
+        frc2::PrintCommand { "Swing under high bar" },
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); innerReach->setUnderLoad(true); }, {innerReach, outerReach}},
         frc2::InstantCommand {[=]() { innerRotate->setMotorCoast(); outerRotate->setMotorCoast(); }, {innerRotate, outerRotate}},
-
-        frc2::PrintCommand { "Swing under high bar" },
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, innerRotatePid}.Perpetually(),
             frc2::ParallelCommandGroup {
@@ -81,9 +80,9 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
                 ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
             }
         },
-        frc2::InstantCommand {[=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); }, {innerRotate, outerRotate}},
 
         frc2::PrintCommand { "Release mid bar" },
+        frc2::InstantCommand {[=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); }, {innerRotate, outerRotate}},
         ReachOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension},
 
         frc2::PrintCommand { "Rotate hook below mid bar" },
