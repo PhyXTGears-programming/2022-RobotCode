@@ -47,8 +47,8 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
     PID outerRotatePid { 0.02, 0.0, 0.0, 0.12, 0.01, -0.2, 0.2 };
     PID innerRotatePid { 0.02, 0.0, 0.0, 0.07, 0.01, -0.15, 0.15 };
 
-    PID climbOuterPid { 0.2, 0.0, 0.0, 0.3, 0.01, -0.6, 0.8 };
-    PID climbInnerPid { 0.2, 0.0, 0.0, 0.3, 0.01, -0.6, 0.8 };
+    PID climbOuterPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.8, 0.05, 1.0 };
+    PID climbInnerPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.8, 0.05, 1.0 };
 
     mHighBarClimb = new frc2::SequentialCommandGroup {
         frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }, {innerRotate}},

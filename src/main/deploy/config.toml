@@ -52,11 +52,11 @@ verticalArmAngle = 0.0
     inner.nextBarAngle = 15.0
     inner.nextBarExtension = 29.0
     inner.dropToNextBarAngle = 25.0
-    inner.grabNextBarExtension = 0.0
+    inner.grabNextBarExtension = 27.5
     inner.verticalArmAngle = 7.0
     inner.liftExtension = 15.0
     inner.toPreviousBarExtension = 20.0       # test value: needs calibration
-    inner.zeroExtension = 2.0
+    inner.zeroExtension = 1.5
     inner.releasePreviousBarExtension = 27.0
     inner.dropOffPreviousBarAngle = -48.0
 
@@ -65,11 +65,11 @@ verticalArmAngle = 0.0
     outer.nextBarAngle = 15.0
     outer.nextBarExtension = 29.0
     outer.dropToNextBarAngle = 25.0
-    outer.grabNextBarExtension = 0.0
+    outer.grabNextBarExtension = 27.5
     outer.verticalArmAngle = 7.0
     outer.liftExtension = 15.0
     outer.toPreviousBarExtension = 20.0       # test value: needs calibration
-    outer.zeroExtension = 2.0
+    outer.zeroExtension = 1.5
     outer.releasePreviousBarExtension = 27.0
     outer.dropOffPreviousBarAngle = -48.0
 
