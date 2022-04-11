@@ -9,10 +9,8 @@
 
 #include "intake/intake.h"
 
-#include "commands/climber/ExtendInnerArms.h"
-#include "commands/climber/ExtendOuterArms.h"
-#include "commands/climber/RetractOuterArms.h"
-#include "commands/climber/RetractInnerArms.h"
+#include "commands/climber/ReachInnerArms.h"
+#include "commands/climber/ReachOuterArms.h"
 #include "commands/climber/RotateOuterArms.h"
 #include "commands/climber/RotateInnerArms.h"
 #include "commands/climber/LockArms.h"
@@ -24,6 +22,7 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/PrintCommand.h>
 
 class TraversalClimb : public frc2::CommandHelper<frc2::CommandBase, TraversalClimb> {
     public:
@@ -68,6 +67,7 @@ class TraversalClimb : public frc2::CommandHelper<frc2::CommandBase, TraversalCl
                 double grabNextBarExtension;
                 double verticalArmAngle;
                 double liftExtension;
+                double insidePreviousBarExtension;
                 double toPreviousBarExtension;
                 double zeroExtension;
                 double releasePreviousBarExtension;

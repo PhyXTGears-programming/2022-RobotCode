@@ -10,6 +10,8 @@
 
 #include "commands/climber/LockArms.h"
 
+#include "PID.h"
+
 #include <frc2/command/InstantCommand.h>
 
 // DO NOT SCHEDULE THIS CLASS.  It is a container for related commands.  Use
@@ -20,6 +22,8 @@ ClimbMidBarOnly::ClimbMidBarOnly(ClimberInnerReach * innerArms, ClimberInnerRota
     config.liftRetraction = toml->get_qualified_as<double>("liftRetraction").value_or(config.liftRetraction);
     config.verticalArmAngle = toml->get_qualified_as<double>("verticalArmAngle").value_or(config.verticalArmAngle);
 
+    PID innerRotatePid { 0.02, 0.0, 0.0, 0.07, 0.01, -0.15, 0.15 };
+
     mReachMidBar = new frc2::SequentialCommandGroup {
         frc2::InstantCommand {
             [=]() {
@@ -28,7 +32,7 @@ ClimbMidBarOnly::ClimbMidBarOnly(ClimberInnerReach * innerArms, ClimberInnerRota
             },
             { innerArms }
         },
-        RotateInnerArmsCommand { innerRotate, config.verticalArmAngle },
+        RotateInnerArmsCommand { innerRotate, config.verticalArmAngle, innerRotatePid },
         ExtendInnerArmsCommand { innerArms, config.initialExtension }
     };
 

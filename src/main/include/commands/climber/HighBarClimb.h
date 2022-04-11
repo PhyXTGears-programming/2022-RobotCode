@@ -68,6 +68,7 @@ class HighBarClimb : public frc2::CommandHelper<frc2::CommandBase, HighBarClimb>
                 double grabNextBarExtension;
                 double verticalArmAngle;
                 double liftExtension;
+                double insidePreviousBarExtension;
                 double toPreviousBarExtension;
                 double zeroExtension;
                 double releasePreviousBarExtension;
