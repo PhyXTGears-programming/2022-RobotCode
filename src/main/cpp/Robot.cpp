@@ -146,7 +146,7 @@ void Robot::RobotPeriodic() {
         static double outerReachTarget = frc::SmartDashboard::GetNumber(DASH_OUTER_REACH_TARGET, 0.0);
         updateDashboardNumber(DASH_OUTER_REACH_TARGET, outerReachTarget, [&](double value) {
             // Ensure value has a safe range.
-            value = std::clamp(value, 1.0, 27.0);   // These limits try to protect from overshooting.  Max range [0, 28].
+            value = std::clamp(value, 0.5, 28.0);   // These limits try to protect from overshooting.  Max range [0, 28].
 
             if (nullptr != outerReachCommand) {
                 if (outerReachCommand->IsScheduled()) {
@@ -262,7 +262,7 @@ void Robot::RobotPeriodic() {
         static double innerReachTarget = frc::SmartDashboard::GetNumber(DASH_INNER_REACH_TARGET, 0.0);
         updateDashboardNumber(DASH_INNER_REACH_TARGET, innerReachTarget, [&](double value) {
             // Ensure value has a safe range.
-            value = std::clamp(value, 1.0, 27.0);   // These limits try to protect from overshooting.  Max range [0, 28].
+            value = std::clamp(value, 0.5, 28.0);   // These limits try to protect from overshooting.  Max range [0, 28].
 
             if (nullptr != innerReachCommand) {
                 if (innerReachCommand->IsScheduled()) {
