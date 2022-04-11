@@ -96,7 +96,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
             }
         },
         frc2::PrintCommand { "Rotate outer to vertical... overdrive" },
-        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(10); }},
+        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }},
         RotateOuterArmsCommand {outerRotate, config.outer.verticalArmAngle, outerRotatePid},
         frc2::PrintCommand { "Grab high bar and lift robot" },
         frc2::ParallelRaceGroup {
