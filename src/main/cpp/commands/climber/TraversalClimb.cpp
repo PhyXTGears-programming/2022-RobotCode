@@ -89,7 +89,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
         frc2::ParallelCommandGroup {
             ReachInnerArmsCommand {innerReach, config.inner.liftExtension, slowInnerPid, slowInnerPid},
-            ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
+            ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension, slowOuterPid, slowOuterPid}
         },
 
         frc2::PrintCommand { "Release mid bar" },
@@ -129,7 +129,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
             {innerRotate, outerRotate}
         },
         frc2::ParallelCommandGroup {
-            ReachInnerArmsCommand {innerReach, config.inner.toPreviousBarExtension},
+            ReachInnerArmsCommand {innerReach, config.inner.toPreviousBarExtension, slowOuterPid, slowOuterPid},
             ReachOuterArmsCommand {outerReach, config.outer.liftExtension, slowOuterPid, slowOuterPid}
         },
 

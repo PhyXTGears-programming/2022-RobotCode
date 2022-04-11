@@ -84,7 +84,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::InstantCommand {[=]() { innerRotate->setMotorCoast(); outerRotate->setMotorCoast(); }, {innerRotate, outerRotate}},
         frc2::ParallelCommandGroup {
             ReachInnerArmsCommand {innerReach, config.inner.liftExtension, slowInnerPid, slowInnerPid},
-            ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
+            ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension, slowOuterPid, slowOuterPid}
         },
 
         frc2::PrintCommand { "Release mid bar" },
