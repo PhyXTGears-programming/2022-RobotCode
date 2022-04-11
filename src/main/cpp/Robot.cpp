@@ -61,12 +61,17 @@ void Robot::RobotInit() {
 
     std::shared_ptr<cpptoml::table> toml = LoadConfig("/home/lvuser/deploy/config.toml");
 
+    driverController   = new frc::XboxController(interfaces::kXBoxDriver);
     operatorController = new frc::XboxController(interfaces::kXBoxOperator);
 
     mInnerReach = new ClimberInnerReach(toml->get_table("climber"));
     mInnerRotate = new ClimberInnerRotate(toml->get_table("climber"));
     mOuterReach = new ClimberOuterReach(toml->get_table("climber"));
     mOuterRotate = new ClimberOuterRotate(toml->get_table("climber"));
+    mIntake = new Intake(toml->get_table("intake"));
+    mSwerveDrive = new SwerveDrive();
+
+    mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
 
     mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
     mHighClimb = new HighBarClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
@@ -483,7 +488,9 @@ void Robot::AutonomousInit() {}
 
 void Robot::AutonomousPeriodic() {}
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+    mDriveTeleopCommand->Schedule();
+}
 
 void Robot::TeleopPeriodic()
 {

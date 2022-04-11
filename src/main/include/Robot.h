@@ -45,6 +45,7 @@
 #include "commands/climber/ClimbMidBarOnly.h"
 #include "commands/climber/HighBarClimb.h"
 #include "commands/climber/TraversalClimb.h"
+#include "commands/drivetrain-swerve/AltDriveTeleopCommand.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -63,6 +64,7 @@ public:
 
 private:
 
+    frc::XboxController * driverController = nullptr;
     frc::XboxController * operatorController = nullptr;
 
     ClimberInnerReach * mInnerReach = nullptr;
@@ -73,6 +75,7 @@ private:
     Shooter *mShooter = nullptr;
     SwerveDrive * mSwerveDrive = nullptr;
     
+    AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
     HighBarClimb * mHighClimb = nullptr;
     TraversalClimb * mTraversalClimb = nullptr;
