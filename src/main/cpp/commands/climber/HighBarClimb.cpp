@@ -1,4 +1,6 @@
 #include "commands/climber/HighBarClimb.h"
+#include "commands/climber/ReachInnerArms.h"
+#include "commands/climber/ReachOuterArms.h"
 #include "commands/intake/RunIntake.h"
 
 #include "PID.h"
@@ -53,9 +55,9 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }}.WithTimeout(1_s),
         frc2::PrintCommand { "Lift robot onto mid bar.  Reach for high bar." },
         frc2::ParallelCommandGroup {
-            RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
+            ReachOuterArmsCommand {outerReach, config.outer.zeroExtension},
             frc2::ParallelRaceGroup {
-                ExtendInnerArmsCommand {innerReach, config.inner.nextBarExtension},
+                ReachInnerArmsCommand {innerReach, config.inner.nextBarExtension},
                 RotateInnerArmsCommand {innerRotate, config.inner.nextBarAngle, rotatePid}.Perpetually(),
             }
         },
@@ -68,18 +70,18 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::ParallelRaceGroup {
             RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, rotatePid}.Perpetually(),
             frc2::ParallelCommandGroup {
-                RetractInnerArmsCommand {innerReach, config.inner.liftExtension},
-                ExtendOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
+                ReachInnerArmsCommand {innerReach, config.inner.liftExtension},
+                ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
             }
         },
         frc2::PrintCommand { "Release mid bar" },
-        ExtendOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension},
+        ReachOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension},
         frc2::PrintCommand { "Rotate hook below mid bar" },
         RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, rotatePid},
         frc2::PrintCommand { "Retract outer arm" },
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, rotatePid}.Perpetually(),
-            RetractOuterArmsCommand {outerReach, config.outer.liftExtension},
+            ReachOuterArmsCommand {outerReach, config.outer.liftExtension},
         },
         frc2::PrintCommand { "Lift robot.  Rotate outer to vertical" },
         frc2::ParallelCommandGroup {
@@ -87,7 +89,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
             RotateOuterArmsCommand {outerRotate, config.outer.verticalArmAngle, rotatePid},
             frc2::SequentialCommandGroup {
                 frc2::WaitCommand {1_s},
-                RetractInnerArmsCommand {innerReach, config.inner.zeroExtension},
+                ReachInnerArmsCommand {innerReach, config.inner.zeroExtension},
             }
         },
         frc2::PrintCommand { "Rotate outer to vertical... overdrive" },
@@ -97,8 +99,8 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.verticalArmAngle, rotatePid}.Perpetually(),
             frc2::ParallelCommandGroup {
-                RetractInnerArmsCommand {innerReach, config.inner.zeroExtension},
-                RetractOuterArmsCommand {outerReach, config.outer.zeroExtension},
+                ReachInnerArmsCommand {innerReach, config.inner.zeroExtension},
+                ReachOuterArmsCommand {outerReach, config.outer.zeroExtension},
             }
         },
         RetractIntakeCommand {intake}
