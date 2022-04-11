@@ -72,7 +72,7 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
 
         frc2::PrintCommand { "Overdrive into high bar" },
         frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }, {innerRotate}},
-        RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, innerRotatePid},
+        RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, innerRotatePid}.WithTimeout(1.0_s),
 
         frc2::PrintCommand { "Swing under high bar" },
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); innerReach->setUnderLoad(true); }, {innerReach, outerReach}},
