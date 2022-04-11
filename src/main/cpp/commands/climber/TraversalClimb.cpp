@@ -99,19 +99,38 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
             [=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); },
             {innerRotate, outerRotate}
         },
-        ReachOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension, slowOuterPid, slowOuterPid},
+        frc2::ParallelRaceGroup {
+            ReachOuterArmsCommand {outerReach, config.outer.releasePreviousBarExtension, slowOuterPid, slowOuterPid},
+            // Hold inner arms at lift extension so robot doesn't overextend.
+            ReachInnerArmsCommand {innerReach, config.inner.liftExtension, slowInnerPid, slowInnerPid}
+                .Perpetually(),
+        },
 
         frc2::PrintCommand { "Rotate hook below mid bar" },
-        RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, outerRotatePid},
+        frc2::ParallelRaceGroup {
+            RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, outerRotatePid},
+            // Hold inner arms at lift extension so robot doesn't overextend.
+            ReachInnerArmsCommand {innerReach, config.inner.liftExtension, slowInnerPid, slowInnerPid}
+                .Perpetually(),
+        },
 
         frc2::PrintCommand { "Retract outer arm" },
         frc2::ParallelRaceGroup {
-            RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, outerRotatePid}.Perpetually(),
+            RotateOuterArmsCommand {outerRotate, config.outer.dropOffPreviousBarAngle, outerRotatePid}
+                .Perpetually(),
             ReachOuterArmsCommand {outerReach, config.outer.zeroExtension},
+            // Hold inner arms at lift extension so robot doesn't overextend.
+            ReachInnerArmsCommand {innerReach, config.inner.liftExtension, slowInnerPid, slowInnerPid}
+                .Perpetually(),
         },
 
         frc2::PrintCommand { "Rotate outer arms towards traversal." },
-        RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle, outerRotatePid},
+        frc2::ParallelRaceGroup {
+            RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle, outerRotatePid},
+            // Hold inner arms at lift extension so robot doesn't overextend.
+            ReachInnerArmsCommand {innerReach, config.inner.liftExtension, slowInnerPid, slowInnerPid}
+                .Perpetually(),
+        },
 
         frc2::PrintCommand { "Lift robot onto high bar.  Reach for traversal bar." },
         frc2::ParallelCommandGroup {
