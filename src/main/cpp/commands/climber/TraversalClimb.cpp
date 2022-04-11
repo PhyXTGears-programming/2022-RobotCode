@@ -47,10 +47,10 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
     PID climbOuterPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.8, 0.05, 1.0 };
     PID climbInnerPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.8, 0.05, 1.0 };
 
-    PID slowInnerPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.5, 0.05, 1.0 };
-    PID slowOuterPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.5, 0.05, 1.0 };
+    PID slowInnerPid { 0.3, 0.004, 0.0, 0.3, 0.05, -0.45, 0.2, 1.0 };
+    PID slowOuterPid { 0.3, 0.004, 0.0, 0.3, 0.05, -0.45, 0.2, 1.0 };
 
-    PID fastInnerReach { 0.6, 0.004, 0.0, 0.4, 0.05, -0.5, 0.5, 1.0 };
+    PID fastInnerReach { 0.4, 0.0, 0.0, 0.03, 0.05, -0.3, 0.3, 0.5 };
 
     mTraversalClimb = new frc2::SequentialCommandGroup {
         frc2::InstantCommand {
