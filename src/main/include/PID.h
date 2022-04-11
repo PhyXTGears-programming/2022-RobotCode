@@ -7,7 +7,7 @@ class PID {
     public:
         PID (
             double p = 0.0, double i = 0.0, double d = 0.0,
-            double ff = 0.0, double acceptableError = 0.1,
+            double ff = 0.0, double acceptableError = 0.005,
             double minOutput = -1.0, double maxOutput = 1.0, double izone = INFINITY,
             units::second_t period = 20_ms
         );
@@ -17,6 +17,12 @@ class PID {
         double calculate(double current);
 
         void setTarget(double target);
+
+        double getP ();
+        double getI ();
+        double getD ();
+        double getFeedForward ();
+
         void setP (double p);
         void setI (double i);
         void setD (double d);

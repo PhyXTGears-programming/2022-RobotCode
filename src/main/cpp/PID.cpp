@@ -20,7 +20,7 @@ PID::PID (
     mMinOutput = minOutput;
     mMaxOutput = maxOutput;
 
-    if (0_s <= period) {
+    if (0_s >= period) {
         std::cerr << "PID period must be above zero" << std::endl;
         mPeriod = 20_ms;
     } else {
@@ -56,6 +56,22 @@ void PID::setTarget (double target) {
     mTarget = target;
 }
 
+double PID::getP () {
+    return mProportional;
+}
+
+double PID::getI () {
+    return mIntegral;
+}
+
+double PID::getD () {
+    return mDeriviation;
+}
+
+double PID::getFeedForward () {
+    return mFeedForward;
+}
+
 void PID::setP (double p) {
     mProportional = p;
 }
@@ -74,6 +90,7 @@ void PID::setFeedForward (double ff) {
 
 void PID::reset () {
     mPreviousError = 0.0;
+    mVelocityError = 0.0;
     mAccumulator = 0.0;
 }
 
