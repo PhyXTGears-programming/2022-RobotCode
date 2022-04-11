@@ -66,12 +66,9 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, rotatePid},
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); innerReach->setUnderLoad(true); }, {outerReach, innerReach}},
         frc2::InstantCommand {[=]() { innerRotate->setMotorCoast(); outerRotate->setMotorCoast(); }, {innerRotate, outerRotate}},
-        frc2::ParallelRaceGroup {
-            RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, rotatePid}.Perpetually(),
-            frc2::ParallelCommandGroup {
-                RetractInnerArmsCommand {innerReach, config.inner.liftExtension},
-                ExtendOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
-            }
+        frc2::ParallelCommandGroup {
+            RetractInnerArmsCommand {innerReach, config.inner.liftExtension},
+            ExtendOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
         },
         // Outer: release mid bar and retract to clear mid bar.
         // Prepare to rotate outer to vertical.

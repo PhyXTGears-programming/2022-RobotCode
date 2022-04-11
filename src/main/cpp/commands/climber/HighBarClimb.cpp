@@ -73,12 +73,9 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::PrintCommand { "Swing under high bar" },
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(false); innerReach->setUnderLoad(true); }, {innerReach, outerReach}},
         frc2::InstantCommand {[=]() { innerRotate->setMotorCoast(); outerRotate->setMotorCoast(); }, {innerRotate, outerRotate}},
-        frc2::ParallelRaceGroup {
-            RotateInnerArmsCommand {innerRotate, config.inner.dropToNextBarAngle, innerRotatePid}.Perpetually(),
-            frc2::ParallelCommandGroup {
-                ReachInnerArmsCommand {innerReach, config.inner.liftExtension, climbInnerPid, climbInnerPid},
-                ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
-            }
+        frc2::ParallelCommandGroup {
+            ReachInnerArmsCommand {innerReach, config.inner.liftExtension, climbInnerPid, climbInnerPid},
+            ReachOuterArmsCommand {outerReach, config.outer.toPreviousBarExtension}
         },
 
         frc2::PrintCommand { "Release mid bar" },
