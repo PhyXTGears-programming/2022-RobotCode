@@ -57,7 +57,6 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         frc2::PrintCommand { "Begin high bar climb: drop intake" },
         RunIntakeCommand { intake }.WithTimeout(0.25_s),
         ExtendIntakeCommand { intake },
-        frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }, {outerReach}},
 
         frc2::PrintCommand { "Rotate inner arms toward high bar." },
         ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, climbInnerPid, climbInnerPid},
