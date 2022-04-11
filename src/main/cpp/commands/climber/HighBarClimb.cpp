@@ -51,10 +51,12 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
     PID climbInnerPid { 0.2, 0.0, 0.0, 0.3, 0.01, -0.6, 0.8 };
 
     mHighBarClimb = new frc2::SequentialCommandGroup {
+        frc2::InstantCommand {[=]() { innerRotate->setCurrentlimit(15); }, {innerRotate}},
+        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }, {outerRotate}},
+
         frc2::PrintCommand { "Begin high bar climb: drop intake" },
         RunIntakeCommand { intake }.WithTimeout(0.25_s),
         ExtendIntakeCommand { intake },
-        frc2::InstantCommand {[=]() { innerRotate->resetCurrentLimit(); outerRotate->resetCurrentLimit(); }, {innerRotate, outerRotate}},
         frc2::InstantCommand {[=]() { outerReach->setUnderLoad(true); }, {outerReach}},
 
         frc2::PrintCommand { "Rotate inner arms toward high bar." },
@@ -102,7 +104,6 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         },
 
         frc2::PrintCommand { "Grab high bar and lift robot" },
-        frc2::InstantCommand {[=]() { outerRotate->setCurrentlimit(15); }, {outerRotate}},
         frc2::ParallelRaceGroup {
             RotateOuterArmsCommand {outerRotate, config.outer.verticalArmAngle, outerRotatePid}.Perpetually(),
             frc2::ParallelCommandGroup {
