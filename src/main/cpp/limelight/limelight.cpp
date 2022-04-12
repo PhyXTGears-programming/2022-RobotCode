@@ -45,7 +45,7 @@ double limelight::getAverageValue()
     double newArray[NUMBERS_FINAL_AVERAGE_COUNT];
     double newArrayAngles[NUMBERS_FINAL_AVERAGE_COUNT];
 
-    // initialized the values to 0
+    // temporary array for storing the largest values of the array
     double maxValuesWidths[NUMBERS_REJECTED_COUNT];
     double maxValuesAngles[NUMBERS_REJECTED_COUNT];
 
