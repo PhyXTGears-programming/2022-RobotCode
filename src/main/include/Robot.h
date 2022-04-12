@@ -63,6 +63,7 @@ private:
     const std::string kAutoDriveAndShoot = "Drive and Shoot";
     const std::string kAutoTwoCargoShoot = "2 Cargo Auto";
     const std::string kAutoTwoCargoNearWall = "2 Cargo Near Wall";
+    const std::string kAutoDriveOnly = "Drive backwards";
     std::string m_autoSelected;
 
     frc::XboxController * driverController = nullptr;
@@ -104,6 +105,8 @@ private:
     frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
     frc2::SequentialCommandGroup * mTwoCargoAuto = nullptr;
     frc2::SequentialCommandGroup * mTwoCargoAutoNearWall = nullptr;
+    frc2::SequentialCommandGroup * mDriveOnly = nullptr;
+    
 };
 
 // there is a hidden forg somewhere in the robot's code.
