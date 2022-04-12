@@ -25,6 +25,7 @@ void limelight::pullValuesFromNT()
         if (numCollected >= NUMBERS_COLLECTED_COUNT)
         {
             currentAverage = getAverageValue();
+            numCollected -= 1;
         }
     }
 }

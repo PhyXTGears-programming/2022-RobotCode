@@ -40,11 +40,11 @@ private:
     PID * pidController = nullptr;
 
     std::shared_ptr<nt::NetworkTable> mTable = nullptr;
-    double angleArray[NUMBERS_COLLECTED_COUNT];
-    double widthArray[NUMBERS_COLLECTED_COUNT];
+    double angleArray[NUMBERS_COLLECTED_COUNT] = { 0.0 };
+    double widthArray[NUMBERS_COLLECTED_COUNT] = { 0.0 };
     int oldestIndex = 0;
     int numCollected = 0;
-    double currentAverage;
+    double currentAverage = 0.0;
 
     struct {
         double P = 0.005;
