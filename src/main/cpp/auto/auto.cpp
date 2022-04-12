@@ -27,14 +27,14 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
             frc2::FunctionalCommand {
                 [](){},
                 [=](){
-                    drive->setMotion(0, 0.1, 0);
+                    drive->setMotion(0, 0.2, 0.0);
                 },
                 [=](bool _interrupted){
                     drive->setMotion(0, 0, 0);
                 },
                 [](){ return false; },
                 { drive }
-            }.WithTimeout(1.2_s),
+            }.WithTimeout(1.35_s),
         },
 
         frc2::FunctionalCommand {
