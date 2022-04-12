@@ -10,6 +10,8 @@
 
 #include "RobotCompileModes.h"
 
+#include "auto/auto.h"
+
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
@@ -179,7 +181,8 @@ void Robot::RobotInit()
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
-    m_chooser.AddOption(kAutoDriveOnly, kAutoDriveOnly);
+    m_chooser.AddOption(kAutoTwoCargoShoot, kAutoTwoCargoShoot);
+    m_chooser.AddOption(kAutoTwoCargoNearWall, kAutoTwoCargoNearWall);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
     mDriveAndShoot = new frc2::SequentialCommandGroup {
@@ -198,19 +201,8 @@ void Robot::RobotInit()
         frc2::StartEndCommand(*mShootNear).WithTimeout(3_s)
     };
 
-    mDriveOnly = new frc2::SequentialCommandGroup {
-        frc2::FunctionalCommand {
-            [](){},
-            [&](){
-                mSwerveDrive->setMotion(0, -0.5, 0.0);
-            },
-            [&](bool _interrupted){
-                mSwerveDrive->setMotion(0, 0, 0); // stop
-            },
-            [](){ return false; },
-            {mSwerveDrive}
-        }.WithTimeout(1.2_s)
-    };
+    mTwoCargoAuto = Auto::MakeTwoCargoAuto(mIntake, mShooter, mSwerveDrive);
+    mTwoCargoAutoNearWall = Auto::MakeTwoCargoAutoNearWall(mIntake, mShooter, mSwerveDrive);
 }
 
 /**
@@ -254,8 +246,12 @@ void Robot::AutonomousInit()
 
     if (m_autoSelected == kAutoDriveAndShoot) {
         mDriveAndShoot->Schedule();
-    } else  if (m_autoSelected == kAutoDriveOnly) {
-        mDriveOnly->Schedule();
+    } else if (m_autoSelected == kAutoTwoCargoShoot) {
+        mTwoCargoAuto->Schedule();
+    } else if (m_autoSelected == kAutoTwoCargoNearWall) {
+        mTwoCargoAutoNearWall->Schedule();
+    } else {
+        // Default Auto goes here
     }
 }
 
@@ -347,7 +343,7 @@ void Robot::TeleopPeriodic()
             mTraversalClimb->Schedule();
         }
     } else {
-        
+
     }
 
     double opY = -operatorController->GetLeftY();

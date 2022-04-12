@@ -8,8 +8,8 @@ SwerveDrive::SwerveDrive(bool fieldOriented) : fieldOriented(fieldOriented)
 {
     drive = new swervedrive::drive<double, double, double>({&flWheel, &frWheel, &blWheel, &brWheel});
 
-    // gyro.SetYawAxis(frc::ADIS16470_IMU::IMUAxis::kZ);
-    // gyro.Reset();
+    gyro = new AHRS(frc::SPI::kMXP);
+    // gyro->Reset();
 }
 
 void SwerveDrive::Periodic()
@@ -23,6 +23,8 @@ void SwerveDrive::Periodic()
     frc::SmartDashboard::PutNumber("Steer FL Abs", flWheel.getAbsAngle() / M_PI * 180);
     frc::SmartDashboard::PutNumber("Steer BR Abs", brWheel.getAbsAngle() / M_PI * 180);
     frc::SmartDashboard::PutNumber("Steer BL Abs", blWheel.getAbsAngle() / M_PI * 180);
+
+    frc::SmartDashboard::PutNumber("Gyro Angle", getHeading() * 180.0 / M_PI);
 }
 
 void SwerveDrive::synchronizeTurnEncoders()
@@ -33,14 +35,29 @@ void SwerveDrive::synchronizeTurnEncoders()
     brWheel.synchronizeTurnEncoder();
 }
 
+void SwerveDrive::resetGyro(){
+    gyro->Reset();
+}
+
+void SwerveDrive::enableFieldCentric(){
+    fieldOriented = true;
+}
+
+void SwerveDrive::disableFieldCentric(){
+    fieldOriented = false;
+}
+
 void SwerveDrive::setMotion(double x, double y, double r)
 {
     double a = 0;
 
-    if (fieldOriented)
-    {
-        // a = gyro.GetAngle() * (PI/180.0);
+    if (fieldOriented) {
+        a = getHeading();
     }
 
     drive->set_motion({x, y}, r, a);
+}
+
+double SwerveDrive::getHeading(){
+    return gyro->GetAngle() * (PI/180.0);
 }
