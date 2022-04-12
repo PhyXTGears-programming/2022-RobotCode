@@ -37,6 +37,20 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
             }.WithTimeout(1.35_s),
         },
 
+        frc2::ParallelRaceGroup {
+            RunIntakeCommand { intake },
+            frc2::FunctionalCommand {
+                []() {},
+                [=]() {
+                    drive->setMotion(0, -0.2, 0.0);
+                },
+                [=](bool _interrupted) {
+                    drive->setMotion(0, 0, 0);
+                },
+                []() { return false; }
+            }.WithTimeout(0.60_s),
+        },
+
         frc2::FunctionalCommand {
             [=](){
                 turnPid->setTarget(drive->getHeading() - (160.0 * M_PI / 180.0));
@@ -52,6 +66,20 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
 
             },
             { drive }
+        },
+
+        frc2::ParallelRaceGroup {
+            RunIntakeCommand { intake },
+            frc2::FunctionalCommand {
+                []() {},
+                [=]() {
+                    drive->setMotion(0, -0.2, 0.0);
+                },
+                [=](bool _interrupted) {
+                    drive->setMotion(0, 0, 0);
+                },
+                []() { return false; }
+            }.WithTimeout(1.0_s),
         },
 
         frc2::ParallelRaceGroup {
