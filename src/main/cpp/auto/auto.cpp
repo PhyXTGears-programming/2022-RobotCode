@@ -86,6 +86,8 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
             }.WithTimeout(1.0_s),
         },
 
+        RetractIntakeCommand {intake},
+
         frc2::ParallelRaceGroup {
             RunIntakeCommand {intake},
             frc2::StartEndCommand {
@@ -93,8 +95,6 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
                 [&]() { shooter->stopShooter(); },
                 { shooter }
             }.WithTimeout(8_s)
-        },
-
-        RetractIntakeCommand {intake}
+        }
     };
 }
