@@ -57,7 +57,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
         frc2::ParallelRaceGroup {
             RunIntakeCommand {intake},
             frc2::StartEndCommand {
-                [&]() { shooter->shootFar(); },
+                [&]() { shooter->shootAuto(); },
                 [&]() { shooter->stopShooter(); },
                 { shooter }
             }.WithTimeout(8_s)
