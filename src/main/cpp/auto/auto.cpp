@@ -17,7 +17,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
     SwerveDrive * drive
 ) {
     const double kAcceptableError = 0.05;
-    PID * turnPid = new PID(0.005, 0.0, 0.0, 0.1, 0.001);
+    PID * turnPid = new PID(0.1, 0.0, 0.0, 0.1, 0.001);
 
     return new frc2::SequentialCommandGroup {
         ExtendIntakeCommand {intake},
@@ -39,7 +39,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
 
         frc2::FunctionalCommand {
             [=](){
-                turnPid->setTarget(drive->getHeading() + M_PI);
+                turnPid->setTarget(drive->getHeading() - (160.0 * M_PI / 180.0));
             },
             [=](){
                 drive->setMotion(0, 0, -turnPid->calculate(drive->getHeading()));
