@@ -42,7 +42,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
                 turnPid->setTarget(drive->getHeading() + M_PI);
             },
             [=](){
-                drive->setMotion(0, 0, turnPid->calculate(drive->getHeading()));
+                drive->setMotion(0, 0, -turnPid->calculate(drive->getHeading()));
             },
             [=](bool _interrupted){
                 drive->setMotion(0, 0, 0); //STOP
