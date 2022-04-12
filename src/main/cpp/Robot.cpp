@@ -35,8 +35,12 @@ void Robot::RobotInit()
     mIntake = new Intake(toml->get_table("intake"));
     mShooter = new Shooter(toml->get_table("shooter"));
     mSwerveDrive = new SwerveDrive(false);
+
+    mLimelight = new limelight();
+    mLimelightSubsystem = new LimelightSubsystem();
+    mVisionPipelineCommand = new VisionPipelineCommand(mLimelightSubsystem);
    
-    mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
+    mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive, mLimelight, mVisionPipelineCommand);
     mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
     mHighClimb = new HighBarClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
     mTraversalClimb = new TraversalClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
@@ -219,6 +223,8 @@ void Robot::RobotInit()
  */
 void Robot::RobotPeriodic() {
     frc2::CommandScheduler::GetInstance().Run();
+
+    mLimelight->Periodic();
 
     static int resyncCounter = 25;
     if (0 == resyncCounter) {
