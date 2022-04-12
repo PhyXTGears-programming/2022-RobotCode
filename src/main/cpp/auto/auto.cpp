@@ -8,6 +8,7 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/StartEndCommand.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/WaitCommand.h>
 
 #include <cmath>
 
@@ -21,6 +22,9 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (
 
     return new frc2::SequentialCommandGroup {
         ExtendIntakeCommand {intake},
+
+        // Give intake time to fall into position.
+        frc2::WaitCommand { 0.5_s },
 
         frc2::ParallelRaceGroup {
             RunIntakeCommand {intake},
