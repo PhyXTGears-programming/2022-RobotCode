@@ -19,9 +19,9 @@ public:
     bool IsFinished() override;
 
 private:
-    double kStrafe;
-    double kForewards;
-    double kAcceptableAngleError;
+    double mStrafe;
+    double mForewards;
+    double mAcceptableAngleError;
     limelight * mLimelight = nullptr;
     VisionPipelineCommand * mVisionPipelineCommand = nullptr;
     SwerveDrive * mSwerveDrive = nullptr;

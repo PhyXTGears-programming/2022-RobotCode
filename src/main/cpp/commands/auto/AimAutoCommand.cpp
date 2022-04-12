@@ -5,24 +5,20 @@ AimAutoCommand::AimAutoCommand(double strafe, double forewards, double acceptabl
     mLimelight = limelight;
     mVisionPipelineCommand = visionPipelineCommand;
     mSwerveDrive = swerveDrive;
-    kStrafe = strafe;
-    kForewards = forewards;
-    kAcceptableAngleError = acceptableAngleError;
+    mStrafe = strafe;
+    mForewards = forewards;
+    mAcceptableAngleError = acceptableAngleError;
 }
 void AimAutoCommand::Initialize(){
     mVisionPipelineCommand->Schedule();
 }
 void AimAutoCommand::Execute(){
-    mSwerveDrive->setMotion(kForewards, kStrafe, mLimelight->PIDCalculate());
+    mSwerveDrive->setMotion(mForewards, mStrafe, mLimelight->PIDCalculate());
 }
 void AimAutoCommand::End(bool interrupted){
     mVisionPipelineCommand->Cancel();
     mLimelight->finishAim();
 }
 bool AimAutoCommand::IsFinished(){
-    if(std::abs(mLimelight->getAngle()) > kAcceptableAngleError){
-        return false;
-    } else {
-        return true;
-    }
+    return !(std::abs(mLimelight->getAngle()) > mAcceptableAngleError);
 }
