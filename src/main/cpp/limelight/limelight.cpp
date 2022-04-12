@@ -111,4 +111,9 @@ double limelight::PIDCalculate(){
 
 void limelight::finishAim(){
     pidController->reset();
+
+    //reset values to 0 in the entire array when done aiming.
+    //currently TBD on if we need to or not (such as if we are only collecting numbers while aiming)
+    //std::fill(angleArray, angleArray + NUMBERS_COLLECTED_COUNT, 0);
+    //std::fill(widthArray, widthArray + NUMBERS_COLLECTED_COUNT, 0);
 }
