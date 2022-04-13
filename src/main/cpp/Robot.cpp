@@ -56,8 +56,6 @@ void Robot::RobotInit()
         [&]() {
             bool isOuter1NearTarget = mOuterReach->isMotor1NearTarget(0.0);
             bool isOuter2NearTarget = mOuterReach->isMotor2NearTarget(0.0);
-            bool isInner1NearTarget = mInnerReach->isMotor1NearTarget(0.0);
-            bool isInner2NearTarget = mInnerReach->isMotor2NearTarget(0.0);
 
             if (isOuter1NearTarget) {
                 mOuterReach->stop1();
@@ -70,30 +68,14 @@ void Robot::RobotInit()
             } else {
                 mOuterReach->run2(-0.4);
             }
-
-            if (isInner1NearTarget) {
-                mInnerReach->stop1();
-            } else {
-                mInnerReach->run1(-0.4);
-            }
-
-            if (isInner2NearTarget) {
-                mInnerReach->stop2();
-            } else {
-                mInnerReach->run2(-0.4);
-            }
         },
         [&](bool) {
             mOuterReach->stop1();
             mOuterReach->stop2();
-            mInnerReach->stop1();
-            mInnerReach->stop2();
         },
         [&]() { return mOuterReach->getMotor1Position() < 1.0
-            && mOuterReach->getMotor2Position() < 1.0
-            && mInnerReach->getMotor1Position() < 1.0
-            && mInnerReach->getMotor2Position() < 1.0; },
-        { mOuterReach, mInnerReach }
+            && mOuterReach->getMotor2Position() < 1.0; },
+        { mOuterReach }
     );
 
     mManualExtendOuterArms = new frc2::FunctionalCommand(
@@ -101,8 +83,6 @@ void Robot::RobotInit()
         [&]() {
             bool isOuter1NearTarget = mOuterReach->isMotor1NearTarget(20.0);
             bool isOuter2NearTarget = mOuterReach->isMotor2NearTarget(20.0);
-            bool isInner1NearTarget = mInnerReach->isMotor1NearTarget(20.0);
-            bool isInner2NearTarget = mInnerReach->isMotor2NearTarget(20.0);
 
             if (isOuter1NearTarget) {
                 mOuterReach->stop1();
@@ -115,30 +95,14 @@ void Robot::RobotInit()
             } else {
                 mOuterReach->run2(0.4);
             }
-
-            if (isInner1NearTarget) {
-                mInnerReach->stop1();
-            } else {
-                mInnerReach->run1(0.4);
-            }
-
-            if (isInner2NearTarget) {
-                mInnerReach->stop2();
-            } else {
-                mInnerReach->run2(0.4);
-            }
         },
         [&](bool) {
             mOuterReach->stop1();
             mOuterReach->stop2();
-            mInnerReach->stop1();
-            mInnerReach->stop2();
         },
         [&]() { return mOuterReach->getMotor1Position() > 20.0
-            && mOuterReach->getMotor2Position() > 20.0
-            && mInnerReach->getMotor1Position() > 20.0
-            && mInnerReach->getMotor2Position() > 20.0; },
-        { mOuterReach, mInnerReach }
+            && mOuterReach->getMotor2Position() > 20.0; },
+        { mOuterReach }
     );
 
     // Shooter commands

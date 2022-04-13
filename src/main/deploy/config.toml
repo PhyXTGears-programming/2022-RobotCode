@@ -6,7 +6,7 @@ intakeExtendedPosition = 1.0
 
 [shooter]
 speed.near = 2450 # RPM
-speed.auto = 2200 # RPM
+speed.auto = 2400 # RPM
 speed.far = 2750
 speed.reverse = -1000
 speed.lowHub = 1000
@@ -57,23 +57,23 @@ verticalArmAngle = 0.0
     inner.liftExtension = 15.0
     inner.insidePreviousBarExtension = 10.0
     inner.toPreviousBarExtension = 20.0       # test value: needs calibration
-    inner.zeroExtension = 1.5
-    inner.releasePreviousBarExtension = 27.0
-    inner.dropOffPreviousBarAngle = -48.0
+    inner.zeroExtension = 0.75
+    inner.releasePreviousBarExtension = 24.0
+    inner.dropOffPreviousBarAngle = -40.0
 
     outer.liftOffExtension = 20.0
     outer.backOffAngle = -10.0
     outer.nextBarAngle = 15.0
-    outer.nextBarExtension = 28.75
+    outer.nextBarExtension = 28.55
     outer.dropToNextBarAngle = 25.0
     outer.grabNextBarExtension = 27.5
     outer.verticalArmAngle = 7.0
     outer.liftExtension = 15.0
     outer.insidePreviousBarExtension = 10.0
     outer.toPreviousBarExtension = 20.0       # test value: needs calibration
-    outer.zeroExtension = 1.5
-    outer.releasePreviousBarExtension = 27.0
-    outer.dropOffPreviousBarAngle = -48.0
+    outer.zeroExtension = 0.75
+    outer.releasePreviousBarExtension = 24.0
+    outer.dropOffPreviousBarAngle = -40.0
 
 [drivetrain]
     [drivetrain.PID]
