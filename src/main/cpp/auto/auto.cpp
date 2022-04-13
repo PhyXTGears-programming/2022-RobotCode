@@ -144,6 +144,22 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (Intake * intake, Shooter 
         },
 
         frc2::ParallelRaceGroup {
+            RunIntakeCommand { intake },
+            frc2::FunctionalCommand {
+                []() {},
+                [=]() {
+                    drive->setMotion(0.0, -0.2, 0.0);
+                },
+                [=](bool _interrupted) {
+                    drive->setMotion(0.0, 0.0, 0.0);
+                },
+                []() { return false; }
+            }.WithTimeout(0.5_s),
+        },
+
+        RetractIntakeCommand {intake},
+
+        frc2::ParallelRaceGroup {
             RunIntakeCommand {intake},
             frc2::StartEndCommand {
                 [=]() { shooter->shootAuto(); },
