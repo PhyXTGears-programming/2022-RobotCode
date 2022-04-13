@@ -1,6 +1,8 @@
 #pragma once
 
 #include "drivetrain-swerve/SwerveDrive.h"
+#include "limelight/limelight.h"
+#include "commands/limelight/VisionPipelineCommand.h"
 #include <functional>
 
 #include <frc2/command/CommandBase.h>
@@ -9,7 +11,7 @@
 
 class AltDriveTeleopCommand : public frc2::CommandHelper<frc2::CommandBase, AltDriveTeleopCommand> {
 public:
-    AltDriveTeleopCommand(frc::XboxController* driverController, SwerveDrive * _swerveDrive);
+    AltDriveTeleopCommand(frc::XboxController* driverController, SwerveDrive * _swerveDrive, limelight * limelight, VisionPipelineCommand * VisionPipelineCommand);
 
     void Initialize() override;
     void Execute() override;
@@ -20,4 +22,8 @@ private:
     frc::XboxController* mJoystick = nullptr;
 
     SwerveDrive * swerveDrive = nullptr;
+
+    limelight * mLimelight = nullptr;
+
+    VisionPipelineCommand * mVisionPipelineCommand = nullptr;
 };

@@ -6,7 +6,7 @@ Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
     config.speed.near = toml->get_qualified_as<double>("speed.near").value_or(2700);
     config.speed.far = toml->get_qualified_as<double>("speed.far").value_or(3200);
     config.speed.lowHub = toml->get_qualified_as<double>("speed.lowHub").value_or(2000);
-    config.speed.reverse = toml->get_qualified_as<double>("speed.lowHub").value_or(-1000);
+    config.speed.reverse = toml->get_qualified_as<double>("speed.reverse").value_or(-1000);
     config.speed.auton = toml->get_qualified_as<double>("speed.auto").value_or(2500);
     config.motor.p = toml->get_qualified_as<double>("motor.p").value_or(0.01);
     config.motor.i = toml->get_qualified_as<double>("motor.i").value_or(0.0);
@@ -29,7 +29,8 @@ Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
 }
 
 void Shooter::Periodic () {
-    frc::SmartDashboard::PutNumber("Shooter Speed (rpm)", mShooterEncoder.GetVelocity());
+    // frc::SmartDashboard::PutNumber("Shooter Speed (rpm)", mShooterEncoder.GetVelocity());
+    // frc::SmartDashboard::PutNumber("Shooter Speed (rpm) Graph", mShooterEncoder.GetVelocity());
 }
 
 void Shooter::runShooter (double speed) {

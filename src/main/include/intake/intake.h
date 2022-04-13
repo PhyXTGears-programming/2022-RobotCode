@@ -13,6 +13,7 @@ public:
     Intake (std::shared_ptr<cpptoml::table> toml);
 
     void runRollers ();
+    void runRollersReverse ();
     void stopRollers ();
 
     void extend ();

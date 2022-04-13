@@ -10,6 +10,8 @@
 
 #include "RobotCompileModes.h"
 
+#include "auto/auto.h"
+
 
 #ifdef ROBOTCMH_PID_TUNING_MODE
 #include "drivetrain/drivetrain.h"
@@ -35,8 +37,12 @@ void Robot::RobotInit()
     mIntake = new Intake(toml->get_table("intake"));
     mShooter = new Shooter(toml->get_table("shooter"));
     mSwerveDrive = new SwerveDrive(false);
+
+    mLimelight = new limelight();
+    mLimelightSubsystem = new LimelightSubsystem();
+    mVisionPipelineCommand = new VisionPipelineCommand(mLimelightSubsystem);
    
-    mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive);
+    mDriveTeleopCommand = new AltDriveTeleopCommand(driverController, mSwerveDrive, mLimelight, mVisionPipelineCommand);
     mClimbMidbarOnly = new ClimbMidBarOnly(mInnerReach, mInnerRotate, toml->get_table_qualified("command.climb.midbar"));
     mHighClimb = new HighBarClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
     mTraversalClimb = new TraversalClimb(mIntake, mInnerReach, mInnerRotate, mOuterReach, mOuterRotate, toml->get_table_qualified("cycleCommand"));
@@ -67,7 +73,8 @@ void Robot::RobotInit()
             mOuterReach->stop1();
             mOuterReach->stop2();
         },
-        [&]() { return mOuterReach->getMotor1Position() < 1.0 && mOuterReach->getMotor2Position() < 1.0; },
+        [&]() { return mOuterReach->getMotor1Position() < 1.0
+            && mOuterReach->getMotor2Position() < 1.0; },
         { mOuterReach }
     );
 
@@ -93,7 +100,8 @@ void Robot::RobotInit()
             mOuterReach->stop1();
             mOuterReach->stop2();
         },
-        [&]() { return mOuterReach->getMotor1Position() > 20.0 && mOuterReach->getMotor2Position() > 20.0; },
+        [&]() { return mOuterReach->getMotor1Position() > 20.0
+            && mOuterReach->getMotor2Position() > 20.0; },
         { mOuterReach }
     );
 
@@ -123,6 +131,11 @@ void Robot::RobotInit()
         { mShooter }
     );
 
+    mIntakeReverse = new frc2::StartEndCommand(
+        [&]() { mIntake->runRollersReverse(); },
+        [&]() { mIntake->stopRollers(); },
+        { mIntake }
+    );
     
     mShootAuto = new frc2::StartEndCommand(
         [&]() { mShooter->shootAuto(); },
@@ -132,6 +145,9 @@ void Robot::RobotInit()
 
     m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
     m_chooser.AddOption(kAutoDriveAndShoot, kAutoDriveAndShoot);
+    m_chooser.AddOption(kAutoTwoCargoShoot, kAutoTwoCargoShoot);
+    m_chooser.AddOption(kAutoTwoCargoNearWall, kAutoTwoCargoNearWall);
+    m_chooser.AddOption(kAutoDriveOnly, kAutoDriveOnly);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
     mDriveAndShoot = new frc2::SequentialCommandGroup {
@@ -139,7 +155,7 @@ void Robot::RobotInit()
             [](){},
             [&](){
                 // Turn slightly right to compensate for drift/drag.
-                mSwerveDrive->setMotion(0, -0.5, -0.035);
+                mSwerveDrive->setMotion(0, -0.5, 0.0);
             },
             [&](bool _interrupted){ 
                 mSwerveDrive->setMotion(0, 0, 0); //stop swerve
@@ -148,6 +164,23 @@ void Robot::RobotInit()
             {mSwerveDrive}
         }.WithTimeout(1.2_s),
         frc2::StartEndCommand(*mShootNear).WithTimeout(3_s)
+    };
+
+    mTwoCargoAuto = Auto::MakeTwoCargoAuto(mIntake, mShooter, mSwerveDrive);
+    mTwoCargoAutoNearWall = Auto::MakeTwoCargoAutoNearWall(mIntake, mShooter, mSwerveDrive);
+
+    mDriveOnly = new frc2::SequentialCommandGroup {
+        frc2::FunctionalCommand {
+            [](){},
+            [&](){
+                mSwerveDrive->setMotion(0, -0.5, -0.035);
+            },
+            [&](bool _interrupted){
+                mSwerveDrive->setMotion(0, 0, 0); // stop
+            },
+            [](){ return false; },
+            {mSwerveDrive}
+        }.WithTimeout(1.2_s)
     };
 }
 
@@ -161,6 +194,8 @@ void Robot::RobotInit()
  */
 void Robot::RobotPeriodic() {
     frc2::CommandScheduler::GetInstance().Run();
+
+    mLimelight->Periodic();
 
     static int resyncCounter = 25;
     if (0 == resyncCounter) {
@@ -190,6 +225,12 @@ void Robot::AutonomousInit()
 
     if (m_autoSelected == kAutoDriveAndShoot) {
         mDriveAndShoot->Schedule();
+    } else if (m_autoSelected == kAutoTwoCargoShoot) {
+        mTwoCargoAuto->Schedule();
+    } else if (m_autoSelected == kAutoTwoCargoNearWall) {
+        mTwoCargoAutoNearWall->Schedule();
+    } else  if (m_autoSelected == kAutoDriveOnly) {
+        mDriveOnly->Schedule();
     } else {
         // Default Auto goes here
     }
@@ -255,6 +296,12 @@ void Robot::TeleopPeriodic()
         }
     }
 
+    if(operatorController->GetLeftBumperPressed()){
+        mIntakeReverse->Schedule();
+    } else if(operatorController->GetLeftBumperReleased()){
+        mIntakeReverse->Cancel();
+    }
+
     //Climber
     if (0 == operatorController->GetPOV()) { // Check up button
         mClimbMidbarOnly->mReachMidBar->Schedule();
@@ -277,7 +324,7 @@ void Robot::TeleopPeriodic()
             mTraversalClimb->Schedule();
         }
     } else {
-        
+
     }
 
     double opY = -operatorController->GetLeftY();

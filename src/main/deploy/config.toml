@@ -5,20 +5,22 @@ intakeRetractedPosition = 0.0
 intakeExtendedPosition = 1.0
 
 [shooter]
-speed.near = 2400 # RPM
-speed.auto = 2200 # RPM
+speed.near = 2450 # RPM
+speed.auto = 2400 # RPM
 speed.far = 2750
 speed.reverse = -1000
 speed.lowHub = 1000
-motor.p = 0.0005
+motor.p = 0.0007
 motor.i = 0.0
 motor.d = 0.0
-motor.ff = 0.00019
+motor.ff = 0.00020
 motor.minValue = -1.0
 motor.maxValue = 1.0
 motor.izone = 1.0
 
 [climber]
+outer.rotation.zeroOffset = 0.0907
+inner.rotation.zeroOffset = 0.087
 
 servo1.unlockPosition = 0.0
 servo1.lockPosition = 0.2
@@ -46,30 +48,32 @@ verticalArmAngle = 0.0
 
 [cycleCommand]
     inner.liftOffExtension = 20.0
-    inner.backOffAngle = -4.0
-    inner.nextBarAngle = 5.5
-    inner.nextBarExtension = 28.0
-    inner.dropToNextBarAngle = 16.0
-    inner.grabNextBarExtension = 0.0
-    inner.verticalArmAngle = 2.0
-    inner.liftExtension = 18.0
-    inner.toPreviousBarExtension = 19.0       # test value: needs calibration
-    inner.zeroExtension = 3.0
+    inner.backOffAngle = -10.0
+    inner.nextBarAngle = 15.0
+    inner.nextBarExtension = 28.75
+    inner.dropToNextBarAngle = 25.0
+    inner.grabNextBarExtension = 27.5
+    inner.verticalArmAngle = 7.0
+    inner.liftExtension = 15.0
+    inner.insidePreviousBarExtension = 10.0
+    inner.toPreviousBarExtension = 20.0       # test value: needs calibration
+    inner.zeroExtension = 0.75
     inner.releasePreviousBarExtension = 24.0
-    inner.dropOffPreviousBarAngle = -15.7
+    inner.dropOffPreviousBarAngle = -40.0
 
     outer.liftOffExtension = 20.0
-    outer.backOffAngle = -2.0
-    outer.nextBarAngle = 8.50
-    outer.nextBarExtension = 28.0
-    outer.dropToNextBarAngle = 16.0
-    outer.grabNextBarExtension = 0.0
+    outer.backOffAngle = -10.0
+    outer.nextBarAngle = 15.0
+    outer.nextBarExtension = 28.55
+    outer.dropToNextBarAngle = 25.0
+    outer.grabNextBarExtension = 27.5
     outer.verticalArmAngle = 7.0
-    outer.liftExtension = 18.0
-    outer.toPreviousBarExtension = 19.0       # test value: needs calibration
-    outer.zeroExtension = 3.0
+    outer.liftExtension = 15.0
+    outer.insidePreviousBarExtension = 10.0
+    outer.toPreviousBarExtension = 20.0       # test value: needs calibration
+    outer.zeroExtension = 0.75
     outer.releasePreviousBarExtension = 24.0
-    outer.dropOffPreviousBarAngle = -13.0
+    outer.dropOffPreviousBarAngle = -40.0
 
 [drivetrain]
     [drivetrain.PID]

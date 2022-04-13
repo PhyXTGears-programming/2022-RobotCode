@@ -27,6 +27,8 @@
 #include "drivetrain-swerve/SwerveDrive.h"
 #include "intake/intake.h"
 #include "shooter/shooter.h"
+#include "limelight/limelight.h"
+#include "limelight/LimelightSubsystem.h"
 
 #include "commands/climber/ClimbMidBarOnly.h"
 #include "commands/climber/HighBarClimb.h"
@@ -36,6 +38,7 @@
 #include "commands/intake/RunIntake.h"
 #include "commands/intake/ExtendIntake.h"
 #include "commands/intake/RetractIntake.h"
+#include "commands/limelight/VisionPipelineCommand.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -58,6 +61,9 @@ private:
     const std::string kAutoNameDefault = "Default";
     const std::string kAutoNameCustom = "My Auto";
     const std::string kAutoDriveAndShoot = "Drive and Shoot";
+    const std::string kAutoTwoCargoShoot = "2 Cargo Auto";
+    const std::string kAutoTwoCargoNearWall = "2 Cargo Near Wall";
+    const std::string kAutoDriveOnly = "Drive backwards";
     std::string m_autoSelected;
 
     frc::XboxController * driverController = nullptr;
@@ -70,6 +76,10 @@ private:
     Intake *mIntake = nullptr;
     Shooter *mShooter = nullptr;
     SwerveDrive * mSwerveDrive = nullptr;
+
+    limelight * mLimelight = nullptr;
+    LimelightSubsystem * mLimelightSubsystem = nullptr;
+    VisionPipelineCommand * mVisionPipelineCommand = nullptr;
     
     AltDriveTeleopCommand * mDriveTeleopCommand = nullptr;
     ClimbMidBarOnly * mClimbMidbarOnly = nullptr;
@@ -89,9 +99,14 @@ private:
     frc2::StartEndCommand *mShootFar = nullptr;
     frc2::StartEndCommand *mShootLowHub = nullptr;
     frc2::StartEndCommand *mShootReverse = nullptr;
+    frc2::StartEndCommand *mIntakeReverse = nullptr;
     frc2::StartEndCommand *mShootAuto = nullptr;
 
     frc2::SequentialCommandGroup * mDriveAndShoot = nullptr;
+    frc2::SequentialCommandGroup * mTwoCargoAuto = nullptr;
+    frc2::SequentialCommandGroup * mTwoCargoAutoNearWall = nullptr;
+    frc2::SequentialCommandGroup * mDriveOnly = nullptr;
+    
 };
 
 // there is a hidden forg somewhere in the robot's code.
