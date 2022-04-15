@@ -59,7 +59,7 @@ verticalArmAngle = 0.0
     inner.toPreviousBarExtension = 20.0       # test value: needs calibration
     inner.zeroExtension = 0.75
     inner.releasePreviousBarExtension = 24.0
-    inner.dropOffPreviousBarAngle = -40.0
+    inner.dropOffPreviousBarAngle = -44.0
 
     outer.liftOffExtension = 20.0
     outer.backOffAngle = -10.0
@@ -73,7 +73,7 @@ verticalArmAngle = 0.0
     outer.toPreviousBarExtension = 20.0       # test value: needs calibration
     outer.zeroExtension = 0.75
     outer.releasePreviousBarExtension = 24.0
-    outer.dropOffPreviousBarAngle = -40.0
+    outer.dropOffPreviousBarAngle = -44.0
 
 [drivetrain]
     [drivetrain.PID]
