@@ -182,7 +182,12 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
 
         frc2::PrintCommand { "Retract intake... if it's still there" },
-        RetractIntakeCommand {intake}
+        RetractIntakeCommand {intake},
+
+        frc2::InstantCommand {
+            [=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); },
+            {innerRotate, outerRotate}
+        }
     };
 }
 
