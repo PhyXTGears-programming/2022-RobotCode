@@ -133,8 +133,8 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
 
         frc2::PrintCommand { "Lift robot onto high bar.  Reach for traversal bar." },
-        frc2::ParallelCommandGroup {
-            ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, slowInnerPid, slowInnerPid},
+        frc2::ParallelRaceGroup {
+            ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, slowInnerPid, slowInnerPid}.Perpetually(),
             frc2::ParallelRaceGroup {
                 ReachOuterArmsCommand {outerReach, config.outer.nextBarExtension},
                 RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle, outerRotatePid}.Perpetually(),
