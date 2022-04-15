@@ -142,7 +142,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
 
         frc2::PrintCommand { "Overdrive into traversal." },
-        RotateOuterArmsCommand {outerRotate, config.outer.dropToNextBarAngle, outerRotatePid}.WithTimeout(1.0_s),
+        RotateOuterArmsCommand {outerRotate, config.outer.dropToNextBarAngle, outerRotatePid}.WithTimeout(1.5_s),
 
         frc2::PrintCommand { "Swing under traversal." },
         frc2::InstantCommand {
