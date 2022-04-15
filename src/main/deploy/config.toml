@@ -49,7 +49,7 @@ verticalArmAngle = 0.0
 [cycleCommand]
     inner.liftOffExtension = 20.0
     inner.backOffAngle = -10.0
-    inner.nextBarAngle = 15.0
+    inner.nextBarAngle = 12.0
     inner.nextBarExtension = 28.75
     inner.dropToNextBarAngle = 25.0
     inner.grabNextBarExtension = 27.5
@@ -63,7 +63,7 @@ verticalArmAngle = 0.0
 
     outer.liftOffExtension = 20.0
     outer.backOffAngle = -10.0
-    outer.nextBarAngle = 15.0
+    outer.nextBarAngle = 12.0
     outer.nextBarExtension = 28.55
     outer.dropToNextBarAngle = 25.0
     outer.grabNextBarExtension = 27.5
