@@ -30,6 +30,6 @@ class ReachInnerArmsCommand : public frc2::CommandHelper<frc2::CommandBase, Reac
         p, i, d, feed-forward, acceptableError,
         minOutput = -1.0, maxOutput = 1.0, izone = INFINITY
         */
-        PID mPid1 { 0.3, 0.0, 0.0, 0.04, 0.05, -1.0, 1.0 };
-        PID mPid2 { 0.3, 0.0, 0.0, 0.04, 0.05, -1.0, 1.0 };
+        PID mPid1 { 0.5, 0.0, 0.0, 0.04, 0.05, -1.0, 1.0 };
+        PID mPid2 { 0.5, 0.0, 0.0, 0.04, 0.05, -1.0, 1.0 };
 };
