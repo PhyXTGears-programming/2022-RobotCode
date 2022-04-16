@@ -16,6 +16,8 @@ Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
     config.motor.maxValue = toml->get_qualified_as<double>("motor.maxValue").value_or(1.0);
     config.motor.izone = toml->get_qualified_as<double>("motor.izone").value_or(1.0);
 
+    mShooterMotor.EnableVoltageCompensation(12.0);
+
     Shooter::setPidValues(
         mPID_ShooterMotor, 
         config.motor.p, 
@@ -29,12 +31,13 @@ Shooter::Shooter(std::shared_ptr<cpptoml::table> toml) {
 }
 
 void Shooter::Periodic () {
-    // frc::SmartDashboard::PutNumber("Shooter Speed (rpm)", mShooterEncoder.GetVelocity());
-    // frc::SmartDashboard::PutNumber("Shooter Speed (rpm) Graph", mShooterEncoder.GetVelocity());
+    frc::SmartDashboard::PutNumber("Shooter Speed (rpm)", mShooterEncoder.GetVelocity());
+    frc::SmartDashboard::PutNumber("Shooter Speed (rpm) Graph", mShooterEncoder.GetVelocity());
 }
 
 void Shooter::runShooter (double speed) {
-    mPID_ShooterMotor.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
+    // mPID_ShooterMotor.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
+    mShooterMotor.Set(speed / 4900.0);
 }
 
 void Shooter::shootLowHub() {
