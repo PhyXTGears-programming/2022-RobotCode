@@ -46,11 +46,11 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
     PID outerRotatePid { 0.02, 0.0, 0.0, 0.12, 0.01, -0.2, 0.2 };
     PID innerRotatePid { 0.02, 0.0, 0.0, 0.07, 0.01, -0.15, 0.15 };
 
-    PID climbOuterPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.8, 0.05, 1.0 };
-    PID climbInnerPid { 0.3, 0.004, 0.0, 0.2, 0.05, -0.8, 0.05, 1.0 };
+    PID climbOuterPid { 0.4, 0.004, 0.0, 0.2, 0.05, -1.0, 0.05, 1.0 };
+    PID climbInnerPid { 0.4, 0.004, 0.0, 0.2, 0.05, -1.0, 0.05, 1.0 };
 
-    PID slowInnerPid { 0.3, 0.004, 0.0, 0.3, 0.05, -0.45, 0.2, 1.0 };
-    PID slowOuterPid { 0.3, 0.004, 0.0, 0.3, 0.05, -0.45, 0.2, 1.0 };
+    PID slowInnerPid { 0.3, 0.004, 0.0, 0.3, 0.05, -0.6, 0.35, 1.0 };
+    PID slowOuterPid { 0.3, 0.004, 0.0, 0.3, 0.05, -0.6, 0.35, 1.0 };
 
     PID fastInnerReach { 0.4, 0.0, 0.0, 0.03, 0.05, -0.3, 0.3, 0.5 };
 
@@ -133,8 +133,8 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
 
         frc2::PrintCommand { "Lift robot onto high bar.  Reach for traversal bar." },
-        frc2::ParallelCommandGroup {
-            ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, slowInnerPid, slowInnerPid},
+        frc2::ParallelRaceGroup {
+            ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, slowInnerPid, slowInnerPid}.Perpetually(),
             frc2::ParallelRaceGroup {
                 ReachOuterArmsCommand {outerReach, config.outer.nextBarExtension},
                 RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle, outerRotatePid}.Perpetually(),
@@ -142,7 +142,7 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
 
         frc2::PrintCommand { "Overdrive into traversal." },
-        RotateOuterArmsCommand {outerRotate, config.outer.dropToNextBarAngle, outerRotatePid}.WithTimeout(1.0_s),
+        RotateOuterArmsCommand {outerRotate, config.outer.dropToNextBarAngle, outerRotatePid}.WithTimeout(1.5_s),
 
         frc2::PrintCommand { "Swing under traversal." },
         frc2::InstantCommand {
@@ -182,7 +182,12 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
 
         frc2::PrintCommand { "Retract intake... if it's still there" },
-        RetractIntakeCommand {intake}
+        RetractIntakeCommand {intake},
+
+        frc2::InstantCommand {
+            [=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); },
+            {innerRotate, outerRotate}
+        }
     };
 }
 
