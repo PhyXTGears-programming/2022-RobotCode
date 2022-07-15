@@ -133,6 +133,15 @@ TraversalClimb::TraversalClimb(Intake * intake, ClimberInnerReach * innerReach, 
         },
 
         frc2::PrintCommand { "Lift robot onto high bar.  Reach for traversal bar." },
+        // Must wait until both inner arms and outer arms reach setpoints.  Take
+        // notice of which commands have the Perpetually() modifier.
+        frc2::ParallelRaceGroup {
+            ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, slowInnerPid, slowInnerPid},
+            frc2::ParallelRaceGroup {
+                ReachOuterArmsCommand {outerReach, config.outer.nextBarExtension}.Perpetually(),
+                RotateOuterArmsCommand {outerRotate, config.outer.nextBarAngle, outerRotatePid}.Perpetually(),
+            }
+        },
         frc2::ParallelRaceGroup {
             ReachInnerArmsCommand {innerReach, config.inner.zeroExtension, slowInnerPid, slowInnerPid}.Perpetually(),
             frc2::ParallelRaceGroup {
