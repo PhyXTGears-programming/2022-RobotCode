@@ -172,6 +172,7 @@ void Robot::RobotInit()
     mTwoCargoAutoNearWall = Auto::MakeTwoCargoAutoNearWall(mIntake, mShooter, mSwerveDrive);
 
     mDriveOnly = new frc2::SequentialCommandGroup {
+        frc2::WaitCommand { 4.0_s },
         frc2::FunctionalCommand {
             [](){},
             [&](){
