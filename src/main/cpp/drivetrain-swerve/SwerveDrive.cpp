@@ -25,6 +25,8 @@ void SwerveDrive::Periodic()
     frc::SmartDashboard::PutNumber("Steer BL Abs", blWheel.getAbsAngle() / M_PI * 180);
 
     frc::SmartDashboard::PutNumber("Gyro Angle", getHeading() * 180.0 / M_PI);
+
+    frc::SmartDashboard::PutBoolean("Field Oriented Steering On", fieldOriented);
 }
 
 void SwerveDrive::synchronizeTurnEncoders()
@@ -45,6 +47,10 @@ void SwerveDrive::enableFieldCentric(){
 
 void SwerveDrive::disableFieldCentric(){
     fieldOriented = false;
+}
+
+void SwerveDrive::toggleFieldCentric() {
+    fieldOriented = !fieldOriented;
 }
 
 void SwerveDrive::setMotion(double x, double y, double r)

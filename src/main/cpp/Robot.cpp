@@ -343,6 +343,13 @@ void Robot::TeleopPeriodic()
             mManualExtendOuterArms->Cancel();
         }
     }
+
+
+    // DRIVER CONTROLLER
+
+    if (driverController->GetYButtonPressed()) {
+        mSwerveDrive->toggleFieldCentric();
+    }
 }
 
 void Robot::DisabledInit() {}
