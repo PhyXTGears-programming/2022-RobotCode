@@ -58,7 +58,12 @@ void SwerveDrive::setMotion(double x, double y, double r)
     double a = 0;
 
     if (fieldOriented) {
-        a = getHeading();
+        // Swerve drive expects heading angle to become more positive with
+        // counter-clockwise (CCW) rotation, and more negative with clockwise
+        // (CW) rotation.
+        // NavX angle is (+) on CW, and (-) on CCW.  Use negate to fix heading
+        // for swerve drive.
+        a = -getHeading();
     }
 
     drive->set_motion({x, y}, r, a);
