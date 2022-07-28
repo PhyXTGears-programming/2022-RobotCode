@@ -9,7 +9,7 @@ SwerveDrive::SwerveDrive(bool fieldOriented) : fieldOriented(fieldOriented)
     drive = new swervedrive::drive<double, double, double>({&flWheel, &frWheel, &blWheel, &brWheel});
 
     gyro = new AHRS(frc::SPI::kMXP);
-    // gyro->Reset();
+    resetGyro();
 }
 
 void SwerveDrive::Periodic()
