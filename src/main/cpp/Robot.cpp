@@ -347,6 +347,11 @@ void Robot::TeleopPeriodic()
 
     // DRIVER CONTROLLER
 
+    // RESET GYRO
+    if (driverController->GetBButtonPressed()) {
+        mSwerveDrive->resetGyro();
+    }
+
     if (driverController->GetYButtonPressed()) {
         mSwerveDrive->toggleFieldCentric();
     }
