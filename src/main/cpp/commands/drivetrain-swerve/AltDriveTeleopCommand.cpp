@@ -36,8 +36,12 @@ void AltDriveTeleopCommand::Initialize()
 
 void AltDriveTeleopCommand::Execute()
 {
-    constexpr double MAX_SPEED = 0.75;
-    double speed = MAX_SPEED - ((TRIGGER_DEADZONE(mJoystick->GetLeftTriggerAxis())) * 0.25);
+    constexpr double NORMAL_SPEED = 0.50;
+    constexpr double SLOW_SPEED = 0.25;
+    constexpr double FAST_SPEED = 0.75;
+    double speed = NORMAL_SPEED
+        + ((TRIGGER_DEADZONE(mJoystick->GetRightTriggerAxis())) * (FAST_SPEED - NORMAL_SPEED))
+        + ((TRIGGER_DEADZONE(mJoystick->GetLeftTriggerAxis())) * (SLOW_SPEED - NORMAL_SPEED));
 
     double x = mJoystick->GetLeftX();
     double y = -1 * mJoystick->GetLeftY();

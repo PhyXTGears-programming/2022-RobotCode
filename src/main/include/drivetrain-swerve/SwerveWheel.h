@@ -15,18 +15,24 @@ class SwerveWheel : public swervedrive::swerve_module<double, double, double> {
 
         void synchronizeTurnEncoder();
 
+        void clearZeroOffset();
+        void setZeroOffset(double radians);
+
         void drive(double speed, double angle) override;
 
         double getAngle();
 
         double getAbsAngle();
 
-    private:
         void setAngle(double angle);
+
         void setSpeed (double speed) {
             driveMotor->Set(inverted ? -speed : speed);
         }
 
+        void disableMotors();
+
+    private:
         constants::swerve::WheelConstants wheelSettings;
         
         rev::CANSparkMax *driveMotor, *turnMotor;

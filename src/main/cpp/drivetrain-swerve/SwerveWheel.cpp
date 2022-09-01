@@ -50,6 +50,16 @@ void SwerveWheel::synchronizeTurnEncoder () {
     turnEncoder->SetPosition(currentAngle);
 }
 
+void SwerveWheel::clearZeroOffset () {
+    encoder->ConfigMagnetOffset(0.0);
+    synchronizeTurnEncoder();
+}
+
+void SwerveWheel::setZeroOffset (double radians) {
+    encoder->ConfigMagnetOffset(radians * 180.0 / M_PI);
+    synchronizeTurnEncoder();
+}
+
 void SwerveWheel::drive (double speed, double angle) {
     if (std::fabs(speed) > 0.05) {  // (jcc Mar02) Another attempt to prevent wild steering near deadzone.
         setAngle(angle);
@@ -72,4 +82,9 @@ void SwerveWheel::setAngle (double rad) {
     inverted = result.second;
 
     turnPid->SetReference(result.first, rev::CANSparkMax::ControlType::kPosition);
+}
+
+void SwerveWheel::disableMotors () {
+    driveMotor->Disable();
+    turnMotor->Disable();
 }

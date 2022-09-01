@@ -37,13 +37,57 @@ void SwerveDrive::synchronizeTurnEncoders()
     brWheel.synchronizeTurnEncoder();
 }
 
-void SwerveDrive::resetGyro(){
+void SwerveDrive::calibrateClearZeroOffsets() {
+    flWheel.clearZeroOffset();
+    frWheel.clearZeroOffset();
+    blWheel.clearZeroOffset();
+    brWheel.clearZeroOffset();
+}
+
+void SwerveDrive::calibrateOrientWheels(double radians) {
+    flWheel.setAngle(radians);
+    frWheel.setAngle(radians);
+    blWheel.setAngle(radians);
+    brWheel.setAngle(radians);
+}
+
+void SwerveDrive::calibrateDisableMotors() {
+    flWheel.disableMotors();
+    frWheel.disableMotors();
+    blWheel.disableMotors();
+    brWheel.disableMotors();
+}
+
+void SwerveDrive::calibrateDriveFoward() {
+    flWheel.setSpeed(0.2);
+    frWheel.setSpeed(0.2);
+    blWheel.setSpeed(0.2);
+    brWheel.setSpeed(0.2);
+}
+
+WheelOffsets SwerveDrive::calibrateGetZeroOffsets() {
+    WheelOffsets ret;
+
+    ret.frontLeft = flWheel.getAbsAngle();
+    ret.frontRight = frWheel.getAbsAngle();
+    ret.backLeft = blWheel.getAbsAngle();
+    ret.backRight = brWheel.getAbsAngle();
+
+    return ret;
+}
+
+void SwerveDrive::calibrateSetZeroOffsets(WheelOffsets & const offsets) {
+    flWheel.setZeroOffset(offsets.frontLeft);
+    frWheel.setZeroOffset(offsets.frontRight);
+    blWheel.setZeroOffset(offsets.backLeft);
+    brWheel.setZeroOffset(offsets.backRight);
+}
+
+void SwerveDrive::resetGyro() {
     gyro->Reset();
 }
 
-void SwerveDrive::enableFieldCentric(){
-    fieldOriented = true;
-}
+void SwerveDrive::enableFieldCentric() { fieldOriented = true; }
 
 void SwerveDrive::disableFieldCentric(){
     fieldOriented = false;

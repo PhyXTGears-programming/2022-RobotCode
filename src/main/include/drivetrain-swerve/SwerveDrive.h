@@ -16,6 +16,18 @@ class SwerveDrive : public frc2::SubsystemBase {
 
         void synchronizeTurnEncoders();
 
+        void calibrateClearZeroOffsets();
+
+        void calibrateOrientWheels(double radians);
+
+        void calibrateDisableMotors();
+
+        void calibrateDriveFoward();
+
+        WheelOffsets calibrateGetZeroOffsets();
+
+        void calibrateSetZeroOffsets(WheelOffsets & const offsets);
+
         void resetGyro();
 
         void enableFieldCentric();
@@ -40,4 +52,8 @@ class SwerveDrive : public frc2::SubsystemBase {
         AHRS * gyro = nullptr;
 
         bool fieldOriented;
+};
+
+struct WheelOffsets {
+    double frontLeft, frontRight, backLeft, backRight;
 };
