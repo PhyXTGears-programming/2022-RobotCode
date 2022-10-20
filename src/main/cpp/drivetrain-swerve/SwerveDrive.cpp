@@ -9,7 +9,7 @@ SwerveDrive::SwerveDrive(bool fieldOriented) : fieldOriented(fieldOriented)
     drive = new swervedrive::drive<double, double, double>({&flWheel, &frWheel, &blWheel, &brWheel});
 
     gyro = new AHRS(frc::SPI::kMXP);
-    // gyro->Reset();
+    resetGyro();
 }
 
 void SwerveDrive::Periodic()
@@ -25,6 +25,8 @@ void SwerveDrive::Periodic()
     frc::SmartDashboard::PutNumber("Steer BL Abs", blWheel.getAbsAngle() / M_PI * 180);
 
     frc::SmartDashboard::PutNumber("Gyro Angle", getHeading() * 180.0 / M_PI);
+
+    frc::SmartDashboard::PutBoolean("Field Oriented Steering On", fieldOriented);
 }
 
 void SwerveDrive::synchronizeTurnEncoders()
@@ -47,12 +49,21 @@ void SwerveDrive::disableFieldCentric(){
     fieldOriented = false;
 }
 
+void SwerveDrive::toggleFieldCentric() {
+    fieldOriented = !fieldOriented;
+}
+
 void SwerveDrive::setMotion(double x, double y, double r)
 {
     double a = 0;
 
     if (fieldOriented) {
-        a = getHeading();
+        // Swerve drive expects heading angle to become more positive with
+        // counter-clockwise (CCW) rotation, and more negative with clockwise
+        // (CW) rotation.
+        // NavX angle is (+) on CW, and (-) on CCW.  Use negate to fix heading
+        // for swerve drive.
+        a = -getHeading();
     }
 
     drive->set_motion({x, y}, r, a);

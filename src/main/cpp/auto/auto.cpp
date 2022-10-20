@@ -121,7 +121,7 @@ frc2::SequentialCommandGroup * Auto::MakeTwoCargoAuto (Intake * intake, Shooter 
                     return false;
                 },
                 { drive }
-            }.WithTimeout(1.35_s)
+            }.WithTimeout(1.6_s)
         },
 
         frc2::ParallelRaceGroup {

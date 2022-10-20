@@ -118,7 +118,12 @@ HighBarClimb::HighBarClimb(Intake * intake, ClimberInnerReach * innerReach, Clim
         },
 
         frc2::PrintCommand { "Retract intake... if it's still there" },
-        RetractIntakeCommand {intake}
+        RetractIntakeCommand {intake},
+
+        frc2::InstantCommand {
+            [=]() { innerRotate->setMotorBrake(); outerRotate->setMotorBrake(); },
+            {innerRotate, outerRotate}
+        }
     };
 }
 

@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/WaitCommand.h>
 
 #include "RobotCompileModes.h"
 
@@ -151,6 +152,7 @@ void Robot::RobotInit()
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
     mDriveAndShoot = new frc2::SequentialCommandGroup {
+        frc2::WaitCommand { 1.0_s },
         frc2::FunctionalCommand { // drive backwards
             [](){},
             [&](){
@@ -170,6 +172,7 @@ void Robot::RobotInit()
     mTwoCargoAutoNearWall = Auto::MakeTwoCargoAutoNearWall(mIntake, mShooter, mSwerveDrive);
 
     mDriveOnly = new frc2::SequentialCommandGroup {
+        frc2::WaitCommand { 4.0_s },
         frc2::FunctionalCommand {
             [](){},
             [&](){
@@ -339,6 +342,18 @@ void Robot::TeleopPeriodic()
         } else if (mManualExtendOuterArms->IsScheduled()) {
             mManualExtendOuterArms->Cancel();
         }
+    }
+
+
+    // DRIVER CONTROLLER
+
+    // RESET GYRO
+    if (driverController->GetBButtonPressed()) {
+        mSwerveDrive->resetGyro();
+    }
+
+    if (driverController->GetYButtonPressed()) {
+        mSwerveDrive->toggleFieldCentric();
     }
 }
 

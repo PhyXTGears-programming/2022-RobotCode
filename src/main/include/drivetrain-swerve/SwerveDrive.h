@@ -22,6 +22,8 @@ class SwerveDrive : public frc2::SubsystemBase {
 
         void disableFieldCentric();
 
+        void toggleFieldCentric();
+
         void setMotion(double x, double y, double r);
 
         double getHeading();
